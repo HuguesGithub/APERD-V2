@@ -1,5 +1,6 @@
 <?php
 namespace core\interfaceimpl;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
