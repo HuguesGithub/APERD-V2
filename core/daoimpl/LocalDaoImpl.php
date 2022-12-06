@@ -1,5 +1,6 @@
 <?php
 namespace core\daoimpl;
+
 use core\interfaceimpl\ConstantsInterface;
 use core\interfaceimpl\UrlsInterface;
 use core\interfaceimpl\LabelsInterface;

@@ -1,5 +1,6 @@
 <?php
 namespace core\daoimpl;
+
 use core\domain\AdministrationClass;
 use core\domain\MySQL;
 
