@@ -1,7 +1,9 @@
 <?php
 namespace core\services;
+
 use core\daoimpl\AdministrationDaoImpl;
 use core\domain\AdministrationClass;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -14,15 +16,6 @@ if (!defined('ABSPATH')) {
 class AdministrationServices extends LocalServices
 {
     //////////////////////////////////////////////////
-    // ATTRIBUTES
-    //////////////////////////////////////////////////
-    /**
-     * L'objet Dao pour faire les requêtes
-     * @var AdministrationDaoImpl $Dao
-     */
-    protected $Dao;
-
-    //////////////////////////////////////////////////
     // CONSTRUCT
     //////////////////////////////////////////////////
     /**
@@ -33,7 +26,7 @@ class AdministrationServices extends LocalServices
     public function __construct()
     {
         parent::__construct();
-        $this->Dao = new AdministrationDaoImpl();
+        $this->objDao = new AdministrationDaoImpl();
     }
 
     //////////////////////////////////////////////////
@@ -67,12 +60,16 @@ class AdministrationServices extends LocalServices
         if ($orderBy=='') {
             $orderBy = self::FIELD_LABELPOSTE;
         }
-        if ($order='' && $orderBy!=self::SQL_ORDER_RAND) {
+        if ($order=='' && $orderBy!=self::SQL_ORDER_RAND) {
             $order = self::SQL_ORDER_ASC;
         }
-        $arrParams = $this->buildOrderAndLimit($orderBy, $order);
-        $arrParams[SQL_PARAMS_WHERE] = $this->buildFilters($arrFilters);
-        return $this->Dao->getAdministrationsWithFilters($arrParams);
+        $arrParams = array(
+            self::SQL_ORDERBY => $orderBy,
+            self::SQL_ORDER => $order,
+            self::SQL_LIMIT => -1,
+            self::SQL_WHERE => $this->buildFilters($arrFilters),
+        );
+        return $this->objDao->getAdministrationsWithFilters($arrParams);
     }
     
     /**
@@ -82,6 +79,6 @@ class AdministrationServices extends LocalServices
      * @version 2.22.12.05
      */
     public function getAdministrationById($adminId)
-    { return $this->Dao->getAdministrationById($adminId); }
+    { return $this->objDao->getAdministrationById($adminId); }
 
 }
