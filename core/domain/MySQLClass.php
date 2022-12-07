@@ -1,5 +1,6 @@
 <?php
 namespace core\domain;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }

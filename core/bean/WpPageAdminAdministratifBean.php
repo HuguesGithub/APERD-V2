@@ -1,6 +1,8 @@
 <?php
 namespace core\bean;
 
+use core\domain\MySQLClass;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -18,25 +20,38 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
         // Initialisation des variables
         $this->slugOnglet = self::ONGLET_ADMINISTRATIFS;
         $this->titreOnglet = self::LABEL_ADMINISTRATIFS;
+
+        $strNotification = '';
+        $strMessage = '';
         
-        /*
-        $this->slugOnglet = self::ONGLET_ENQUETE;
-        
-        /////////////////////////////////////////
-        // Construction du menu de l'inbox
-        $this->arrSubOnglets = array(
-            self::CST_FILE_OPENED => array(self::FIELD_ICON => self::I_FILE_OPENED, self::FIELD_LABEL => 'En cours'),
-            self::CST_FILE_CLOSED => array(self::FIELD_ICON => self::I_FILE_CLOSED, self::FIELD_LABEL => 'Classées'),
-            self::CST_FILE_COLDED => array(self::FIELD_ICON => self::I_FILE_COLDED, self::FIELD_LABEL => 'Cold Case'),
-            self::CST_ENQUETE_READ => array(self::FIELD_LABEL => 'Lire'),
-            self::CST_ENQUETE_WRITE => array(self::FIELD_LABEL => 'Rédiger'),
-        );
-        /////////////////////////////////////////
+        $id = $this->initVar(self::ATTR_ID);
+        $this->objAdministratif = $this->objAdministrationServices->getAdministrationById($id);
 
         /////////////////////////////////////////
-        // Définition des services
-        $this->CopsEnqueteServices = new CopsEnqueteServices();
-        */
+        // Vérification de la soumission d'un formulaire
+        $postAction = $this->initVar(self::CST_POST_ACTION);
+        if ($postAction!='') {
+            // Un formulaire est soumis.
+            // On récupère les données qu'on affecte à l'objet
+            $this->objAdministratif->setField(self::FIELD_GENRE, $this->initVar(self::FIELD_GENRE));
+            $this->objAdministratif->setField(self::FIELD_NOMTITULAIRE, $this->initVar(self::FIELD_NOMTITULAIRE));
+            $this->objAdministratif->setField(self::FIELD_LABELPOSTE, $this->initVar(self::FIELD_LABELPOSTE));
+            
+            // Si le contrôle des données est ok
+            if ($this->objAdministratif->controlerDonnees($strNotification, $strMessage)) {
+                // Si l'id n'est pas défini
+                if ($id=='') {
+                    // On insère l'objet
+                    $this->objAdministratif->insert();
+                } else {
+                    // On met à jour l'objet
+                    $this->objAdministratif->update();
+                }
+            } else {
+            }
+            // TODO : de manière générale, ce serait bien d'afficher le résultat de l'opération.
+        }
+        /////////////////////////////////////////
         
         /////////////////////////////////////////
         // Construction du Breadcrumbs
@@ -109,6 +124,8 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
         // Définition des droits de l'utilisateur
         $blnHasEditorRights = self::isAdmin();
         $blnIsEditorPage    = ($this->slugSubOnglet==self::CST_WRITE);
+        $blnIsDeletePage    = ($this->slugSubOnglet==self::CST_DELETE);
+        $blnConfirm         = $this->initVar(self::CST_CONFIRM, false);
         
         // Définition éventuelle du bouton Création / Annulaiton
         // Définition du contenu de la page.
@@ -118,58 +135,33 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
         if ($blnHasEditorRights) {
             if ($blnIsEditorPage) {
                 // Bouton Annuler
-                $strBtnCreationAnnulation = '';
-                // 				<a href="/admin?onglet=library&amp;subOnglet=index&amp;action=write&amp;curPage=1" class="btn btn-primary mb-3 btn-block">Créer une entrée</a>
+                $strBtnCreationAnnulation = $this->getCancelButton();
                 // Interface d'édition
-                $strMainContent = '';
-            } else {
+                $strMainContent = $this->getEditContent();
+            } elseif ($blnIsDeletePage) {
+                if ($blnConfirm) {
+                    // Bouton Retour
+                    $strBtnCreationAnnulation = $this->getReturnButton();
+                    // Interface de suppression
+                    $strMainContent = $this->getDeletedContent();
+                } else {
+                    // Bouton Annuler
+                    $strBtnCreationAnnulation = $this->getCancelButton();
+                    // Interface de suppression
+                    $strMainContent = $this->getDeleteContent();
+                }
+            } else{
                 // Bouton Créer
-                $btnAttributes = array(self::ATTR_CLASS=>'btn btn-primary mb-3 btn-block');
-                $label = $this->getIcon(self::I_EDIT).self::CST_NBSP.self::LABEL_CREER_ENTREE;
-                $strButton = $this->getButton($label, $btnAttributes);
-                $href = $this->getUrl(array(self::CST_ACTION=>self::CST_WRITE));
-                $strBtnCreationAnnulation = $this->getLink($strButton, $href, '');
+                $strBtnCreationAnnulation = $this->getCreateButton();
                 // Interface de liste
-                $listContent = $this->getListContent($blnHasEditorRights);
-                $attributes = array(
-                    // On défini le titre
-                    self::LABEL_ADMINISTRATIFS,
-                    // On défini un éventuel entête/footer de boutons d'actions
-                    $this->getListControlTools($blnHasEditorRights),
-                    // On défini le tag de la liste
-                    $this->slugOnglet,
-                    // On défini la description de la liste
-                    self::LABEL_LIST_ADMINISTRATIFS,
-                    // On défini le header de la liste
-                    $this->getListHeaderRow($blnHasEditorRights),
-                    // On défini le contenu de la liste
-                    $listContent,
-                    
-                );
-                $strMainContent = $this->getRender(self::WEB_PPFC_LIST_DEFAULT, $attributes);
+                $strMainContent = $this->getListContent($blnHasEditorRights);
             }
         } else {
             // Interface de liste
-            $listContent = $this->getListContent($blnHasEditorRights);
-            $attributes = array(
-                // On défini le titre
-                self::LABEL_ADMINISTRATIFS,
-                // On défini un éventuel entête/footer de boutons d'actions
-                $this->getListControlTools($blnHasEditorRights),
-                // On défini le tag de la liste
-                $this->slugOnglet,
-                // On défini la description de la liste
-                self::LABEL_LIST_ADMINISTRATIFS,
-                // On défini le header de la liste
-                $this->getListHeaderRow($blnHasEditorRights),
-                // On défini le contenu de la liste
-                $listContent,
-                
-            );
-            $strMainContent = $this->getRender(self::WEB_PPFC_LIST_DEFAULT, $attributes);
+            $strMainContent = $this->getListContent($blnHasEditorRights);
         }
         
-        $urlTemplate = 'web/pages/publique/fragments/section/section-onglet-content-one-fourth.tpl';
+        $urlTemplate = self::WEB_PPFS_CONTENT_ONE_4TH;
         $attributes = array(
             // Identifiant de la page
             $this->slugOnglet,
@@ -181,103 +173,67 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
             $strMainContent,
         );
         return $this->getRender($urlTemplate, $attributes);
-
-        /////////////////////////////////////////
-        // Construction du panneau de droite
-        $strBtnClass = 'btn btn-primary btn-block mb-3';
-        if ($this->slugSubOnglet==self::CST_ENQUETE_READ ||
-            $this->CopsEnquete->getField(self::FIELD_ID)!='' &&
-            $this->CopsEnquete->getField(self::FIELD_STATUT_ENQUETE)!=self::CST_ENQUETE_OPENED) {
-                $strRightPanel   = $this->CopsEnquete->getBean()->getReadEnqueteBlock();
-                $attributes = array (
-                    self::ATTR_HREF  => $this->getOngletUrl(),
-                    self::ATTR_CLASS => $strBtnClass,
-                );
-                $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
-            } elseif ($this->slugSubOnglet==self::CST_ENQUETE_WRITE) {
-                $strRightPanel   = $this->CopsEnquete->getBean()->getWriteEnqueteBlock();
-                $attributes = array (
-                    self::ATTR_HREF  => $this->getOngletUrl(),
-                    self::ATTR_CLASS => $strBtnClass,
-                );
-                $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
-            } else {
-                $strRightPanel   = $this->getFolderEnquetesList();
-                $attributes = array (
-                    self::ATTR_HREF  => $this->getSubOngletUrl(self::CST_FOLDER_WRITE),
-                    self::ATTR_CLASS => $strBtnClass,
-                );
-                $strContent = 'Ouvrir une enquête';
-            }
-        /////////////////////////////////////////
-
-        $attributes = array(
-            // Contenu du panneau latéral gauche
-            $this->getFolderBlock(),
-            // Contenu du panneau principal
-            $strRightPanel,
-            // Eventuel bouton de retour si on est en train de lire ou rédiger un message
-            $this->getBalise(self::TAG_A, $strContent, $attributes),
-        );
     }
-
-    /**
-     * @since 1.22.09.20
-     * @version 1.22.10.19
-     *
-    public function getFolderEnquetesList()
+    
+    public function getDeleteContent()
     {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-enquetes-list.php';
-        /////////////////////////////////////////
-        // Construction du panneau de droite
-        // Liste des dossiers pour une catégorie spécifique (En cours, Classées, Cold Case...)
-        switch ($this->slugSubOnglet) {
-            case self::CST_FILE_CLOSED :
-                $attributes = array(self::SQL_WHERE_FILTERS => array(
-                    self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_CLOSED,
-                ));
-            break;
-            case self::CST_FILE_COLDED :
-                $attributes = array(self::SQL_WHERE_FILTERS => array(
-                    self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_COLDED,
-                ));
-             break;
-            case self::CST_FILE_OPENED :
-            default :
-                $attributes = array(self::SQL_WHERE_FILTERS => array(
-                    self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_OPENED,
-                ));
-            break;
+        $strElements = '';
+        
+        // On peut avoir une liste d'id en cas de suppression multiple.
+        $ids = $this->initVar(self::ATTR_ID);
+        foreach (explode(',', $ids) as $id) {
+            $objAdministratif = $this->objAdministrationServices->getAdministrationById($id);
+            $strElements .= $this->getBalise(self::TAG_LI, $objAdministratif->getFullInfo());
         }
-
-        $objsCopsEnquete = $this->CopsEnqueteServices->getEnquetes($attributes);
-        if (empty($objsCopsEnquete)) {
-            $strContent = '<tr><td class="text-center">Aucune enquête.<br></td></tr>';
-        } else {
-            $strContent = '';
-            foreach ($objsCopsEnquete as $objCopsEnquete) {
-                $strContent .= $objCopsEnquete->getBean()->getCopsEnqueteRow();
-            }
-        }
-        /////////////////////////////////////////
-        // Gestion de la pagination
-        $strPagination = '';
-        /////////////////////////////////////////
-
-        $attributes = array(
-            // Titre du dossier affiché
-            $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL],
-            // Nombre de messages dans le dossier affiché : 1-50/200
-            $strPagination,
-            // La liste des messages du dossier affiché
-            $strContent,
-            // Le slug du dossier affiché
-            $this->getSubOngletUrl(),
+        
+        $urlElements = array(
+            self::ATTR_ID => $ids,
+            self::CST_CONFIRM => 1,
         );
-        /////////////////////////////////////////
+        $urlTemplate = self::WEB_PPFC_DEL_ADM;
+        $attributes = array(
+            // Liste des éléments supprimés
+            $strElements,
+            // Url de confirmation
+            $this->getUrl($urlElements),
+            // URl d'annulation
+            $this->getUrl(array(self::CST_SUBONGLET=>'')),
+        );
         return $this->getRender($urlTemplate, $attributes);
     }
-    */
+    
+    public function getDeletedContent()
+    {
+        $strElements = '';
+        
+        // On peut avoir une liste d'id en cas de suppression multiple.
+        $ids = $this->initVar(self::ATTR_ID);
+        foreach (explode(',', $ids) as $id) {
+            $objAdministratif = $this->objAdministrationServices->getAdministrationById($id);
+            $strElements .= $this->getBalise(self::TAG_LI, $objAdministratif->getFullInfo());
+            $objAdministratif->delete();
+        }
+        
+        $urlTemplate = self::WEB_PPFC_CONF_DEL;
+        $attributes = array(
+            // Liste des éléments supprimés
+            $strElements,
+            // URl d'annulation
+            $this->getUrl(array(self::CST_SUBONGLET=>'')),
+        );
+        return $this->getRender($urlTemplate, $attributes);
+    }
+    
+    /**
+     * @return string
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function getEditContent()
+    {
+        $baseUrl = $this->getUrl(array(self::CST_SUBONGLET=>''));
+        return $this->objAdministratif->getBean()->getForm($baseUrl);
+    }
     
     /**
      * @param boolean $blnHasEditorRights
@@ -287,9 +243,7 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
      */
     public function getListControlTools($blnHasEditorRights=false)
     {
-        $divContent = '';
-        // On ajoute le bouton de refresh ?        
-        // <button type="button" class="btn btn-default btn-sm" title="Rafraîchir la liste"><a href="/admin?onglet=library&amp;subOnglet=index&amp;curPage=1" class="text-white"><i class="fa-solid fa-arrows-rotate"></i></a></button>&nbsp;
+        $divContent = $this->getRefreshButton().self::CST_NBSP;
         
         // Si on a les droits, on ajoute le bouton de download
         if ($blnHasEditorRights) {
@@ -353,7 +307,21 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
             $strContent .= $objItem->getBean()->getRow($blnHasEditorRights);
         }
         
-        return $strContent;
+        $attributes = array(
+            // On défini le titre
+            self::LABEL_ADMINISTRATIFS,
+            // On défini un éventuel entête/footer de boutons d'actions
+            $this->getListControlTools($blnHasEditorRights),
+            // On défini le tag de la liste
+            $this->slugOnglet,
+            // On défini la description de la liste
+            self::LABEL_LIST_ADMINISTRATIFS,
+            // On défini le header de la liste
+            $this->getListHeaderRow($blnHasEditorRights),
+            // On défini le contenu de la liste
+            $strContent,
+        );
+        return $this->getRender(self::WEB_PPFC_LIST_DEFAULT, $attributes);
     }
     
     /**
@@ -363,6 +331,49 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
      */
     public function getDownloadButton()
     {
-        return '<button type="button" class="btn btn-default btn-sm btn-light ajaxAction" title="Exporter la liste" data-trigger="click" data-ajax="csvExport" data-type="'.$this->slugOnglet.'"><i class="fa-solid fa-download"></i></button>';
+        $btnContent = $this->getIcon(self::I_DOWNLOAD);
+        $btnAttributes = array(
+            self::ATTR_CLASS => 'btn btn-default btn-sm btn-light ajaxAction',
+            self::ATTR_TITLE => 'Exporter la liste',
+            self::ATTR_DATA_TRIGGER => 'click',
+            self::ATTR_DATA_AJAX => 'csvExport',
+            self::ATTR_DATA_TYPE => $this->slugOnglet,
+        );
+        return $this->getButton($btnContent, $btnAttributes);
+    }
+    
+    public function getCancelButton()
+    {
+        $label = $this->getIcon(self::I_ANGLES_LEFT).self::CST_NBSP.self::LABEL_ANNULER;
+        $href = $this->getUrl(array(self::CST_SUBONGLET=>''));
+        return $this->getLinkedButton($label, $href);
+    }
+    
+    public function getReturnButton()
+    {
+        $label = $this->getIcon(self::I_ANGLES_LEFT).self::CST_NBSP.self::LABEL_RETOUR;
+        $href = $this->getUrl(array(self::CST_SUBONGLET=>''));
+        return $this->getLinkedButton($label, $href);
+    }
+    
+    public function getCreateButton()
+    {
+        $label = $this->getIcon(self::I_EDIT).self::CST_NBSP.self::LABEL_CREER_ENTREE;
+        $href = $this->getUrl(array(self::CST_SUBONGLET=>self::CST_WRITE));
+        return $this->getLinkedButton($label, $href);
+    }
+    
+    public function getRefreshButton()
+    {
+        $aContent = $this->getIcon(self::I_REFRESH);
+        $btnContent = $this->getLink($aContent, $this->getUrl(), 'text-dark');
+        return $this->getButton($btnContent, array(self::ATTR_CLASS=>'btn btn-default btn-sm btn-light'));
+    }
+    
+    public function getLinkedButton($label, $href)
+    {
+        $btnAttributes = array(self::ATTR_CLASS=>'btn btn-primary mb-3 btn-block');
+        $strButton = $this->getButton($label, $btnAttributes);
+        return $this->getLink($strButton, $href, '');
     }
 }

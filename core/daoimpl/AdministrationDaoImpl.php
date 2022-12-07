@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
  * Classe AdministrationDaoImpl
  * @author Hugues
  * @since 2.22.12.05
- * @version 2.22.12.06
+ * @version 2.22.12.07
  */
 class AdministrationDaoImpl extends LocalDaoImpl
 {
@@ -80,5 +80,51 @@ class AdministrationDaoImpl extends LocalDaoImpl
         $row = MySQLClass::wpdbSelect($prepRequest);
         return (empty($row) ? new AdministrationClass() : new AdministrationClass($row[0]));
         //////////////////////////////
+    }
+    
+    /**
+     * @param array $attributes
+     * @return int
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function insertAdministration($attributes)
+    {
+        //////////////////////////////
+        // Construction de la requête
+        $request  = "INSERT INTO ".$this->dbTable." (genre, nomTitulaire, labelPoste) ";
+        $request .= "VALUES ('%s', '%s', '%s');";
+        return parent::insert($request, $attributes);
+    }
+    
+    /**
+     * @param array $attributes
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function updateAdministration($attributes)
+    {
+        //////////////////////////////
+        // Construction de la requête
+        $request  = "UPDATE ".$this->dbTable." SET ";
+        $request .= "genre = '%s', ";
+        $request .= "nomTitulaire = '%s', ";
+        $request .= "labelPoste = '%s' ";
+        $request .= "WHERE id = '%s';";
+        parent::update($request, $attributes);
+    }
+    
+    /**
+     * @param array $attributes
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function deleteAdministration($attributes)
+    {
+        //////////////////////////////
+        // Construction de la requête
+        $request  = "DELETE FROM ".$this->dbTable." ";
+        $request .= "WHERE id = '%s';";
+        parent::delete($request, $attributes);
     }
 }

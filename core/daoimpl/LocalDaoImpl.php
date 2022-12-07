@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
  * Classe LocalDaoImpl
  * @author Hugues
  * @since 2.22.12.05
- * @version 2.22.12.06
+ * @version 2.22.12.07
  */
 class LocalDaoImpl implements ConstantsInterface, UrlsInterface, LabelsInterface
 {
@@ -63,6 +63,56 @@ class LocalDaoImpl implements ConstantsInterface, UrlsInterface, LabelsInterface
         // Exécution de la requête
         $rows = MySQLClass::wpdbSelect($prepRequest);
         return $this->convertToArray($rows);
+        //////////////////////////////
+    }
+    
+    /**
+     * @param string $request
+     * @param array $attributes
+     * @return int
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function insert($request, $attributes)
+    {
+        $prepRequest = vsprintf($request, $attributes);
+        
+        //////////////////////////////
+        // Exécution de la requête
+        MySQLClass::wpdbQuery($prepRequest);
+        return MySQLClass::getLastInsertId();
+        //////////////////////////////
+    }
+    
+    /**
+     * @param string $request
+     * @param array $attributes
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function update($request, $attributes)
+    {
+        $prepRequest = vsprintf($request, $attributes);
+        
+        //////////////////////////////
+        // Exécution de la requête
+        MySQLClass::wpdbQuery($prepRequest);
+        //////////////////////////////
+    }
+    
+    /**
+     * @param string $request
+     * @param array $attributes
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function delete($request, $attributes)
+    {
+        $prepRequest = vsprintf($request, $attributes);
+        
+        //////////////////////////////
+        // Exécution de la requête
+        MySQLClass::wpdbQuery($prepRequest);
         //////////////////////////////
     }
 }

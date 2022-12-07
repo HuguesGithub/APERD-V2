@@ -50,7 +50,7 @@ class AdministrationBean extends LocalBean
             $trContent  = $this->getCellInput($blnChecked);
             
             // Nom + Lien d'édition
-            $urlEdition = $this->baseUrl.self::CST_AMP.self::CST_ACTION.'='.self::CST_EDIT;
+            $urlEdition = $this->baseUrl.self::CST_AMP.self::CST_SUBONGLET.'='.self::CST_EDIT;
             $aLink = $this->getLink($this->obj->getName(), $urlEdition, self::CST_TEXT_WHITE.' row-title');
             $label = $this->getBalise(self::TAG_STRONG, $aLink);
             $trContent .= $this->getBalise(self::TAG_TD, $label, $attributes);
@@ -84,7 +84,7 @@ class AdministrationBean extends LocalBean
         $urlTemplate = self::WEB_A_FORM_ADMINISTRATION;
         $attributes = array(
             // Création - 1
-            ($this->obj->getField(self::FIELD_ID)=='' ? self::LABEL_CREATION : self::LABEL_EDITION),
+            ($this->obj->getField(self::FIELD_ID)=='' ? self::LABEL_CREER : self::LABEL_MODIFIER),
             // Identifiant de l'Administration - 2
             $this->obj->getField(self::FIELD_ID),
             // Annuler - 3
@@ -128,7 +128,7 @@ class AdministrationBean extends LocalBean
     public function getCellActions()
     {
         // Bouton Edition
-        $urlEdition = $this->baseUrl.self::CST_AMP.self::CST_ACTION.'='.self::CST_EDIT;
+        $urlEdition = $this->baseUrl.self::CST_AMP.self::CST_SUBONGLET.'='.self::CST_WRITE;
         $strIcon = $this->getIcon(self::I_EDIT);
         $strButton = $this->getButton($strIcon, array(self::ATTR_CLASS=>'btn btn-sm btn-primary'));
         $divContent  = $this->getLink($strButton, $urlEdition, '', array(self::ATTR_TITLE=>'Modifier'));
@@ -136,7 +136,7 @@ class AdministrationBean extends LocalBean
         $divContent .= self::CST_NBSP;
         
         // Bouton Suppression
-        $urlSuppression = $this->baseUrl.self::CST_AMP.self::CST_ACTION.'='.self::CST_DELETE;
+        $urlSuppression = $this->baseUrl.self::CST_AMP.self::CST_SUBONGLET.'='.self::CST_DELETE;
         $strIcon = $this->getIcon(self::I_DELETE);
         $strButton = $this->getButton($strIcon, array(self::ATTR_CLASS=>'btn btn-sm btn-danger'));
         $divContent .= $this->getLink($strButton, $urlSuppression, '', array(self::ATTR_TITLE=>'Supprimer'));

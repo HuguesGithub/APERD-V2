@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
  * Classe AdministrationServices
  * @author Hugues
  * @since 2.22.12.05
- * @version 2.22.12.05
+ * @version 2.22.12.07
  */
 class AdministrationServices extends LocalServices
 {
@@ -80,4 +80,48 @@ class AdministrationServices extends LocalServices
     public function getAdministrationById($adminId)
     { return $this->objDao->getAdministrationById($adminId); }
 
+    /**
+     * @param AdministrationClass $obj
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function insert(&$obj)
+    {
+        $arrParams = array(
+            $obj->getField(self::FIELD_GENRE),
+            $obj->getField(self::FIELD_NOMTITULAIRE),
+            $obj->getField(self::FIELD_LABELPOSTE),
+        );
+        $id = $this->objDao->insertAdministration($arrParams);
+        $obj->setField(self::FIELD_ID, $id);
+    }
+    
+    /**
+     * @param AdministrationClass $obj
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function update($obj)
+    {
+        $arrParams = array(
+            $obj->getField(self::FIELD_GENRE),
+            $obj->getField(self::FIELD_NOMTITULAIRE),
+            $obj->getField(self::FIELD_LABELPOSTE),
+            $obj->getField(self::FIELD_ID),
+        );
+        $this->objDao->updateAdministration($arrParams);
+    }
+    
+    /**
+     * @param AdministrationClass $obj
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function delete($obj)
+    {
+        $arrParams = array(
+            $obj->getField(self::FIELD_ID),
+        );
+        $this->objDao->deleteAdministration($arrParams);
+    }
 }

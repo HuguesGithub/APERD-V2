@@ -301,7 +301,7 @@ class WpPageAdminBean extends WpPageBean
         );
         return $this->getRender($urlTemplate, $attributes);
         /*
-    	<!-- 
+        <!--
       <li class="nav-item d-none d-sm-inline-block"%5$s>
         <a class="nav-link" href="/admin?onglet=inbox"><i class="fa-solid fa-envelope"></i>%4$s</a>
       </li>
@@ -324,8 +324,8 @@ class WpPageAdminBean extends WpPageBean
         <a class="nav-link" href="/admin?onglet=profile"><i class="fa-solid fa-user"></i></a>
       </li>
       -->
-	   <!-- /.nav-item -->
-         * 
+       <!-- /.nav-item -->
+         *
        // Nom Prénom de la personne logguée
      $this->CopsPlayer->getFullName(),
      // Si présence de notifications, le badge
@@ -454,7 +454,7 @@ class WpPageAdminBean extends WpPageBean
         // On fait de même avec le subOnglet
         if (!isset($urlElements[self::CST_SUBONGLET]) && $this->slugSubOnglet!='') {
             $url .= self::CST_AMP.self::CST_SUBONGLET.'='.$this->slugSubOnglet;
-        } elseif (isset($urlElements[self::CST_SUBONGLET])) {
+        } elseif (isset($urlElements[self::CST_SUBONGLET]) && $urlElements[self::CST_SUBONGLET]!='') {
             $url .= self::CST_AMP.self::CST_SUBONGLET.'='.$urlElements[self::CST_SUBONGLET];
             unset($urlElements[self::CST_SUBONGLET]);
         }
