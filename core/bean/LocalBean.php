@@ -1,5 +1,6 @@
 <?php
 namespace core\bean;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }

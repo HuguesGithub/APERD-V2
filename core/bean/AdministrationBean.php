@@ -1,6 +1,8 @@
 <?php
 namespace core\bean;
+
 use core\domain\AdministrationClass;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -22,7 +24,7 @@ class AdministrationBean extends LocalBean
     {
         $this->obj = ($objAdministration=='' ? new AdministrationClass() : $objAdministration);
     }
-	
+    
     //////////////////////////////////////////////////
     // METHODES
     //////////////////////////////////////////////////
@@ -93,5 +95,5 @@ class AdministrationBean extends LocalBean
         );
         return $this->getRender($urlTemplate, $attributes);
     }
-	
+    
 }

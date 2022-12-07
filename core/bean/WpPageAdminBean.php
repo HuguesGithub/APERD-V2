@@ -1,5 +1,6 @@
 <?php
 namespace core\bean;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -24,7 +25,7 @@ class WpPageAdminBean extends WpPageBean
      */
     public function __construct()
     {
-		/*
+        /*
         $this->slugPage = self::PAGE_ADMIN;
         $this->slugOnglet = $this->initVar(self::CST_ONGLET);
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
@@ -126,7 +127,7 @@ class WpPageAdminBean extends WpPageBean
         }
         $this->breadCrumbsContent = $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
-		*/
+        */
     }
 
     /**
@@ -142,10 +143,10 @@ class WpPageAdminBean extends WpPageBean
             $arrParams = explode('&', substr($uri, $pos+1, strlen($uri)));
             if (!empty($arrParams)) {
                 foreach ($arrParams as $param) {
-					if (strpos($param, '=')!==false) {
-						list($key, $value) = explode('=', $param);
-						$this->urlParams[$key] = $value;
-					}
+                    if (strpos($param, '=')!==false) {
+                        list($key, $value) = explode('=', $param);
+                        $this->urlParams[$key] = $value;
+                    }
                 }
             }
             $uri = substr($uri, 0, $pos-1);
@@ -169,7 +170,7 @@ class WpPageAdminBean extends WpPageBean
      */
     public function getContentPage()
     {
-		/*
+        /*
         if (!self::isCopsLogged()) {
             // Soit on n'est pas loggué et on affiche la mire d'identification.
             // Celle-ci est invisible et passe visible en cas de souris qui bouge ou touche cliquée.
@@ -189,10 +190,10 @@ class WpPageAdminBean extends WpPageBean
             );
             return $this->getRender($urlTemplate, $attributes);
         }
-		*/
-		/*
+        */
+        /*
         try {
-			if (isset($this->urlParams[self::CST_ONGLET])) {
+            if (isset($this->urlParams[self::CST_ONGLET])) {
                 switch ($this->urlParams[self::CST_ONGLET]) {
                     case self::ONGLET_CALENDAR :
                         $objBean = WpPageAdminCalendarBean::getStaticWpPageBean($this->slugSubOnglet);
@@ -217,21 +218,21 @@ class WpPageAdminBean extends WpPageBean
                         break;
                     case self::ONGLET_DESK   :
                     default       :
-					*/
+                    */
                         $objBean = $this;
-						/*
+                        /*
                     break;
                 }
-			} else {
+            } else {
                 $objBean = $this;
-			}
-			*/
+            }
+            */
             $returned = $objBean->getBoard();
-			/*
+            /*
         } catch (\Exception $Exception) {
             $returned = 'Error';
         }
-		*/
+        */
         return $returned;
     }
 
@@ -243,8 +244,8 @@ class WpPageAdminBean extends WpPageBean
      */
     public function getBoard()
     {
-		return 'Toto';
-		/*
+        return 'Toto';
+        /*
         // Soit on est loggué et on affiche le contenu du bureau du cops
         $urlTemplate = 'web/pages/public/public-board.php';
         $attributes = array(
@@ -265,7 +266,7 @@ class WpPageAdminBean extends WpPageBean
             '', '', '', '', '', '', '', '', '', '', '',
         );
         return $this->getRender($urlTemplate, $attributes);
-		*/
+        */
     }
     
     /**

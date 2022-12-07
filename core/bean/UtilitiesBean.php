@@ -1,9 +1,11 @@
 <?php
 namespace core\bean;
+
 use core\services\AdministrationServices;
 use core\interfaceimpl\ConstantsInterface;
 use core\interfaceimpl\UrlsInterface;
 use core\interfaceimpl\LabelsInterface;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -17,8 +19,8 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
 {
     public function __construct()
     {
-		$this->objAdministrationServices = new AdministrationServices();
-	}
+        $this->objAdministrationServices = new AdministrationServices();
+    }
   
     /**
      * @param string $balise
@@ -30,15 +32,15 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
      */
     protected function getBalise($balise, $label='', $attributes=array())
     {
-		$strBalise = '<'.$balise.$this->getExtraAttributesString($attributes);
+        $strBalise = '<'.$balise.$this->getExtraAttributesString($attributes);
         if (in_array($balise, array(self::TAG_INPUT))) {
             $strBalise .= '/>';
         } else {
             $strBalise .= '>'.$label.'</'.$balise.'>';
         }
-		return $strBalise;
+        return $strBalise;
     }
-	
+    
     /**
      * @param array $attributes
      * @return string
@@ -65,7 +67,7 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
      */
     public function getRender($urlTemplate, $args)
     { return vsprintf(file_get_contents(PLUGIN_PATH.$urlTemplate), $args); }
-	
+    
     /**
      * @param string $label
      * @param array $attributes
@@ -148,7 +150,7 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
         }
         return $this->getBalise(self::TAG_BUTTON, $label, $buttonAttributes);
     }
-	
+    
     /**
      * @param string $label
      * @param array $attributes

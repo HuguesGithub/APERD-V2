@@ -19,16 +19,16 @@ class WpPageBean extends UtilitiesBean
      */
     public function __construct($post='')
     {
-		/*
+        /*
         if ($post=='') {
             $post = get_post();
         }
         $this->objWpPage = WpPage::convertElement($post);
-		*/
+        */
     }
 
     /**
-	 * @return mixed
+     * @return mixed
      * @since 2.22.12.05
      * @version 2.22.12.05
      */
