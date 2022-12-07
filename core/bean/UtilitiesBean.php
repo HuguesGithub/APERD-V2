@@ -65,7 +65,7 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
      * @since 2.22.12.05
      * @version 2.22.12.05
      */
-    public function getRender($urlTemplate, $args)
+    public function getRender($urlTemplate, $args=array())
     { return vsprintf(file_get_contents(PLUGIN_PATH.$urlTemplate), $args); }
     
     /**

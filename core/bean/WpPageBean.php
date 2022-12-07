@@ -19,6 +19,7 @@ class WpPageBean extends UtilitiesBean
      */
     public function __construct($post='')
     {
+        parent::__construct();
         /*
         if ($post=='') {
             $post = get_post();

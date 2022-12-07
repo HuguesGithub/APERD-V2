@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * Classe WpPageAdminBean
  * @author Hugues
  * @since 2.22.12.05
- * @version 2.22.12.05
+ * @version 2.22.12.07
  */
 class WpPageAdminBean extends WpPageBean
 {
@@ -21,14 +21,17 @@ class WpPageAdminBean extends WpPageBean
     /**
      * Class Constructor
      * @since 2.22.12.05
-     * @version 2.22.12.05
+     * @version 2.22.12.07
      */
     public function __construct()
     {
-        /*
+        parent::__construct();
+        
         $this->slugPage = self::PAGE_ADMIN;
         $this->slugOnglet = $this->initVar(self::CST_ONGLET);
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
+        
+        /*
         
         $this->urlOnglet = $this->getPageUrl().'?'.self::CST_ONGLET.'=';
         
@@ -56,17 +59,24 @@ class WpPageAdminBean extends WpPageBean
         } elseif (isset($_SESSION[self::FIELD_MATRICULE])) {
             $this->CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
         }
-        
+        */
         $this->arrSidebarContent = array(
             self::ONGLET_DESK => array(
-                self::FIELD_ICON  => 'desktop',
-                self::FIELD_LABEL => 'Bureau',
+                self::CST_ICON  => self::I_DESKTOP,
+                self::CST_LABEL => self::LABEL_BUREAU,
             ),
+            self::ONGLET_ADMINISTRATIFS => array(
+                self::CST_ICON  => self::I_USERS,
+                self::CST_LABEL => self::LABEL_ADMINISTRATIFS,
+            ),
+            /*
             self::ONGLET_LIBRARY => array(
                 self::FIELD_ICON  => 'book',
                 self::FIELD_LABEL => 'Bibliothèque',
             ),
+            */
         );
+        /*
         if (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='Guest') {
             $this->arrSidebarContentNonGuest = array(
                 self::ONGLET_INBOX => array(
@@ -113,23 +123,27 @@ class WpPageAdminBean extends WpPageBean
             );
             *
         }
-
-        $this->btnDark = 'btn-dark';
-        $this->btnDisabled = 'btn-dark disabled';
-        
+        */
         // Le lien vers la Home
-        $aContent = $this->getIcon('desktop');
-        $buttonContent = $this->getLink($aContent, '/'.self::PAGE_ADMIN, self::CST_TEXT_WHITE);
-        if ($this->slugOnglet=='desk' || $this->slugOnglet=='') {
-            $buttonAttributes = array(self::ATTR_CLASS=>$this->btnDisabled);
+        $aContent = $this->getIcon(self::I_DESKTOP);
+        $buttonContent = $this->getLink($aContent, $this->getPageUrl(), self::CST_TEXT_WHITE);
+        if ($this->slugOnglet==self::ONGLET_DESK || $this->slugOnglet=='') {
+            $buttonAttributes = array(self::ATTR_CLASS=>self::CSS_BTN_DARK.' '.self::CSS_DISABLED);
         } else {
-            $buttonAttributes = array(self::ATTR_CLASS=>$this->btnDark);
+            $buttonAttributes = array(self::ATTR_CLASS=>self::CSS_BTN_DARK);
         }
         $this->breadCrumbsContent = $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
-        */
     }
-
+    
+    /**
+     * @return string
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+     public function getPageUrl()
+     { return '/'.$this->slugPage; }
+     
     /**
      * @return string
      * @since 1.22.10.18
@@ -191,10 +205,9 @@ class WpPageAdminBean extends WpPageBean
             return $this->getRender($urlTemplate, $attributes);
         }
         */
-        /*
         try {
-            if (isset($this->urlParams[self::CST_ONGLET])) {
-                switch ($this->urlParams[self::CST_ONGLET]) {
+            switch ($this->slugOnglet) {
+                /**
                     case self::ONGLET_CALENDAR :
                         $objBean = WpPageAdminCalendarBean::getStaticWpPageBean($this->slugSubOnglet);
                         break;
@@ -216,23 +229,26 @@ class WpPageAdminBean extends WpPageBean
                     case self::ONGLET_AUTOPSIE :
                         $objBean = new WpPageAdminAutopsieBean();
                         break;
-                    case self::ONGLET_DESK   :
-                    default       :
                     */
-                        $objBean = $this;
-                        /*
+                case self::ONGLET_ADMINISTRATIFS :
+                    $objBean = new WpPageAdminAdministratifBean();
                     break;
-                }
+                case self::ONGLET_DESK   :
+                default       :
+                    $objBean = $this;
+                    break;
+            }
+            /*
             } else {
                 $objBean = $this;
             }
             */
             $returned = $objBean->getBoard();
             /*
+        */
         } catch (\Exception $Exception) {
             $returned = 'Error';
         }
-        */
         return $returned;
     }
 
@@ -240,60 +256,144 @@ class WpPageAdminBean extends WpPageBean
      * Retourne le contenu de l'interface
      * @return string
      * @since 2.22.12.05
-     * @version 2.22.12.05
+     * @version 2.22.12.07
      */
     public function getBoard()
     {
-        return 'Toto';
-        /*
-        // Soit on est loggué et on affiche le contenu du bureau du cops
-        $urlTemplate = 'web/pages/public/public-board.php';
+        // On est loggué, on affiche le bureau.
+        $urlTemplate = self::WEB_PP_BOARD;
         $attributes = array(
-            // La sidebar
-            $this->getSideBar(),
-            // Le contenu de la page
-            $this->getOngletContent(),
-            // L'id
-            $this->CopsPlayer->getMaskMatricule(),
-            // Le nom
-            $this->CopsPlayer->getFullName(),
             // La barre de navigation
             $this->getNavigationBar(),
+            // Le nom
+            'Joneaux Hugues',
+            // La sidebar
+            $this->getSideBar(),
             // Header
             $this->getContentHeader(),
+            // Le contenu de l'onglet
+            $this->getOngletContent(),
             // Version
             self::VERSION,
-            '', '', '', '', '', '', '', '', '', '', '',
+            //
+            'https://v2-aperd.jhugues.fr',
+            /*
+        // Soit on est loggué et on affiche le contenu du bureau du cops
+            // L'id
+            $this->CopsPlayer->getMaskMatricule(),
+            $this->CopsPlayer->getFullName(),
+        */
         );
         return $this->getRender($urlTemplate, $attributes);
+    }
+    
+    /**
+     * @return string
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function getNavigationBar()
+    {
+        $urlTemplate = self::WEB_PPFN_NAV_BAR;
+        $attributes = array(
+            // On va juste ajouter déventuels icones
+            '',
+        );
+        return $this->getRender($urlTemplate, $attributes);
+        /*
+    	<!-- 
+      <li class="nav-item d-none d-sm-inline-block"%5$s>
+        <a class="nav-link" href="/admin?onglet=inbox"><i class="fa-solid fa-envelope"></i>%4$s</a>
+      </li>
+      <!-- /.nav-item -- >
+      <!-- Notifications Dropdown Menu -- >
+      <li class="nav-item"%5$s>
+        <a class="nav-link" data-toggle="dropdown" href="#"><i class="fa-solid fa-bell"></i>%2$s</a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          %3$s
+          <div class="dropdown-divider"></div>
+          <a href="/admin?onglet=inbox&subOnglet=alert" class="dropdown-item dropdown-footer">Toutes les Notifications</a>
+        </div>
+      </li>
+      <!-- /.nav-item -- >
+      <li class="nav-item d-none d-sm-inline-block"%5$s>
+        <a class="nav-link" href="/admin?onglet=settings"><i class="fa-solid fa-gear"></i></a>
+      </li>
+      <!-- /.nav-item -- >
+      <li class="nav-item"%5$s>
+        <a class="nav-link" href="/admin?onglet=profile"><i class="fa-solid fa-user"></i></a>
+      </li>
+      -->
+	   <!-- /.nav-item -->
+         * 
+       // Nom Prénom de la personne logguée
+     $this->CopsPlayer->getFullName(),
+     // Si présence de notifications, le badge
+     // <span class="badge badge-warning navbar-badge">0</span>
+     '',
+     // La liste des notifications
+     // Ou un message adapté s'il n'y en a pas.
+     '<span class="dropdown-item dropdown-header">Aucune nouvelle Notification</span>',
+     // Si présence d'un nouveau mail, le badge
+     ($nbMailsNonLus!=0 ? '<span class="badge badge-success navbar-badge">'.$nbMailsNonLus.'</span>' : ''),
+     // Si Guest, on cache des trucs.
+     ($_SESSION[self::FIELD_MATRICULE]=='Guest' ? ' style="display:none !important;"' : ''),
+     );
         */
     }
     
     /**
-     * @since 1.22.10.18
-     * @version 1.22.10.18
-     *
-     protected function getSideBar()
-     {
-         $urlTemplate = 'web/pages/public/fragments/public-fragments-sidebar.php';
-         
-         $sidebarContent = '';
-         foreach ($this->arrSidebarContent as $strOnglet => $arrOnglet) {
-            $curOnglet = (isset($this->urlParams[self::CST_ONGLET]) && $strOnglet==$this->urlParams[self::CST_ONGLET]);
+     * @return string
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function getContentHeader()
+    {
+        $urlTemplate = self::WEB_PPFS_CONTENT_HEADER;
+        $attributes = array(
+            // Le Titre
+            '',
+            // Le BreadCrumb
+            $this->getDiv($this->breadCrumbsContent, array(self::ATTR_CLASS=>'btn-group float-sm-right')),
+        );
+        return $this->getRender($urlTemplate, $attributes);
+    }
+     
+     
+    /**
+     * @return string
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function getSideBar()
+    {
+        $urlTemplate = self::WEB_PPFN_NAV_SIDEBAR;
+
+        $sidebarContent = '';
+        foreach ($this->arrSidebarContent as $strOnglet => $arrOnglet) {
+            // Si c'est l'onglet courant ou par défaut
+            $blnCurrent = ($this->slugOnglet==$strOnglet || $this->slugOnglet=='' && $strOnglet==self::ONGLET_DESK);
+            // Le lien a-t-il des enfants ?
             $hasChildren = isset($arrOnglet[self::CST_CHILDREN]);
-         
+
             // Construction du label
-            $pContent  = $arrOnglet[self::FIELD_LABEL];
-            $pContent .= ($hasChildren ? $this->getIcon(self::I_ANGLE_LEFT, 'right') : '');
-         
+            $pContent  = $arrOnglet[self::CST_LABEL];
+            $pContent .= ($hasChildren ? $this->getIcon(self::I_ANGLE_LEFT, self::CST_RIGHT) : '');
+
             // Construction du lien
-            $aContent  = $this->getIcon($arrOnglet[self::FIELD_ICON], 'nav-icon');
+            $urlElements = array(
+                self::CST_ONGLET => $strOnglet,
+            );
+            $aContent  = $this->getIcon($arrOnglet[self::CST_ICON], 'nav-icon');
             $aContent .= $this->getBalise(self::TAG_P, $pContent);
             $aAttributes = array(
-                self::ATTR_HREF  => $this->urlOnglet.$strOnglet,
-                self::ATTR_CLASS => 'nav-link'.($curOnglet ? ' '.self::CST_ACTIVE : ''),
+                self::ATTR_HREF  => $this->getUrl($urlElements),
+                self::ATTR_CLASS => 'nav-link'.($blnCurrent ? ' '.self::CST_ACTIVE : ''),
             );
             $superLiContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
+            
+            /*
+         
          
             // S'il a des enfants, on enrichit
             if ($hasChildren) {
@@ -317,71 +417,70 @@ class WpPageAdminBean extends WpPageBean
                 $superLiContent .= $this->getBalise(self::TAG_UL, $ulContent, $liAttributes);
             }
          
+        */
             // Construction de l'élément de la liste
-            $liAttributes = array(self::ATTR_CLASS=>'nav-item'.($curOnglet ? ' menu-open' : ''));
+            $liAttributes = array(self::ATTR_CLASS=>'nav-item'); //.($this->slugOnglet ? ' menu-open' : '') ne sert à rien pour le moment
             $sidebarContent .= $this->getBalise(self::TAG_LI, $superLiContent, $liAttributes);
-         }
-         
-         $attributes = array(
+        }
+        
+        $attributes = array(
             $sidebarContent,
-            // La date
-            self::getCopsDate('D m-d-Y'),
-            // L'heure
-            self::getCopsDate('H:i:s'),
-         );
-         return $this->getRender($urlTemplate, $attributes);
+        );
+        return $this->getRender($urlTemplate, $attributes);
+    }
+    
+    /**
+     * @param array $urlElements
+     * @return string
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function getUrl($urlElements=array())
+    {
+        $url = $this->getPageUrl();
+        /////////////////////////////////////////////
+        // Si l'onglet est passé en paramètre et qu'il est défini, on va le reprendre
+        // S'il est défini et vide, on va l'enlever.
+        // S'il n'est pas défini, on va mettre l'onglet courant par défaut.
+        if (!isset($urlElements[self::CST_ONGLET])) {
+            $url .= '?'.self::CST_ONGLET.'='.$this->slugOnglet;
+        } else {
+            $url .= '?'.self::CST_ONGLET.'='.$urlElements[self::CST_ONGLET];
+            unset($urlElements[self::CST_ONGLET]);
+        }
+        /////////////////////////////////////////////
+     
+        /////////////////////////////////////////////
+        // On fait de même avec le subOnglet
+        if (!isset($urlElements[self::CST_SUBONGLET]) && $this->slugSubOnglet!='') {
+            $url .= self::CST_AMP.self::CST_SUBONGLET.'='.$this->slugSubOnglet;
+        } elseif (isset($urlElements[self::CST_SUBONGLET])) {
+            $url .= self::CST_AMP.self::CST_SUBONGLET.'='.$urlElements[self::CST_SUBONGLET];
+            unset($urlElements[self::CST_SUBONGLET]);
+        }
+        /////////////////////////////////////////////
+     
+        /////////////////////////////////////////////
+        // Maintenant, on doit ajouter ceux passés en paramètre
+        if (!empty($urlElements)) {
+            foreach ($urlElements as $key => $value) {
+                if ($value!='') {
+                    $url .= self::CST_AMP.$key.'='.$value;
+                }
+            }
+        }
+        /////////////////////////////////////////////
+     
+        return $url;
      }
-
-     /**
-      * @return string
-      * @since v1.22.11.11
-      * @version v1.22.11.11
-      *
-     public function getOngletContent()
-     { return ''; }
      
     /**
-     * @since 1.22.10.18
-     * @version 1.22.10.18
-     *
-    public function getNavigationBar()
-    {
-        // On détermine le nombre de messages non lus dans la boite de réception
-        $nbMailsNonLus = $this->CopsMailServices->getNombreMailsNonLus();
-
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-content-navigation-bar.php';
-        $attributes = array(
-            // Nom Prénom de la personne logguée
-            $this->CopsPlayer->getFullName(),
-            // Si présence de notifications, le badge
-            // <span class="badge badge-warning navbar-badge">0</span>
-            '',
-            // La liste des notifications
-            // Ou un message adapté s'il n'y en a pas.
-            '<span class="dropdown-item dropdown-header">Aucune nouvelle Notification</span>',
-            // Si présence d'un nouveau mail, le badge
-            ($nbMailsNonLus!=0 ? '<span class="badge badge-success navbar-badge">'.$nbMailsNonLus.'</span>' : ''),
-            // Si Guest, on cache des trucs.
-            ($_SESSION[self::FIELD_MATRICULE]=='Guest' ? ' style="display:none !important;"' : ''),
-        );
-        return $this->getRender($urlTemplate, $attributes);
-    }
-
-    /**
-     * @since 1.22.10.18
-     * @version 1.22.10.18
-     *
-    public function getContentHeader()
-    {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-content-header.php';
-        $attributes = array(
-            // Le Titre
-            '',
-            // Le BreadCrumb
-            $this->getDiv($this->breadCrumbsContent, array(self::ATTR_CLASS=>'btn-group float-sm-right')),
-        );
-        return $this->getRender($urlTemplate, $attributes);
-    }
+     * @return string
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function getOngletContent()
+    { return 'A définir : Bureau'; }
   
     /**
      * @since 1.22.10.18
@@ -414,14 +513,6 @@ class WpPageAdminBean extends WpPageBean
         /////////////////////////////////////////
         return $strLeftPanel;
     }
-        
-    /**
-     * @return string
-     * @since 1.22.10.28
-     * @version 1.22.10.28
-     *
-    public function getPageUrl()
-    { return '/'.$this->slugPage; }
 
     /**
      * @param array $urlElements
@@ -446,49 +537,5 @@ class WpPageAdminBean extends WpPageBean
         return $url;
     }
     
-    /**
-     * @param array
-     * @return string
-     * @since 1.22.10.28
-     * @version 1.22.10.28
-     *
-    public function getUrl($urlElements=array())
-    {
-        $url = $this->getPageUrl();
-        /////////////////////////////////////////////
-        // Si l'onglet est passé en paramètre et qu'il est défini, on va le reprendre
-        // S'il est défini et vide, on va l'enlever.
-        // S'il n'est pas défini, on va mettre l'onglet courant par défaut.
-        if (!isset($urlElements[self::CST_ONGLET])) {
-            $url .= '?'.self::CST_ONGLET.'='.$this->slugOnglet;
-        } else {
-            $url .= '?'.self::CST_ONGLET.'='.$urlElements[self::CST_ONGLET];
-            unset($urlElements[self::CST_ONGLET]);
-        }
-        /////////////////////////////////////////////
-        
-        /////////////////////////////////////////////
-        // On fait de même avec le subOnglet
-        if (!isset($urlElements[self::CST_SUBONGLET])) {
-            $url .= self::CST_AMP.self::CST_SUBONGLET.'='.$this->slugSubOnglet;
-        } else {
-            $url .= self::CST_AMP.self::CST_SUBONGLET.'='.$urlElements[self::CST_SUBONGLET];
-            unset($urlElements[self::CST_SUBONGLET]);
-        }
-        /////////////////////////////////////////////
-        
-        /////////////////////////////////////////////
-        // Maintenant, on doit ajouter ceux passés en paramètre
-        if (!empty($urlElements)) {
-            foreach ($urlElements as $key => $value) {
-                if ($value!='') {
-                    $url .= self::CST_AMP.$key.'='.$value;
-                }
-            }
-        }
-        /////////////////////////////////////////////
-        
-        return $url;
-    }
     */
 }

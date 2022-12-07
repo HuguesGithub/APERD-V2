@@ -1,0 +1,21 @@
+/* ----------------------------------------------------- */
+/* On encadre les boutons de navigation du Header        */
+.main-header .nav-item > .nav-link i {
+    border: 1px solid rgba(255, 255, 255, .75);
+    border-radius: 5px;
+    padding: 2px 6px;
+}
+
+/* ----------------------------------------------------- */
+/* Dans le breadcrumbs, les boutons non disabled doivent */
+/* avoir un / pour faire séparation avec le lien suivant */
+.content-header .btn:not(.disabled):not(.dropdown-toggle)::after {
+  content: "/";
+  padding-left: 20px;
+}
+
+/* ----------------------------------------------------- */
+/* Propriétés pour les tableaux                          */
+.toolbox-controls {
+  padding: 5px;
+}

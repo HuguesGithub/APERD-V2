@@ -25,7 +25,6 @@ class AdministrationServices extends LocalServices
      */
     public function __construct()
     {
-        parent::__construct();
         $this->objDao = new AdministrationDaoImpl();
     }
 
@@ -58,7 +57,7 @@ class AdministrationServices extends LocalServices
     public function getAdministrationsWithFilters($arrFilters=array(), $orderBy='', $order='')
     {
         if ($orderBy=='') {
-            $orderBy = self::FIELD_LABELPOSTE;
+            $orderBy = self::FIELD_NOMTITULAIRE;
         }
         if ($order=='' && $orderBy!=self::SQL_ORDER_RAND) {
             $order = self::SQL_ORDER_ASC;

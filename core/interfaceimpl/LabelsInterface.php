@@ -19,8 +19,12 @@ interface LabelsInterface
 
     /////////////////////////////////////////////////
     // Libellés divers
-    const LABEL_CREATION       = 'Création';
-    const LABEL_EDITION        = 'Édition';
+    const LABEL_ACTIONS             = 'Actions';
+    const LABEL_ADMINISTRATIFS      = 'Administratifs';
+    const LABEL_BUREAU              = 'Bureau';
+    const LABEL_CREATION            = 'Création';
+    const LABEL_EDITION             = 'Édition';
+    const LABEL_LIST_ADMINISTRATIFS = 'Liste des Administratifs';
     
     /////////////////////////////////////////////////
     // Messages d'erreurs
