@@ -75,13 +75,8 @@ class LocalDaoImpl implements ConstantsInterface, UrlsInterface, LabelsInterface
      */
     public function insert($request, $attributes)
     {
-        $prepRequest = vsprintf($request, $attributes);
-        
-        //////////////////////////////
-        // Exécution de la requête
-        MySQLClass::wpdbQuery($prepRequest);
+        $this->crud($request, $attributes);
         return MySQLClass::getLastInsertId();
-        //////////////////////////////
     }
     
     /**
@@ -91,14 +86,7 @@ class LocalDaoImpl implements ConstantsInterface, UrlsInterface, LabelsInterface
      * @version 2.22.12.07
      */
     public function update($request, $attributes)
-    {
-        $prepRequest = vsprintf($request, $attributes);
-        
-        //////////////////////////////
-        // Exécution de la requête
-        MySQLClass::wpdbQuery($prepRequest);
-        //////////////////////////////
-    }
+    { $this->crud($request, $attributes); }
     
     /**
      * @param string $request
@@ -107,6 +95,15 @@ class LocalDaoImpl implements ConstantsInterface, UrlsInterface, LabelsInterface
      * @version 2.22.12.07
      */
     public function delete($request, $attributes)
+    { $this->crud($request, $attributes); }
+    
+    /**
+     * @param string $request
+     * @param array $attributes
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function crud($request, $attributes)
     {
         $prepRequest = vsprintf($request, $attributes);
         

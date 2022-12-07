@@ -32,12 +32,7 @@ class WpPageAdminBean extends WpPageBean
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
         
         /*
-        
-        $this->urlOnglet = $this->getPageUrl().'?'.self::CST_ONGLET.'=';
-        
         $this->analyzeUri();
-        $this->CopsPlayerServices = new CopsPlayerServices();
-        $this->CopsMailServices   = new CopsMailServices();
     
         if (isset($_POST[self::FIELD_MATRICULE])) {
             // On cherche a priori à se logguer
@@ -69,59 +64,20 @@ class WpPageAdminBean extends WpPageBean
                 self::CST_ICON  => self::I_USERS,
                 self::CST_LABEL => self::LABEL_ADMINISTRATIFS,
             ),
-            /*
-            self::ONGLET_LIBRARY => array(
-                self::FIELD_ICON  => 'book',
-                self::FIELD_LABEL => 'Bibliothèque',
-            ),
-            */
         );
+        // TODO : on garde un exemple d'entrée avec des enfants. Et le merge pour ajouter les menus des personnes
+        // identifiées. Si ce différentiel est maintenu
         /*
-        if (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='Guest') {
-            $this->arrSidebarContentNonGuest = array(
-                self::ONGLET_INBOX => array(
-                    self::FIELD_ICON  => 'envelope',
-                    self::FIELD_LABEL => 'Messagerie',
-                ),
                 self::ONGLET_CALENDAR => array(
                     self::FIELD_ICON   => 'calendar-days',
                     self::FIELD_LABEL  => 'Calendrier',
-                    /*
                     self::CST_CHILDREN => array(
                         self::CST_CAL_MONTH  => 'Calendrier',
                         self::CST_CAL_EVENT  => 'Événements',
                         self::CST_CAL_PARAM  => 'Paramètres',
                     ),
-                    *
                 ),
-            );
             $this->arrSidebarContent = array_merge($this->arrSidebarContent, $this->arrSidebarContentNonGuest);
-            /*
-            $this->arrSidebarContent = array(
-                self::ONGLET_AUTOPSIE => array(
-                    self::FIELD_ICON  => 'box-archive',
-                    self::FIELD_LABEL => 'Autopsies',
-                ),
-                self::ONGLET_ENQUETE => array(
-                    self::FIELD_ICON  => self::I_FILE_CATEGORY,
-                    self::FIELD_LABEL => 'Enquêtes',
-                ),
-                
-                self::ONGLET_ARCHIVE => array(
-                    self::FIELD_ICON  => 'box-archive',
-                    self::FIELD_LABEL => 'Archives',
-                ),
-                'player' => array(
-                    self::FIELD_ICON   => 'user',
-                    self::FIELD_LABEL  => 'Personnage',
-                    self::CST_CHILDREN => array(
-                        'player-carac'  => 'Caractéristiques',
-                        'player-comps'  => 'Compétences',
-                        'player-story'  => 'Background',
-                    ),
-                ),
-            );
-            *
         }
         */
         // Le lien vers la Home
@@ -144,6 +100,7 @@ class WpPageAdminBean extends WpPageBean
      public function getPageUrl()
      { return '/'.$this->slugPage; }
      
+    // TODO : On arrive à s'en passer ? Ou j'initialise individuellement pour le moment ?
     /**
      * @return string
      * @since 1.22.10.18
@@ -184,6 +141,7 @@ class WpPageAdminBean extends WpPageBean
      */
     public function getContentPage()
     {
+        // TODO : Gestion de l'identification.
         /*
         if (!self::isCopsLogged()) {
             // Soit on n'est pas loggué et on affiche la mire d'identification.
@@ -207,29 +165,6 @@ class WpPageAdminBean extends WpPageBean
         */
         try {
             switch ($this->slugOnglet) {
-                /**
-                    case self::ONGLET_CALENDAR :
-                        $objBean = WpPageAdminCalendarBean::getStaticWpPageBean($this->slugSubOnglet);
-                        break;
-                    case self::ONGLET_INBOX :
-                        $objBean = WpPageAdminMailBean::getStaticWpPageBean($this->slugSubOnglet);
-                        break;
-                    case self::ONGLET_LIBRARY :
-                        $objBean = WpPageAdminLibraryBean::getStaticWpPageBean($this->slugSubOnglet);
-                        break;
-                    case 'player' :
-                        $objBean = new AdminCopsPlayerPageBean();
-                        break;
-                    case self::ONGLET_PROFILE :
-                        $objBean = new AdminCopsProfilePageBean();
-                        break;
-                    case self::ONGLET_ENQUETE :
-                        $objBean = new WpPageAdminEnqueteBean();
-                        break;
-                    case self::ONGLET_AUTOPSIE :
-                        $objBean = new WpPageAdminAutopsieBean();
-                        break;
-                    */
                 case self::ONGLET_ADMINISTRATIFS :
                     $objBean = new WpPageAdminAdministratifBean();
                     break;
@@ -238,14 +173,7 @@ class WpPageAdminBean extends WpPageBean
                     $objBean = $this;
                     break;
             }
-            /*
-            } else {
-                $objBean = $this;
-            }
-            */
             $returned = $objBean->getBoard();
-            /*
-        */
         } catch (\Exception $Exception) {
             $returned = 'Error';
         }
@@ -392,9 +320,8 @@ class WpPageAdminBean extends WpPageBean
             );
             $superLiContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
             
+            // TODO : Gestion des enfants
             /*
-         
-         
             // S'il a des enfants, on enrichit
             if ($hasChildren) {
                 $ulContent = '';
@@ -419,7 +346,8 @@ class WpPageAdminBean extends WpPageBean
          
         */
             // Construction de l'élément de la liste
-            $liAttributes = array(self::ATTR_CLASS=>'nav-item'); //.($this->slugOnglet ? ' menu-open' : '') ne sert à rien pour le moment
+            //.($this->slugOnglet ? ' menu-open' : '') ne sert à rien pour le moment
+            $liAttributes = array(self::ATTR_CLASS=>'nav-item');
             $sidebarContent .= $this->getBalise(self::TAG_LI, $superLiContent, $liAttributes);
         }
         
