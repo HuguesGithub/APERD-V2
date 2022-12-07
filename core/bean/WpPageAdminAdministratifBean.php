@@ -124,7 +124,11 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
                 $strMainContent = '';
             } else {
                 // Bouton Créer
-                $strBtnCreationAnnulation = '';
+                $btnAttributes = array(self::ATTR_CLASS=>'btn btn-primary mb-3 btn-block');
+                $label = $this->getIcon(self::I_EDIT).self::CST_NBSP.self::LABEL_CREER_ENTREE;
+                $strButton = $this->getButton($label, $btnAttributes);
+                $href = $this->getUrl(array(self::CST_ACTION=>self::CST_WRITE));
+                $strBtnCreationAnnulation = $this->getLink($strButton, $href, '');
                 // Interface de liste
                 $listContent = $this->getListContent($blnHasEditorRights);
                 $attributes = array(
@@ -146,7 +150,23 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
             }
         } else {
             // Interface de liste
-            $strMainContent = $this->getRender(self::WEB_PPFC_LIST_ADM);
+            $listContent = $this->getListContent($blnHasEditorRights);
+            $attributes = array(
+                // On défini le titre
+                self::LABEL_ADMINISTRATIFS,
+                // On défini un éventuel entête/footer de boutons d'actions
+                $this->getListControlTools($blnHasEditorRights),
+                // On défini le tag de la liste
+                $this->slugOnglet,
+                // On défini la description de la liste
+                self::LABEL_LIST_ADMINISTRATIFS,
+                // On défini le header de la liste
+                $this->getListHeaderRow($blnHasEditorRights),
+                // On défini le contenu de la liste
+                $listContent,
+                
+            );
+            $strMainContent = $this->getRender(self::WEB_PPFC_LIST_DEFAULT, $attributes);
         }
         
         $urlTemplate = 'web/pages/publique/fragments/section/section-onglet-content-one-fourth.tpl';
@@ -273,17 +293,14 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
         
         // Si on a les droits, on ajoute le bouton de download
         if ($blnHasEditorRights) {
-            $divContent .= '<button type="button" class="btn btn-default btn-sm ajaxAction" title="Exporter la liste" data-trigger="click" data-ajax="csvExport" data-type="'.$this->slugOnglet.'"><i class="fa-solid fa-download"></i></button>';
+            $divContent .= $this->getDownloadButton();
         }
         
         // On ajoute le div de pagination, s'il y a lieu
         if ($this->blnHasPagination) {
             $divContent .= $this->getDiv($this->strPagination, array(self::ATTR_CLASS=>'float-right'));
         }
-        /*
-					<button type="button" class="btn btn-default btn-sm disabled text-white"><i class="fa-solid fa-caret-left"></i></button>&nbsp;1 - 10 sur 790&nbsp;
-					<button type="button" class="btn btn-default btn-sm "><a href="/admin?onglet=library&amp;subOnglet=index&amp;curPage=2" class="text-white"><i class="fa-solid fa-caret-right"></i></a></button>
-         */
+        
         $divAttributes = array(self::ATTR_CLASS=>$this->slugOnglet.'-controls toolbox-controls');
         return $this->getDiv($divContent, $divAttributes);
     }
@@ -313,34 +330,39 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
         }
         return $this->getBalise(self::TAG_TR, $trContent);
     }
-    /*
-     */
     
+    /**
+     * @return string
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
     public function getListContent($blnHasEditorRights=false)
     {
-        $baseUrl = ($blnHasEditorRights ? $this->getUrl() : '');
         $strContent = '';
         $this->blnHasPagination = false;
+        $this->strPagination = '';
+ 
+        /*
+         <button type="button" class="btn btn-default btn-sm disabled text-white"><i class="fa-solid fa-caret-left"></i></button>&nbsp;1 - 10 sur 790&nbsp;
+         <button type="button" class="btn btn-default btn-sm "><a href="/admin?onglet=library&amp;subOnglet=index&amp;curPage=2" class="text-white"><i class="fa-solid fa-caret-right"></i></a></button>
+         */
         
         $objItems = $this->objAdministrationServices->getAdministrationsWithFilters();
         while (!empty($objItems)) {
             $objItem = array_shift($objItems);
-            $strContent .= $objItem->getBean()->getRow($baseUrl);
+            $strContent .= $objItem->getBean()->getRow($blnHasEditorRights);
         }
         
         return $strContent;
     }
-    /*
-						<tr><td class="mailbox-name"><a class="text-white"><span>Abakua</span></a></td><td class="mailbox-date">Secte</td><td class="mailbox-name"></td></tr>
-						<tr><td class="mailbox-name"><a class="text-white"><span>ABGRAAL</span></a></td><td class="mailbox-date">LAPD</td><td class="mailbox-name"></td></tr>
-						<tr><td class="mailbox-name"><a class="text-white"><span>ABU BAKR, Sadi</span></a></td><td class="mailbox-date">Religion</td><td class="mailbox-name"></td></tr>
-						<tr><td class="mailbox-name"><a class="text-white"><span>ACKERMAN Anthony</span></a></td><td class="mailbox-date">COPS</td><td class="mailbox-name"></td></tr>
-						<tr><td class="mailbox-name"><a class="text-white"><span>ADAMS</span></a></td><td class="mailbox-date">LAPD</td><td class="mailbox-name"></td></tr>
-						<tr><td class="mailbox-name"><a class="text-white"><span>ADAMS Douglas</span></a></td><td class="mailbox-date">COPS</td><td class="mailbox-name"></td></tr>
-						<tr><td class="mailbox-name"><a class="text-white"><span>ADZIMA Brad</span></a></td><td class="mailbox-date">LAPD</td><td class="mailbox-name"></td></tr>
-						<tr><td class="mailbox-name"><a class="text-white"><span>AGUILERA Gaston</span></a></td><td class="mailbox-date">LAPD</td><td class="mailbox-name"></td></tr>
-						<tr><td class="mailbox-name"><a class="text-white"><span>AL KHABIR, Habib</span></a></td><td class="mailbox-date">Religion</td><td class="mailbox-name"></td></tr>
-						<tr><td class="mailbox-name"><a class="text-white"><span>ALIMAKWELL Liane</span></a></td><td class="mailbox-date">LAPD</td><td class="mailbox-name"></td></tr>
-     * 
+    
+    /**
+     * @return string
+     * @since 2.22.12.07
+     * @version 2.22.12.07
      */
+    public function getDownloadButton()
+    {
+        return '<button type="button" class="btn btn-default btn-sm btn-light ajaxAction" title="Exporter la liste" data-trigger="click" data-ajax="csvExport" data-type="'.$this->slugOnglet.'"><i class="fa-solid fa-download"></i></button>';
+    }
 }

@@ -4,7 +4,7 @@ namespace core\daoimpl;
 use core\interfaceimpl\ConstantsInterface;
 use core\interfaceimpl\UrlsInterface;
 use core\interfaceimpl\LabelsInterface;
-use core\domain\MySQL;
+use core\domain\MySQLClass;
 
 if (!defined('ABSPATH')) {
     die('Forbidden');
@@ -61,7 +61,7 @@ class LocalDaoImpl implements ConstantsInterface, UrlsInterface, LabelsInterface
         
         //////////////////////////////
         // Exécution de la requête
-        $rows = MySQL::wpdbSelect($prepRequest);
+        $rows = MySQLClass::wpdbSelect($prepRequest);
         return $this->convertToArray($rows);
         //////////////////////////////
     }

@@ -23,6 +23,7 @@ interface LabelsInterface
     const LABEL_ADMINISTRATIFS      = 'Administratifs';
     const LABEL_BUREAU              = 'Bureau';
     const LABEL_CREATION            = 'Création';
+    const LABEL_CREER_ENTREE        = 'Créer une entrée';
     const LABEL_EDITION             = 'Édition';
     const LABEL_LIST_ADMINISTRATIFS = 'Liste des Administratifs';
     

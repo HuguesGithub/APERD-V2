@@ -2,7 +2,7 @@
 namespace core\daoimpl;
 
 use core\domain\AdministrationClass;
-use core\domain\MySQL;
+use core\domain\MySQLClass;
 
 if (!defined('ABSPATH')) {
     die('Forbidden');
@@ -25,7 +25,6 @@ class AdministrationDaoImpl extends LocalDaoImpl
      */
     public function __construct()
     {
-        $this->obj = new AdministrationClass();
         $this->dbTable = 'wp_14_aperd_administration';
         parent::__construct();
     }
@@ -78,7 +77,7 @@ class AdministrationDaoImpl extends LocalDaoImpl
         
         //////////////////////////////
         // Exécution de la requête
-        $row = MySQL::wpdbSelect($prepRequest);
+        $row = MySQLClass::wpdbSelect($prepRequest);
         return (empty($row) ? new AdministrationClass() : new AdministrationClass($row[0]));
         //////////////////////////////
     }
