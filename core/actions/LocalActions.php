@@ -36,15 +36,15 @@ class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
      */
     public static function exportFile($data, $prefix)
     {
-        $dir_name = dirname(__FILE__).'/../../web/rsc/csv-files/';
-        $file_name = self::CST_EXPORT.'_'.strtolower($prefix).'_'.date('Ymd_His').'.csv';
-        $dst = fopen($dir_name.$file_name, 'w');
+        $dirName = dirname(__FILE__).'/../../web/rsc/csv-files/';
+        $fileName = self::CST_EXPORT.'_'.strtolower($prefix).'_'.date('Ymd_His').'.csv';
+        $dst = fopen($dirName.$fileName, 'w');
         fputs($dst, implode(self::CST_EOL, $data));
         fclose($dst);
-        $file_name = '/wp-content/plugins/hj-v2-aperd/web/rsc/csv-files/'.$file_name;
+        $fileName = '/wp-content/plugins/hj-v2-aperd/web/rsc/csv-files/'.$fileName;
         
         $objActions = new LocalActions();
-        return $objActions->getToastContentJson('success', 'Succès', sprintf(self::MSG_SUCCESS_EXPORT, $file_name));
+        return $objActions->getToastContentJson('success', 'Succès', sprintf(self::MSG_SUCCESS_EXPORT, $fileName));
     }
     
     /**

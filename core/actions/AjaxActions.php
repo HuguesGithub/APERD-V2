@@ -23,28 +23,27 @@ class AjaxActions extends LocalActions
         switch ($_POST[self::AJAX_ACTION]) {
             case 'csvExport':
                 $returned = self::dealWithCsvExport();
-          break;
-      default :
-        $saisie = stripslashes($_POST[self::AJAX_ACTION]);
-        $returned  = 'Erreur dans AjaxActions le $_POST['.self::AJAX_ACTION.'] : '.$saisie.'<br>';
-      break;
+                break;
+            default :
+                $saisie = stripslashes($_POST[self::AJAX_ACTION]);
+                $returned  = 'Erreur dans AjaxActions le $_POST['.self::AJAX_ACTION.'] : '.$saisie.'<br>';
+                break;
+        }
+        return $returned;
     }
-    return $returned;
-  }
   
-  public static function dealWithCsvExport()
-  {
-      switch ($_POST[self::ATTR_TYPE]) {
-          case self::ONGLET_ADMINISTRATIFS :
-              $returned = AdministrationActions::getCsvExport();
-              break;
-          default :
-              $saisie = stripslashes($_POST[self::ATTR_TYPE]);
-              $returned  = 'Erreur dans AjaxActions csvExport, le $_POST['.self::ATTR_TYPE.'] : '.$saisie.'<br>';
-              break;
-              
-      }
-      return $returned;
-  }
+    public static function dealWithCsvExport()
+    {
+        switch ($_POST[self::ATTR_TYPE]) {
+            case self::ONGLET_ADMINISTRATIFS :
+                $returned = AdministrationActions::getCsvExport();
+                break;
+            default :
+                $saisie = stripslashes($_POST[self::ATTR_TYPE]);
+                $returned  = 'Erreur dans AjaxActions csvExport, le $_POST['.self::ATTR_TYPE.'] : '.$saisie.'<br>';
+                break;
+        }
+        return $returned;
+    }
 
 }
