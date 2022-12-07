@@ -22,15 +22,6 @@ class AdministrationActions extends LocalActions
      * @since 1.22.12.07
      * @version 1.22.12.07
      */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * @since 1.22.12.07
-     * @version 1.22.12.07
-     */
     public static function getCsvExport()
     {
         $arrIds = explode(',', $_POST['ids']);

@@ -151,7 +151,7 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
                     // Interface de suppression
                     $strMainContent = $this->getDeleteContent();
                 }
-            } else{
+            } else {
                 // Bouton Créer
                 $strBtnCreationAnnulation = $this->getCreateButton();
                 // Interface de liste

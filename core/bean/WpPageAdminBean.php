@@ -30,31 +30,13 @@ class WpPageAdminBean extends WpPageBean
         $this->slugPage = self::PAGE_ADMIN;
         $this->slugOnglet = $this->initVar(self::CST_ONGLET);
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
+
+        // TODO : Gestion de l'identification.
+        // TODO : Gestion de la déconnexion.
         
-        /*
-        $this->analyzeUri();
-    
-        if (isset($_POST[self::FIELD_MATRICULE])) {
-            // On cherche a priori à se logguer
-            $attributes[self::SQL_WHERE_FILTERS] = array(
-                self::FIELD_ID => self::SQL_JOKER_SEARCH,
-                self::FIELD_MATRICULE => $_POST[self::FIELD_MATRICULE],
-                self::FIELD_PASSWORD  => ($_POST[self::FIELD_PASSWORD]=='' ? '' : md5($_POST[self::FIELD_PASSWORD])),
-            );
-            $objsCopsPlayer = $this->CopsPlayerServices->getCopsPlayers($attributes);
-            if (!empty($objsCopsPlayer)) {
-                $this->CopsPlayer = array_shift($objsCopsPlayer);
-                $_SESSION[self::FIELD_MATRICULE] = $_POST[self::FIELD_MATRICULE];
-            } else {
-                $_SESSION[self::FIELD_MATRICULE] = 'err_login';
-            }
-        } elseif (isset($_GET['logout'])) {
-            // On cherche a priori à se déconnecter
-            unset($_SESSION[self::FIELD_MATRICULE]);
-        } elseif (isset($_SESSION[self::FIELD_MATRICULE])) {
-            $this->CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
-        }
-        */
+        // TODO : Récupération des paramètres plus vaste que des initVar multiples ?
+        // $this->analyzeUri();
+        
         $this->arrSidebarContent = array(
             self::ONGLET_DESK => array(
                 self::CST_ICON  => self::I_DESKTOP,
@@ -78,8 +60,8 @@ class WpPageAdminBean extends WpPageBean
                     ),
                 ),
             $this->arrSidebarContent = array_merge($this->arrSidebarContent, $this->arrSidebarContentNonGuest);
-        }
         */
+        
         // Le lien vers la Home
         $aContent = $this->getIcon(self::I_DESKTOP);
         $buttonContent = $this->getLink($aContent, $this->getPageUrl(), self::CST_TEXT_WHITE);
@@ -141,28 +123,6 @@ class WpPageAdminBean extends WpPageBean
      */
     public function getContentPage()
     {
-        // TODO : Gestion de l'identification.
-        /*
-        if (!self::isCopsLogged()) {
-            // Soit on n'est pas loggué et on affiche la mire d'identification.
-            // Celle-ci est invisible et passe visible en cas de souris qui bouge ou touche cliquée.
-            $urlTemplate = 'web/pages/public/fragments/public-fragments-section-connexion-panel.php';
-            if (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]=='err_login') {
-                $strNotification  = "Une erreur est survenue lors de la saisie de votre identifiant et de votre ";
-                $strNotification .= "mot de passe.<br>L'un des champs était vide, ou les deux ne correspondaient";
-                $strNotification .= " pas à une valeur attendue.<br>Veuillez réessayer ou contacter un ";
-                $strNotification .=  "administrateur.<br><br>";
-                unset($_SESSION[self::FIELD_MATRICULE]);
-            } else {
-                $strNotification = '';
-            }
-            $attributes = array(
-                ($strNotification=='' ? 'd-none' : ''),
-                $strNotification,
-            );
-            return $this->getRender($urlTemplate, $attributes);
-        }
-        */
         try {
             switch ($this->slugOnglet) {
                 case self::ONGLET_ADMINISTRATIFS :
@@ -205,12 +165,6 @@ class WpPageAdminBean extends WpPageBean
             self::VERSION,
             //
             'https://v2-aperd.jhugues.fr',
-            /*
-        // Soit on est loggué et on affiche le contenu du bureau du cops
-            // L'id
-            $this->CopsPlayer->getMaskMatricule(),
-            $this->CopsPlayer->getFullName(),
-        */
         );
         return $this->getRender($urlTemplate, $attributes);
     }
@@ -321,30 +275,7 @@ class WpPageAdminBean extends WpPageBean
             $superLiContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
             
             // TODO : Gestion des enfants
-            /*
-            // S'il a des enfants, on enrichit
-            if ($hasChildren) {
-                $ulContent = '';
-                foreach ($arrOnglet[self::CST_CHILDREN] as $strSubOnglet => $label) {
-                    if ($strSubOnglet==$this->urlParams[self::CST_SUBONGLET] ||
-                        $this->urlParams[self::CST_SUBONGLET]=='date' && $strSubOnglet=='allDates') {
-                        $extraClass = ' '.self::CST_ACTIVE;
-                    } else {
-                        $extraClass = '';
-                    }
-                    $aContent  = $this->getIcon(self::I_CIRCLE, 'nav-icon').$this->getBalise(self::TAG_P, $label);
-                    $aAttributes = array(
-                        self::ATTR_HREF  => $this->urlOnglet.$strOnglet.'&amp;subOnglet='.$strSubOnglet,
-                        self::ATTR_CLASS => 'nav-link'.$extraClass,
-                    );
-                    $liContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
-                    $ulContent .= $this->getBalise(self::TAG_LI, $liContent, array(self::ATTR_CLASS=>'nav-item'));
-                }
-                $liAttributes = array(self::ATTR_CLASS=>'nav nav-treeview');
-                $superLiContent .= $this->getBalise(self::TAG_UL, $ulContent, $liAttributes);
-            }
-         
-        */
+            
             // Construction de l'élément de la liste
             //.($this->slugOnglet ? ' menu-open' : '') ne sert à rien pour le moment
             $liAttributes = array(self::ATTR_CLASS=>'nav-item');
