@@ -28,15 +28,18 @@ interface UrlsInterface
     // Files
     const WEB_A_ROW_ADMINISTRATION  = self::WEB_PAF_TR.'admin-fragments-row-administration.tpl';
     const WEB_A_FORM_ADMINISTRATION = self::WEB_PAF_FORM.'admin-fragments-form-administration.tpl';
+    const WEB_A_FORM_ADULTE         = self::WEB_PAF_FORM.'admin-fragments-form-adulte.tpl';
     const WEB_P_ROW_ADMINISTRATION  = self::WEB_PPF_TR.'publique-fragments-row-administration.tpl';
     const WEB_PP_BOARD              = self::WEB_PAGES_PUBLIC.'publique-board.tpl';
     const WEB_PPFC_LIST_ADM         = self::WEB_PPF_CARD.'publique-fragments-card-administratif-liste.tpl';
     const WEB_PPFC_DEL_ADM          = self::WEB_PPF_CARD.'publique-fragments-card-administratif-delete.tpl';
     const WEB_PPFC_PRES_ADM         = self::WEB_PPF_CARD.'publique-fragments-card-administratif-presentation.tpl';
+    const WEB_PPFC_PRES_ADULTE      = self::WEB_PPF_CARD.'publique-fragments-card-adulte-presentation.tpl';
     const WEB_PPFC_LIST_DEFAULT     = self::WEB_PPF_CARD.'publique-fragments-card-default-liste.tpl';
     const WEB_PPFC_CONF_DEL         = self::WEB_PPF_CARD.'publique-fragments-card-delete-confirmed.tpl';
     const WEB_PPFN_NAV_BAR          = self::WEB_PPF_NAV.'publique-fragments-nav-bar.tpl';
     const WEB_PPFN_NAV_SIDEBAR      = self::WEB_PPF_NAV.'publique-fragments-nav-sidebar.tpl';
+    const WEB_PPFS_CONNEXION_PANEL  = self::WEB_PPF_SECTION.'publique-fragments-section-connexion-panel.tpl';
     const WEB_PPFS_CONTENT_HEADER   = self::WEB_PPF_SECTION.'publique-fragments-section-content-header.tpl';
     const WEB_PPFS_CONTENT_NAVBAR   = self::WEB_PPF_SECTION.'publique-fragments-section-content-navigation-bar.php';
     const WEB_PPFS_ONGLET           = self::WEB_PPF_SECTION.'publique-fragments-section-onglet.php';

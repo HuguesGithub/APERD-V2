@@ -2,6 +2,7 @@
 namespace core\bean;
 
 use core\services\AdministrationServices;
+use core\services\AdulteServices;
 use core\interfaceimpl\ConstantsInterface;
 use core\interfaceimpl\UrlsInterface;
 use core\interfaceimpl\LabelsInterface;
@@ -13,15 +14,25 @@ if (!defined('ABSPATH')) {
  * Classe UtilitiesBean
  * @author Hugues
  * @since 2.22.12.05
- * @version 2.22.12.05
+ * @version 2.22.12.08
  */
 class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterface
 {
     public function __construct()
     {
         $this->objAdministrationServices = new AdministrationServices();
+        $this->objAdulteServices         = new AdulteServices();
     }
   
+    /**
+     * @return bool
+     */
+    public static function isAperdLogged()
+    {
+        // On va checker dans les variables de SESSION si les infos relatives à l'APERD y sont stockées.
+        return (isset($_SESSION[self::SESSION_APERD_ID]) && $_SESSION[self::SESSION_APERD_ID]!=self::CST_ERR_LOGIN);
+    }
+    
     /**
      * @param string $balise
      * @param string $label

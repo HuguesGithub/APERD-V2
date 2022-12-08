@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * Classe WpPageAdminBean
  * @author Hugues
  * @since 2.22.12.05
- * @version 2.22.12.07
+ * @version 2.22.12.08
  */
 class WpPageAdminBean extends WpPageBean
 {
@@ -31,8 +31,31 @@ class WpPageAdminBean extends WpPageBean
         $this->slugOnglet = $this->initVar(self::CST_ONGLET);
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
 
-        // TODO : Gestion de l'identification.
-        // TODO : Gestion de la déconnexion.
+        if (isset($_POST['mail'])) {
+            // TODO : Mettre en place les contrôles
+            
+            // On cherche a priori à se logguer
+            $userMail = $this->initVar('mail');
+            $userPassword = $this->initVar('password');
+            // On s'identifie avec un user Wordpress.
+            $wpUser = wp_authenticate_email_password(null, $userMail, $userPassword);
+            
+            // Si on a un wpUser qui correspond au mail et au mot de passe.
+            if (get_class($wpUser)=='WP_Error') {
+                // On a raté l'identification, on va essayé d'afficher la popup d'erreur.
+                $_SESSION[self::SESSION_APERD_ID] = self::CST_ERR_LOGIN;
+            } else {
+                // TODO : On va récupérer le parent qui correspond au mail saisi
+                // TODO : Initialiser l'utilisateur courant.
+                $_SESSION[self::SESSION_APERD_ID] = $_POST['mail'];
+            }
+        } elseif (isset($_GET['logout'])) {
+            // On cherche a priori à se déconnecter
+            unset($_SESSION[self::SESSION_APERD_ID]);
+        } elseif (isset($_SESSION[self::SESSION_APERD_ID])) {
+            // On navigue sur le site en étant identifié.
+            // TODO : Initialiser l'utilisateur courant.
+        }
         
         // TODO : Récupération des paramètres plus vaste que des initVar multiples ?
         // $this->analyzeUri();
@@ -45,6 +68,10 @@ class WpPageAdminBean extends WpPageBean
             self::ONGLET_ADMINISTRATIFS => array(
                 self::CST_ICON  => self::I_USERS,
                 self::CST_LABEL => self::LABEL_ADMINISTRATIFS,
+            ),
+            self::ONGLET_PARENTS => array(
+                self::CST_ICON  => self::I_USERS,
+                self::CST_LABEL => self::LABEL_PARENTS,
             ),
         );
         // TODO : on garde un exemple d'entrée avec des enfants. Et le merge pour ajouter les menus des personnes
@@ -123,8 +150,31 @@ class WpPageAdminBean extends WpPageBean
      */
     public function getContentPage()
     {
+        /////////////////////////////////////////////////////////////
+        // Pour le cas où on n'est pas loggué, on court-circuite tout le processus d'affichage
+        // pour afficher la page de garde avec la mire d'identification.
+        if (!self::isAperdLogged()) {
+            $urlTemplate = self::WEB_PPFS_CONNEXION_PANEL;
+            // Si la variable de Session est renseigné à err_login, on a foiré l'identification
+            if (isset($_SESSION[self::SESSION_APERD_ID]) && $_SESSION[self::SESSION_APERD_ID]==self::CST_ERR_LOGIN) {
+                $strNotification  = self::MSG_ERREUR_CONTROL_IDENTIFICATION;
+                unset($_SESSION[self::SESSION_APERD_ID]);
+            } else {
+                $strNotification = '';
+            }
+            $attributes = array(
+                ($strNotification=='' ? 'd-none' : ''),
+                $strNotification,
+            );
+            return $this->getRender($urlTemplate, $attributes);
+        }
+        /////////////////////////////////////////////////////////////
+        
         try {
             switch ($this->slugOnglet) {
+                case self::ONGLET_PARENTS :
+                    $objBean = new WpPageAdminAdulteBean();
+                    break;
                 case self::ONGLET_ADMINISTRATIFS :
                     $objBean = new WpPageAdminAdministratifBean();
                     break;

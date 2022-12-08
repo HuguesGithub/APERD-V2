@@ -1,51 +1,56 @@
 <?php
 namespace core\bean;
 
+use core\domain\MySQLClass;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
 /**
- * Classe WpPageAdminAdministratifBean
+ * Classe WpPageAdminAdulteBean
  * @author Hugues
- * @since 1.22.09.20
- * @version 1.22.10.19
+ * @since 1.22.12.08
+ * @version 1.22.12.08
  */
-class WpPageAdminAdministratifBean extends WpPageAdminBean
+class WpPageAdminAdulteBean extends WpPageAdminBean
 {
     public function __construct()
     {
         parent::__construct();
         // Initialisation des variables
-        $this->slugOnglet = self::ONGLET_ADMINISTRATIFS;
-        $this->titreOnglet = self::LABEL_ADMINISTRATIFS;
-
+        $this->slugOnglet = self::ONGLET_PARENTS;
+        $this->titreOnglet = self::LABEL_PARENTS;
+        
         $strNotification = '';
         $strMessage = '';
         
         $id = $this->initVar(self::ATTR_ID);
-        $this->objAdministratif = $this->objAdministrationServices->getAdministrationById($id);
-
+        $this->objAdulte = $this->objAdulteServices->getAdulteById($id);
+        $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
+        
         /////////////////////////////////////////
         // Vérification de la soumission d'un formulaire
         $postAction = $this->initVar(self::CST_POST_ACTION);
         if ($postAction!='') {
             // Un formulaire est soumis.
             // On récupère les données qu'on affecte à l'objet
-            $this->objAdministratif->setField(self::FIELD_GENRE, $this->initVar(self::FIELD_GENRE));
-            $this->objAdministratif->setField(self::FIELD_NOMTITULAIRE, $this->initVar(self::FIELD_NOMTITULAIRE));
-            $this->objAdministratif->setField(self::FIELD_LABELPOSTE, $this->initVar(self::FIELD_LABELPOSTE));
+            $this->objAdulte->setField(self::FIELD_NOMADULTE, $this->initVar(self::FIELD_NOMADULTE));
+            $this->objAdulte->setField(self::FIELD_PRENOMADULTE, $this->initVar(self::FIELD_PRENOMADULTE));
+            $this->objAdulte->setField(self::FIELD_MAILADULTE, $this->initVar(self::FIELD_MAILADULTE));
+            $this->objAdulte->setField(self::FIELD_ADHERENT, $this->initVar(self::FIELD_ADHERENT, 0));
             
             // Si le contrôle des données est ok
-            if ($this->objAdministratif->controlerDonnees($strNotification, $strMessage)) {
+            if ($this->objAdulte->controlerDonnees($strNotification, $strMessage)) {
                 // Si l'id n'est pas défini
                 if ($id=='') {
                     // On insère l'objet
-                    $this->objAdministratif->insert();
+                    $this->objAdulte->insert();
                 } else {
                     // On met à jour l'objet
-                    $this->objAdministratif->update();
+                    $this->objAdulte->update();
                 }
             } else {
+                echo "$strNotification, $strMessage";
                 // TODO : Le contrôle de données n'est pas bon. Afficher l'erreur.
             }
             // TODO : de manière générale, ce serait bien d'afficher le résultat de l'opération.
@@ -63,60 +68,8 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
 
     /**
      * @return string
-     * @since 1.22.10.19
-     * @version 1.22.10.19
-     *
-    public function initBoard()
-    {
-        /////////////////////////////////////////
-        // Création du Breadcrumbs
-        $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET, self::CST_FILE_OPENED);
-        $this->buildBreadCrumbs('Enquêtes', self::ONGLET_ENQUETE, true);
-
-        ////////////////////////////////////////////////////////
-        // Si formulaire soumis, mise à jour ou insertion.
-        if (isset($this->urlParams[self::CST_WRITE_ACTION])) {
-            // Insertion / Mise à jour de l'enquête saisie via le formulaire
-            // Mais seulement si le nom de l'enquête a été saisi.
-            if ($this->urlParams[self::FIELD_NOM_ENQUETE]!='') {
-                if ($this->urlParams[self::FIELD_ID]!='') {
-                    $this->CopsEnquete = CopsEnqueteActions::updateEnquete($this->urlParams);
-                } else {
-                    $this->CopsEnquete = CopsEnqueteActions::insertEnquete($this->urlParams);
-                }
-            }
-        } elseif (isset($this->urlParams[self::CST_ACTION])) {
-            // Mise à jour du statut (et donc de la dernière date de modification) sur le lien de la liste.
-            // On récupère l'enquête associée à l'id.
-            $this->CopsEnquete = $this->CopsEnqueteServices->getEnquete($this->urlParams[self::FIELD_ID]);
-            // Si elle existe, on effectue le traitement qui va bien.
-            $intStatut = $this->CopsEnquete->getField(self::FIELD_STATUT_ENQUETE);
-            if ($this->CopsEnquete->getField(self::FIELD_ID)==$this->urlParams[self::FIELD_ID]
-                && $intStatut!=self::CST_ENQUETE_CLOSED
-                && ($intStatut==self::CST_ENQUETE_OPENED
-                    || $intStatut==self::CST_ENQUETE_COLDED
-                    && $this->urlParams[self::CST_ACTION]==self::CST_ENQUETE_OPENED)) {
-                        // Si l'enquête existe.
-                        // Si l'enquête n'est pas déjà transférée au DA.
-                        // Si l'enquête est coldcase, elle ne peut pas être transférée au DA
-
-                        // Si tout est bon,
-                        // on classe une enquête, on la réouvre ou on la transfère au DA
-                        $this->CopsEnquete->setField(self::FIELD_STATUT_ENQUETE, $this->urlParams[self::CST_ACTION]);
-                        $this->CopsEnquete->setField(self::FIELD_DLAST, self::getCopsDate('tsnow'));
-                        $this->CopsEnqueteServices->updateEnquete($this->CopsEnquete);
-            }
-        } else {
-            // On récupère l'enquête associée à l'id.
-            $this->CopsEnquete = $this->CopsEnqueteServices->getEnquete($this->urlParams[self::FIELD_ID]);
-        }
-        ////////////////////////////////////////////////////////
-    }
-
-    /**
-     * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.07
+     * @since 2.22.12.08
+     * @version 2.22.12.08
      */
     public function getOngletContent()
     {
@@ -167,13 +120,18 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
             // Un éventuel bouton de Création / Annulation si on a les droits
             $strBtnCreationAnnulation,
             // Un bloc de présentation
-            $this->getRender(self::WEB_PPFC_PRES_ADM),
-            // Une liste d'administratifs ou un formulaire d'édition.
+            $this->getRender(self::WEB_PPFC_PRES_ADULTE),
+            // Une liste de parents ou un formulaire d'édition.
             $strMainContent,
         );
         return $this->getRender($urlTemplate, $attributes);
     }
-    
+
+    /**
+     * @return string
+     * @since 2.22.12.08
+     * @version 2.22.12.08
+     */
     public function getDeleteContent()
     {
         $strElements = '';
@@ -181,8 +139,8 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
         // On peut avoir une liste d'id en cas de suppression multiple.
         $ids = $this->initVar(self::ATTR_ID);
         foreach (explode(',', $ids) as $id) {
-            $objAdministratif = $this->objAdministrationServices->getAdministrationById($id);
-            $strElements .= $this->getBalise(self::TAG_LI, $objAdministratif->getFullInfo());
+            $objAdulte = $this->objAdulteServices->getAdulteById($id);
+            $strElements .= $this->getBalise(self::TAG_LI, $objAdulte->getName());
         }
         
         $urlElements = array(
@@ -201,6 +159,11 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
         return $this->getRender($urlTemplate, $attributes);
     }
     
+    /**
+     * @return string
+     * @since 2.22.12.08
+     * @version 2.22.12.08
+     */
     public function getDeletedContent()
     {
         $strElements = '';
@@ -208,9 +171,9 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
         // On peut avoir une liste d'id en cas de suppression multiple.
         $ids = $this->initVar(self::ATTR_ID);
         foreach (explode(',', $ids) as $id) {
-            $objAdministratif = $this->objAdministrationServices->getAdministrationById($id);
-            $strElements .= $this->getBalise(self::TAG_LI, $objAdministratif->getFullInfo());
-            $objAdministratif->delete();
+            $objAdulte = $this->objAdulteServices->getAdulteById($id);
+            $strElements .= $this->getBalise(self::TAG_LI, $objAdulte->getName());
+            $objAdulte->delete();
         }
         
         $urlTemplate = self::WEB_PPFC_CONF_DEL;
@@ -231,7 +194,7 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
     public function getEditContent()
     {
         $baseUrl = $this->getUrl(array(self::CST_SUBONGLET=>''));
-        return $this->objAdministratif->getBean()->getForm($baseUrl);
+        return $this->objAdulte->getBean()->getForm($baseUrl);
     }
     
     /**
@@ -267,17 +230,13 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
     public function getListHeaderRow($blnHasEditorRights=false)
     {
         // Selon qu'on a les droit d'administration ou non, on n'aura pas autant de colonnes à afficher.
-        // On veut afficher les éléments suivants (* si les droits d'édition) :
-        // * une case à cocher
-        // - un nom
-        // - un poste
-        // * des actions à effectuer
         $trContent = '';
         if ($blnHasEditorRights) {
             $trContent .= $this->getTh(self::CST_NBSP);
         }
-        $trContent .= $this->getTh(self::LABEL_NOMTITULAIRE);
-        $trContent .= $this->getTh(self::LABEL_LABELPOSTE);
+        $trContent .= $this->getTh(self::LABEL_NOMPRENOM);
+        $trContent .= $this->getTh(self::LABEL_MAIL);
+        $trContent .= $this->getTh(self::LABEL_ADHERENT);
         if ($blnHasEditorRights) {
             $trContent .= $this->getTh(self::LABEL_ACTIONS);
         }
@@ -300,21 +259,28 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
          <button type="button" class="btn btn-default btn-sm "><a href="/admin?onglet=library&amp;subOnglet=index&amp;curPage=2" class="text-white"><i class="fa-solid fa-caret-right"></i></a></button>
          */
         
-        $objItems = $this->objAdministrationServices->getAdministrationsWithFilters();
+        /////////////////////////////////////////
+        // On va chercher les éléments à afficher
+        $objItems = $this->objAdulteServices->getAdultesWithFilters();
+        /////////////////////////////////////////////:
+        // Pagination
+        $this->strPagination = $this->buildPagination($objItems);
+        /////////////////////////////////////////////:
         while (!empty($objItems)) {
             $objItem = array_shift($objItems);
             $strContent .= $objItem->getBean()->getRow($blnHasEditorRights);
         }
+        /////////////////////////////////////////
         
         $attributes = array(
             // On défini le titre
-            self::LABEL_ADMINISTRATIFS,
+            self::LABEL_PARENTS,
             // On défini un éventuel entête/footer de boutons d'actions
             $this->getListControlTools($blnHasEditorRights),
             // On défini le tag de la liste
             $this->slugOnglet,
             // On défini la description de la liste
-            self::LABEL_LIST_ADMINISTRATIFS,
+            self::LABEL_LIST_PARENTS,
             // On défini le header de la liste
             $this->getListHeaderRow($blnHasEditorRights),
             // On défini le contenu de la liste
@@ -374,5 +340,54 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
         $btnAttributes = array(self::ATTR_CLASS=>'btn btn-primary mb-3 btn-block');
         $strButton = $this->getButton($label, $btnAttributes);
         return $this->getLink($strButton, $href, '');
+    }
+
+    /**
+     * @param array $objs
+     * @return string
+     * @since 2.22.12.08
+     * @version 2.22.12.08
+     */
+    public function buildPagination(&$objs)
+    {
+        $nbItems = count($objs);
+        $nbItemsPerPage = 10;
+        $nbPages = ceil($nbItems/$nbItemsPerPage);
+        $strPagination = '';
+        if ($nbPages>1) {
+            $this->blnHasPagination = true;
+            // Le bouton page précédente
+            $label = $this->getIcon(self::I_CARET_LEFT);
+            if ($this->curPage!=1) {
+                $btnClass = '';
+                $href = $this->getUrl(array(self::CST_CURPAGE=>$this->curPage-1));
+                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
+            } else {
+                $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
+                $btnContent = $label;
+            }
+            $btnAttributes = array(self::ATTR_CLASS=>$btnClass);
+            $strPagination .= $this->getButton($btnContent, $btnAttributes).self::CST_NBSP;
+            
+            // La chaine des éléments affichés
+            $firstItem = ($this->curPage-1)*$nbItemsPerPage;
+            $lastItem = min(($this->curPage)*$nbItemsPerPage, $nbItems);
+            $strPagination .= vsprintf(self::DYN_DISPLAYED_PAGINATION, array($firstItem+1, $lastItem, $nbItems));
+            
+            // Le bouton page suivante
+            $label = $this->getIcon(self::I_CARET_RIGHT);
+            if ($this->curPage!=$nbPages) {
+                $btnClass = '';
+                $href = $this->getUrl(array(self::CST_CURPAGE=>$this->curPage+1));
+                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
+            } else {
+                $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
+                $btnContent = $label;
+            }
+            $btnAttributes = array(self::ATTR_CLASS=>$btnClass);
+            $strPagination .= self::CST_NBSP.$this->getButton($btnContent, $btnAttributes);
+            $objs = array_slice($objs, $firstItem, $nbItemsPerPage);
+        }
+        return $strPagination;
     }
 }

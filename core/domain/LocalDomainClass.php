@@ -2,6 +2,7 @@
 namespace core\domain;
 
 use core\services\AdministrationServices;
+use core\services\AdulteServices;
 use core\interfaceimpl\ConstantsInterface;
 use core\interfaceimpl\UrlsInterface;
 use core\interfaceimpl\LabelsInterface;
@@ -20,7 +21,7 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
     //////////////////////////////////////////////////
     // CONSTRUCT
     //////////////////////////////////////////////////
-	
+    
     /**
      * @param array $attributes
      * @since 2.22.12.05
@@ -28,20 +29,21 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
      */
     public function __construct($attributes=array())
     {
-		// Initialisation des attributs de l'objet.
-		if (!empty($attributes)) {
-			foreach ($attributes as $key => $value) {
-				$this->setField($key, $value);
-			}
-		}
-		
-		// Initialisation des Services
+        // Initialisation des attributs de l'objet.
+        if (!empty($attributes)) {
+            foreach ($attributes as $key => $value) {
+                $this->setField($key, $value);
+            }
+        }
+        
+        // Initialisation des Services
         $this->objAdministrationServices = new AdministrationServices();
+        $this->objAdulteServices         = new AdulteServices();
     }
 
     /*
-	 * @param string $key
-	 * @param string
+     * @param string $key
+     * @param string
      * @since 2.22.12.05
      * @version 2.22.12.05
      */
@@ -49,8 +51,8 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
     { return (property_exists($this, $key) ? $this->{$key} : null); }
      
     /*
-	 * @param string $key
-	 * @param string $value
+     * @param string $key
+     * @param string $value
      * @since 2.22.12.05
      * @version 2.22.12.05
      */
@@ -64,7 +66,7 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
      */
     public function getCsvEntete()
     { return implode(self::CSV_SEP, $this->arrFields); }
-	
+    
     /**
      * @return string
      * @since 2.22.12.05
@@ -72,12 +74,12 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
      */
     public function toCsv()
     {
-		$arrValues = array();
-		foreach (array_keys($this->arrFields) as $key) {
-			array_push($arrValues, $this->{$key});
-		}
-		return implode(self::CSV_SEP, $arrValues);
-	}
+        $arrValues = array();
+        foreach (array_keys($this->arrFields) as $key) {
+            array_push($arrValues, $this->{$key});
+        }
+        return implode(self::CSV_SEP, $arrValues);
+    }
 
     /**
      * @param string &$notif
@@ -85,33 +87,34 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
      * @since 2.22.12.05
      * @version 2.22.12.05
      */
-	public function setNotif(&$notif, $notifLevel) {
-		if ($notifLevel==self::NOTIF_DANGER) {
-			$notif = self::NOTIF_DANGER;
-		} elseif ($notifLevel==self::NOTIF_WARNING && $notif!=self::NOTIF_DANGER) {
-			$notif = self::NOTIF_WARNING;
-		} else {
-			$notif = $notifLevel;
-		}
-	}
+    public function setNotif(&$notif, $notifLevel)
+    {
+        if ($notifLevel==self::NOTIF_DANGER) {
+            $notif = self::NOTIF_DANGER;
+        } elseif ($notifLevel==self::NOTIF_WARNING && $notif!=self::NOTIF_DANGER) {
+            $notif = self::NOTIF_WARNING;
+        } else {
+            $notif = $notifLevel;
+        }
+    }
 
     /**
-	 * @param string $field
+     * @param string $field
      * @param string &$notif
      * @param string &$msg
      * @since 2.22.12.05
      * @version 2.22.12.05
      */
-	public function controlerSaisie($field, &$notif, &$msg)
-	{
-		$blnOk = true;
+    public function controlerSaisie($field, &$notif, &$msg)
+    {
+        $blnOk = true;
         if (empty($this->{$field})) {
             $this->setNotif($notif, self::NOTIF_DANGER);
-            $msg   = vsprintf(MSG_ERREUR_CONTROL_EXISTENCE_NORMEE, array($field));
+            $msg   = vsprintf(self::MSG_ERREUR_CONTROL_EXISTENCE_NORMEE, array($field));
             $blnOk = false;
         }
-		return $blnOk;
-	}
+        return $blnOk;
+    }
 
 
 
@@ -142,15 +145,6 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
     return '{'.$str.'}';
   }
 
-  public function toCsv($sep=';')
-  {
-    $classVars = $this->getClassVars();
-    $arrValues = array();
-    foreach ($classVars as $key => $value) {
-      $arrValues[] = $this->getField($key);
-    }
-    return implode($sep, $arrValues);
-  }
   /**
    * @param array $post
    * @return bool
@@ -297,7 +291,7 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
     if (!empty($vars)) {
       foreach ($vars as $key => $value) {
         if ($key=='stringClass' || $key=='px_max') {
-			// TODO : problème avec px_max, à régler
+            // TODO : problème avec px_max, à régler
           continue;
         }
         $Obj->setField($key, $row->{$key});

@@ -19,3 +19,7 @@
 .toolbox-controls {
   padding: 5px;
 }
+
+/* ----------------------------------------------------- */
+/* Propriétés pour les formulaires                       */
+select[required], input[required] { border-width: 2px; }

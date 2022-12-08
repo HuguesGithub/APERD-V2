@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
 /**
  * @author Hugues
  * @since 2.22.12.05
- * @version 2.22.12.05
+ * @version 2.22.12.08
  */
 interface LabelsInterface
 {
@@ -16,7 +16,10 @@ interface LabelsInterface
     const LABEL_GENRE        = 'Genre';
     const LABEL_LABELPOSTE   = 'Libellé du poste';
     const LABEL_NOMTITULAIRE = 'Nom du titulaire';
-
+    const LABEL_NOMPRENOM    = 'Nom et prénom';
+    const LABEL_MAIL         = 'Email';
+    const LABEL_ADHERENT     = 'Adhérent';
+    
     /////////////////////////////////////////////////
     // Libellés divers
     const LABEL_ACTIONS             = 'Actions';
@@ -27,12 +30,15 @@ interface LabelsInterface
     const LABEL_CREER               = 'Créer';
     const LABEL_CREER_ENTREE        = 'Créer une entrée';
     const LABEL_LIST_ADMINISTRATIFS = 'Liste des Administratifs';
+    const LABEL_LIST_PARENTS        = 'Liste des Parents d\'élèves';
     const LABEL_MODIFIER            = 'Modifier';
+    const LABEL_PARENTS             = 'Parents';
     const LABEL_RETOUR              = 'Retour';
     
     /////////////////////////////////////////////////
     // Messages d'erreurs
     const MSG_ERREUR_CONTROL_EXISTENCE_NORMEE = 'Champ obligatoire [<strong>%s</strong>] non saisi. ';
+    const MSG_ERREUR_CONTROL_IDENTIFICATION   = "Une erreur est survenue lors de la saisie de votre identifiant et de votre mot de passe.<br>L'un des champs était vide, ou les deux ne correspondaient pas à une valeur attendue.<br>Veuillez réessayer ou contacter un administrateur.<br><br>";
     
     /////////////////////////////////////////////////
     // Messages de succès
