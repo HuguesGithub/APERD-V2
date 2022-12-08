@@ -71,7 +71,9 @@ class AdulteServices extends LocalServices
      * @version 2.22.12.08
      */
     public function getAdultesWithFilters(
-        $arrFilters=array(), $orderBy=self::FIELD_NOMADULTE, $order=self::SQL_ORDER_ASC
+        $arrFilters=array(),
+        $orderBy=self::FIELD_NOMADULTE,
+        $order=self::SQL_ORDER_ASC
     ) {
         $arrParams = $this->initRequestParams($arrFilters, $orderBy, $order);
         return $this->objDao->getAdultesWithFilters($arrParams);

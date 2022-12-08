@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
  * Classe AdministrationServices
  * @author Hugues
  * @since 2.22.12.05
- * @version 2.22.12.07
+ * @version 2.22.12.08
  */
 class AdministrationServices extends LocalServices
 {
@@ -34,9 +34,9 @@ class AdministrationServices extends LocalServices
      * @param array $arrFilters
      * @return array
      * @since 2.22.12.05
-     * @version 2.22.12.05
+     * @version 2.22.12.08
      */
-    private function buildFilters($arrFilters)
+    public function buildFilters($arrFilters)
     {
         $arrParams = array();
         array_push($arrParams, $this->getValueToSearch($arrFilters, self::FIELD_NOMTITULAIRE));
@@ -70,7 +70,9 @@ class AdministrationServices extends LocalServices
      * @version 2.22.12.08
      */
     public function getAdministrationsWithFilters(
-        $arrFilters=array(), $orderBy=self::FIELD_NOMTITULAIRE, $order=self::SQL_ORDER_ASC
+        $arrFilters=array(),
+        $orderBy=self::FIELD_NOMTITULAIRE,
+        $order=self::SQL_ORDER_ASC
     ) {
         $arrParams = $this->initRequestParams($arrFilters, $orderBy, $order);
         return $this->objDao->getAdministrationsWithFilters($arrParams);
