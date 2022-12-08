@@ -120,58 +120,8 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
      */
     public function getOngletContent()
     {
-        // Définition des droits de l'utilisateur
-        $blnHasEditorRights = self::isAdmin();
-        $blnIsEditorPage    = ($this->slugSubOnglet==self::CST_WRITE);
-        $blnIsDeletePage    = ($this->slugSubOnglet==self::CST_DELETE);
-        $blnConfirm         = $this->initVar(self::CST_CONFIRM, false);
-        
-        // Définition éventuelle du bouton Création / Annulaiton
-        // Définition du contenu de la page.
-        $strBtnCreationAnnulation = '';
-        $strMainContent = '';
-        // Si on a les droits et on est sur une page d'édition
-        if ($blnHasEditorRights) {
-            if ($blnIsEditorPage) {
-                // Bouton Annuler
-                $strBtnCreationAnnulation = $this->getCancelButton();
-                // Interface d'édition
-                $strMainContent = $this->getEditContent();
-            } elseif ($blnIsDeletePage) {
-                if ($blnConfirm) {
-                    // Bouton Retour
-                    $strBtnCreationAnnulation = $this->getReturnButton();
-                    // Interface de suppression
-                    $strMainContent = $this->getDeletedContent();
-                } else {
-                    // Bouton Annuler
-                    $strBtnCreationAnnulation = $this->getCancelButton();
-                    // Interface de suppression
-                    $strMainContent = $this->getDeleteContent();
-                }
-            } else {
-                // Bouton Créer
-                $strBtnCreationAnnulation = $this->getCreateButton();
-                // Interface de liste
-                $strMainContent = $this->getListContent($blnHasEditorRights);
-            }
-        } else {
-            // Interface de liste
-            $strMainContent = $this->getListContent($blnHasEditorRights);
-        }
-        
-        $urlTemplate = self::WEB_PPFS_CONTENT_ONE_4TH;
-        $attributes = array(
-            // Identifiant de la page
-            $this->slugOnglet,
-            // Un éventuel bouton de Création / Annulation si on a les droits
-            $strBtnCreationAnnulation,
-            // Un bloc de présentation
-            $this->getRender(self::WEB_PPFC_PRES_ADM),
-            // Une liste d'administratifs ou un formulaire d'édition.
-            $strMainContent,
-        );
-        return $this->getRender($urlTemplate, $attributes);
+        $this->urlOngletContentTemplate = self::WEB_PPFC_PRES_ADM;
+        return $this->getCommonOngletContent();
     }
     
     public function getDeleteContent()
