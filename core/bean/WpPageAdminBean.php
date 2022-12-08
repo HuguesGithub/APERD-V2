@@ -455,15 +455,40 @@ class WpPageAdminBean extends WpPageBean
      */
     public function getDownloadButton()
     {
+        ///////////////////////////////////////////
+        // On groupe un bouton de download
         $btnContent = $this->getIcon(self::I_DOWNLOAD);
         $btnAttributes = array(
-            self::ATTR_CLASS => 'btn btn-default btn-sm btn-light ajaxAction',
+            self::ATTR_CLASS => 'btn-light ajaxAction',
             self::ATTR_TITLE => self::LABEL_EXPORTER_LISTE,
             self::ATTR_DATA_TRIGGER => 'click',
             self::ATTR_DATA_AJAX => self::CST_CSV_EXPORT,
             self::ATTR_DATA_TYPE => $this->slugOnglet,
         );
-        return $this->getButton($btnContent, $btnAttributes);
+        $btnDownload = $this->getButton($btnContent, $btnAttributes);
+
+        // Avec un dropdown Sélection / Tous, avec Tous par défaut.
+        $btnAttributes = array(
+            self::ATTR_ID => 'dropdownSelection',
+            self::ATTR_CLASS => 'btn-light dropdown-toggle',
+            'data-bs-toggle' => 'dropdown',
+            'aria-expanded' => 'false',
+        );
+        $btnDropdown = $this->getButton('Tous', $btnAttributes);
+        
+        // Les choix possibles
+        $ulContent  = $this->getBalise(self::TAG_LI, $this->getLink('Sélection', '#', 'dropdown-item text-white ajaxAction', array('data-trigger'=>'click', 'data-ajax'=>'dropdown', 'data-target'=>'#dropdownSelection')));
+        $ulContent .= $this->getBalise(self::TAG_LI, $this->getLink('Tous', '#', 'dropdown-item text-white ajaxAction', array('data-trigger'=>'click', 'data-ajax'=>'dropdown', 'data-target'=>'#dropdownSelection')));
+        $ulAttributes = array(
+            self::ATTR_CLASS => 'dropdown-menu',
+            self::ATTR_STYLE => 'position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(93.6px, 427.2px, 0px);',
+            'data-popper-placement' => 'bottom-start',
+        );
+        $ulDropdown = $this->getBalise(self::TAG_UL, $ulContent, $ulAttributes);
+        
+        $divGroup = $this->getDiv($btnDropdown.$ulDropdown, array('role'=>'group', self::ATTR_CLASS=>'btn-group'));
+        
+        return $this->getDiv($btnDownload.$divGroup, array('role'=>'group', self::ATTR_CLASS=>'btn-group', 'aria-label'=>'Choix export'));
     }
     
     public function getCancelButton()

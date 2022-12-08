@@ -16,8 +16,21 @@ function ajaxActionClick(obj) {
             case 'csvExport' :
                 csvExport(obj);
                 break;
+            // Drodown d'un menu déroulant
+            case 'dropdown' :
+                dropdownElement(obj);
+                break;
         }
     }
+}
+//////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////
+//
+function dropdownElement(obj) {
+    let target = obj.data('target');
+    let value = obj.html();
+    $(target).html(value);
 }
 //////////////////////////////////////////////////////////
 
@@ -25,9 +38,14 @@ function ajaxActionClick(obj) {
 // 
 function csvExport(obj) {
     let ids = '';
-    $('input[name="post[]"]:checked').each(function(){
-        ids += $(this).val()+',';
-    });
+    let values = obj.next().find('button').html();
+    if (values=='Tous') {
+        ids = 'all';        
+    } else {
+        $('input[name="post[]"]:checked').each(function(){
+            ids += $(this).val()+',';
+        });
+    }
     let data = {'action': 'dealWithAjax', 'ajaxAction': 'csvExport', 'type': obj.data('type'), 'ids': ids};
 
     // On a un appel ajax pour rechercher les équivalences au numéro

@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
  * AdministrationActions
  * @author Hugues
  * @since 1.22.12.07
- * @version 1.22.12.07
+ * @version 1.22.12.08
  */
 class AdministrationActions extends LocalActions
 {
@@ -20,11 +20,10 @@ class AdministrationActions extends LocalActions
     //////////////////////////////////////////////////
     /**
      * @since 1.22.12.07
-     * @version 1.22.12.07
+     * @version 1.22.12.08
      */
     public static function getCsvExport()
     {
-        $arrIds = explode(',', $_POST['ids']);
         $arrToExport = array();
         $objAdministrationServices = new AdministrationServices();
 
@@ -32,14 +31,25 @@ class AdministrationActions extends LocalActions
         $objAdministration = new AdministrationClass();
         // On récupère l'entête
         $arrToExport[] = $objAdministration->getCsvEntete();
-
-        // On récupère les données de tous les objets sélectionnés
-        foreach ($arrIds as $id) {
-            if (empty($id)) {
-                continue;
+        
+        // On vérifie si on veut tous les éléments ou seulement une sélection
+        $ids = $_POST[self::CST_IDS];
+        if ($ids==self::CST_ALL) {
+            // On récupère toutes les données
+            $objsAdministration = $objAdministrationServices->getAdministrationsWithFilters();
+            foreach ($objsAdministration as $objAdministration) {
+                $arrToExport[] = $objAdministration->toCsv();
             }
-            $objAdministration = $objAdministrationServices->getAdministrationById($id);
-            $arrToExport[] = $objAdministration->toCsv();
+        } else {
+            // On récupère les données de tous les objets sélectionnés
+            $arrIds = explode(',', $ids);
+            foreach ($arrIds as $id) {
+                if (empty($id)) {
+                    continue;
+                }
+                $objAdministration = $objAdministrationServices->getAdministrationById($id);
+                $arrToExport[] = $objAdministration->toCsv();
+            }
         }
         
         // On retourne le message de réussite.

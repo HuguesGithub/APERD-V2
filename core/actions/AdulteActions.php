@@ -24,7 +24,6 @@ class AdulteActions extends LocalActions
      */
     public static function getCsvExport()
     {
-        $arrIds = explode(',', $_POST['ids']);
         $arrToExport = array();
         $objAdulteServices = new AdulteServices();
 
@@ -32,14 +31,25 @@ class AdulteActions extends LocalActions
         $objAdulte = new AdulteClass();
         // On récupère l'entête
         $arrToExport[] = $objAdulte->getCsvEntete();
-
-        // On récupère les données de tous les objets sélectionnés
-        foreach ($arrIds as $id) {
-            if (empty($id)) {
-                continue;
+        
+        // On vérifie si on veut tous les éléments ou seulement une sélection
+        $ids = $_POST[self::CST_IDS];
+        if ($ids==self::CST_ALL) {
+            // On récupère toutes les données
+            $objsAdulte = $objAdulteServices->getAdultesWithFilters();
+            foreach ($objsAdulte as $objAdulte) {
+                $arrToExport[] = $objAdulte->toCsv();
             }
-            $objAdulte = $objAdulteServices->getAdulteById($id);
-            $arrToExport[] = $objAdulte->toCsv();
+        } else {
+            // On récupère les données de tous les objets sélectionnés
+            $arrIds = explode(',', $ids);
+            foreach ($arrIds as $id) {
+                if (empty($id)) {
+                    continue;
+                }
+                $objAdulte = $objAdulteServices->getAdulteById($id);
+                $arrToExport[] = $objAdulte->toCsv();
+            }
         }
         
         // On retourne le message de réussite.
