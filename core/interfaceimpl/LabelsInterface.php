@@ -29,11 +29,13 @@ interface LabelsInterface
     const LABEL_CREATION            = 'Création';
     const LABEL_CREER               = 'Créer';
     const LABEL_CREER_ENTREE        = 'Créer une entrée';
+    const LABEL_EXPORTER_LISTE      = 'Exporter la liste';
     const LABEL_LIST_ADMINISTRATIFS = 'Liste des Administratifs';
     const LABEL_LIST_PARENTS        = 'Liste des Parents d\'élèves';
     const LABEL_MODIFIER            = 'Modifier';
     const LABEL_PARENTS             = 'Parents';
     const LABEL_RETOUR              = 'Retour';
+    const LABEL_SUPPRIMER           = 'Supprimer';
     
     /////////////////////////////////////////////////
     // Messages d'erreurs

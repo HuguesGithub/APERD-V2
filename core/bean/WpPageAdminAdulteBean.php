@@ -1,8 +1,6 @@
 <?php
 namespace core\bean;
 
-use core\domain\MySQLClass;
-
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -250,144 +248,11 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
      */
     public function getListContent($blnHasEditorRights=false)
     {
-        $strContent = '';
-        $this->blnHasPagination = false;
-        $this->strPagination = '';
- 
-        /*
-         <button type="button" class="btn btn-default btn-sm disabled text-white"><i class="fa-solid fa-caret-left"></i></button>&nbsp;1 - 10 sur 790&nbsp;
-         <button type="button" class="btn btn-default btn-sm "><a href="/admin?onglet=library&amp;subOnglet=index&amp;curPage=2" class="text-white"><i class="fa-solid fa-caret-right"></i></a></button>
-         */
-        
+        $this->attrDescribeList = self::LABEL_LIST_PARENTS;
         /////////////////////////////////////////
         // On va chercher les éléments à afficher
         $objItems = $this->objAdulteServices->getAdultesWithFilters();
-        /////////////////////////////////////////////:
-        // Pagination
-        $this->strPagination = $this->buildPagination($objItems);
-        /////////////////////////////////////////////:
-        while (!empty($objItems)) {
-            $objItem = array_shift($objItems);
-            $strContent .= $objItem->getBean()->getRow($blnHasEditorRights);
-        }
         /////////////////////////////////////////
-        
-        $attributes = array(
-            // On défini le titre
-            self::LABEL_PARENTS,
-            // On défini un éventuel entête/footer de boutons d'actions
-            $this->getListControlTools($blnHasEditorRights),
-            // On défini le tag de la liste
-            $this->slugOnglet,
-            // On défini la description de la liste
-            self::LABEL_LIST_PARENTS,
-            // On défini le header de la liste
-            $this->getListHeaderRow($blnHasEditorRights),
-            // On défini le contenu de la liste
-            $strContent,
-        );
-        return $this->getRender(self::WEB_PPFC_LIST_DEFAULT, $attributes);
-    }
-    
-    /**
-     * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.07
-     */
-    public function getDownloadButton()
-    {
-        $btnContent = $this->getIcon(self::I_DOWNLOAD);
-        $btnAttributes = array(
-            self::ATTR_CLASS => 'btn btn-default btn-sm btn-light ajaxAction',
-            self::ATTR_TITLE => 'Exporter la liste',
-            self::ATTR_DATA_TRIGGER => 'click',
-            self::ATTR_DATA_AJAX => 'csvExport',
-            self::ATTR_DATA_TYPE => $this->slugOnglet,
-        );
-        return $this->getButton($btnContent, $btnAttributes);
-    }
-    
-    public function getCancelButton()
-    {
-        $label = $this->getIcon(self::I_ANGLES_LEFT).self::CST_NBSP.self::LABEL_ANNULER;
-        $href = $this->getUrl(array(self::CST_SUBONGLET=>''));
-        return $this->getLinkedButton($label, $href);
-    }
-    
-    public function getReturnButton()
-    {
-        $label = $this->getIcon(self::I_ANGLES_LEFT).self::CST_NBSP.self::LABEL_RETOUR;
-        $href = $this->getUrl(array(self::CST_SUBONGLET=>''));
-        return $this->getLinkedButton($label, $href);
-    }
-    
-    public function getCreateButton()
-    {
-        $label = $this->getIcon(self::I_EDIT).self::CST_NBSP.self::LABEL_CREER_ENTREE;
-        $href = $this->getUrl(array(self::CST_SUBONGLET=>self::CST_WRITE));
-        return $this->getLinkedButton($label, $href);
-    }
-    
-    public function getRefreshButton()
-    {
-        $aContent = $this->getIcon(self::I_REFRESH);
-        $btnContent = $this->getLink($aContent, $this->getUrl(), 'text-dark');
-        return $this->getButton($btnContent, array(self::ATTR_CLASS=>'btn btn-default btn-sm btn-light'));
-    }
-    
-    public function getLinkedButton($label, $href)
-    {
-        $btnAttributes = array(self::ATTR_CLASS=>'btn btn-primary mb-3 btn-block');
-        $strButton = $this->getButton($label, $btnAttributes);
-        return $this->getLink($strButton, $href, '');
-    }
-
-    /**
-     * @param array $objs
-     * @return string
-     * @since 2.22.12.08
-     * @version 2.22.12.08
-     */
-    public function buildPagination(&$objs)
-    {
-        $nbItems = count($objs);
-        $nbItemsPerPage = 10;
-        $nbPages = ceil($nbItems/$nbItemsPerPage);
-        $strPagination = '';
-        if ($nbPages>1) {
-            $this->blnHasPagination = true;
-            // Le bouton page précédente
-            $label = $this->getIcon(self::I_CARET_LEFT);
-            if ($this->curPage!=1) {
-                $btnClass = '';
-                $href = $this->getUrl(array(self::CST_CURPAGE=>$this->curPage-1));
-                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
-            } else {
-                $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
-                $btnContent = $label;
-            }
-            $btnAttributes = array(self::ATTR_CLASS=>$btnClass);
-            $strPagination .= $this->getButton($btnContent, $btnAttributes).self::CST_NBSP;
-            
-            // La chaine des éléments affichés
-            $firstItem = ($this->curPage-1)*$nbItemsPerPage;
-            $lastItem = min(($this->curPage)*$nbItemsPerPage, $nbItems);
-            $strPagination .= vsprintf(self::DYN_DISPLAYED_PAGINATION, array($firstItem+1, $lastItem, $nbItems));
-            
-            // Le bouton page suivante
-            $label = $this->getIcon(self::I_CARET_RIGHT);
-            if ($this->curPage!=$nbPages) {
-                $btnClass = '';
-                $href = $this->getUrl(array(self::CST_CURPAGE=>$this->curPage+1));
-                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
-            } else {
-                $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
-                $btnContent = $label;
-            }
-            $btnAttributes = array(self::ATTR_CLASS=>$btnClass);
-            $strPagination .= self::CST_NBSP.$this->getButton($btnContent, $btnAttributes);
-            $objs = array_slice($objs, $firstItem, $nbItemsPerPage);
-        }
-        return $strPagination;
+        return $this->getDefaultListContent($objItems, $blnHasEditorRights);
     }
 }

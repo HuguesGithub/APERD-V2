@@ -7,8 +7,8 @@ if (!defined('ABSPATH')) {
 /**
  * Classe WpPageAdminAdministratifBean
  * @author Hugues
- * @since 1.22.09.20
- * @version 1.22.10.19
+ * @since 1.22.12.01
+ * @version 1.22.12.08
  */
 class WpPageAdminAdministratifBean extends WpPageAdminBean
 {
@@ -291,88 +291,11 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
      */
     public function getListContent($blnHasEditorRights=false)
     {
-        $strContent = '';
-        $this->blnHasPagination = false;
-        $this->strPagination = '';
- 
-        /*
-         <button type="button" class="btn btn-default btn-sm disabled text-white"><i class="fa-solid fa-caret-left"></i></button>&nbsp;1 - 10 sur 790&nbsp;
-         <button type="button" class="btn btn-default btn-sm "><a href="/admin?onglet=library&amp;subOnglet=index&amp;curPage=2" class="text-white"><i class="fa-solid fa-caret-right"></i></a></button>
-         */
-        
+        $this->attrDescribeList = self::LABEL_LIST_ADMINISTRATIFS;
+        /////////////////////////////////////////
+        // On va chercher les éléments à afficher
         $objItems = $this->objAdministrationServices->getAdministrationsWithFilters();
-        while (!empty($objItems)) {
-            $objItem = array_shift($objItems);
-            $strContent .= $objItem->getBean()->getRow($blnHasEditorRights);
-        }
-        
-        $attributes = array(
-            // On défini le titre
-            self::LABEL_ADMINISTRATIFS,
-            // On défini un éventuel entête/footer de boutons d'actions
-            $this->getListControlTools($blnHasEditorRights),
-            // On défini le tag de la liste
-            $this->slugOnglet,
-            // On défini la description de la liste
-            self::LABEL_LIST_ADMINISTRATIFS,
-            // On défini le header de la liste
-            $this->getListHeaderRow($blnHasEditorRights),
-            // On défini le contenu de la liste
-            $strContent,
-        );
-        return $this->getRender(self::WEB_PPFC_LIST_DEFAULT, $attributes);
-    }
-    
-    /**
-     * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.07
-     */
-    public function getDownloadButton()
-    {
-        $btnContent = $this->getIcon(self::I_DOWNLOAD);
-        $btnAttributes = array(
-            self::ATTR_CLASS => 'btn btn-default btn-sm btn-light ajaxAction',
-            self::ATTR_TITLE => 'Exporter la liste',
-            self::ATTR_DATA_TRIGGER => 'click',
-            self::ATTR_DATA_AJAX => 'csvExport',
-            self::ATTR_DATA_TYPE => $this->slugOnglet,
-        );
-        return $this->getButton($btnContent, $btnAttributes);
-    }
-    
-    public function getCancelButton()
-    {
-        $label = $this->getIcon(self::I_ANGLES_LEFT).self::CST_NBSP.self::LABEL_ANNULER;
-        $href = $this->getUrl(array(self::CST_SUBONGLET=>''));
-        return $this->getLinkedButton($label, $href);
-    }
-    
-    public function getReturnButton()
-    {
-        $label = $this->getIcon(self::I_ANGLES_LEFT).self::CST_NBSP.self::LABEL_RETOUR;
-        $href = $this->getUrl(array(self::CST_SUBONGLET=>''));
-        return $this->getLinkedButton($label, $href);
-    }
-    
-    public function getCreateButton()
-    {
-        $label = $this->getIcon(self::I_EDIT).self::CST_NBSP.self::LABEL_CREER_ENTREE;
-        $href = $this->getUrl(array(self::CST_SUBONGLET=>self::CST_WRITE));
-        return $this->getLinkedButton($label, $href);
-    }
-    
-    public function getRefreshButton()
-    {
-        $aContent = $this->getIcon(self::I_REFRESH);
-        $btnContent = $this->getLink($aContent, $this->getUrl(), 'text-dark');
-        return $this->getButton($btnContent, array(self::ATTR_CLASS=>'btn btn-default btn-sm btn-light'));
-    }
-    
-    public function getLinkedButton($label, $href)
-    {
-        $btnAttributes = array(self::ATTR_CLASS=>'btn btn-primary mb-3 btn-block');
-        $strButton = $this->getButton($label, $btnAttributes);
-        return $this->getLink($strButton, $href, '');
+        /////////////////////////////////////////
+        return $this->getDefaultListContent($objItems, $blnHasEditorRights);
     }
 }
