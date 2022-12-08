@@ -36,6 +36,7 @@ interface LabelsInterface
     const LABEL_PARENTS             = 'Parents';
     const LABEL_RETOUR              = 'Retour';
     const LABEL_SUPPRIMER           = 'Supprimer';
+    const LABEL_PHONE               = 'Téléphone';
     
     /////////////////////////////////////////////////
     // Messages d'erreurs

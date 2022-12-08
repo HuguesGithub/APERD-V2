@@ -190,30 +190,6 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
      * @since 2.22.12.07
      * @version 2.22.12.07
      */
-    public function getListControlTools($blnHasEditorRights=false)
-    {
-        $divContent = $this->getRefreshButton().self::CST_NBSP;
-        
-        // Si on a les droits, on ajoute le bouton de download
-        if ($blnHasEditorRights) {
-            $divContent .= $this->getDownloadButton();
-        }
-        
-        // On ajoute le div de pagination, s'il y a lieu
-        if ($this->blnHasPagination) {
-            $divContent .= $this->getDiv($this->strPagination, array(self::ATTR_CLASS=>'float-right'));
-        }
-        
-        $divAttributes = array(self::ATTR_CLASS=>$this->slugOnglet.'-controls toolbox-controls');
-        return $this->getDiv($divContent, $divAttributes);
-    }
-    
-    /**
-     * @param boolean $blnHasEditorRights
-     * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.07
-     */
     public function getListHeaderRow($blnHasEditorRights=false)
     {
         // Selon qu'on a les droit d'administration ou non, on n'aura pas autant de colonnes à afficher.

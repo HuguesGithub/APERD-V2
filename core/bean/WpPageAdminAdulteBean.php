@@ -36,7 +36,9 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
             $this->objAdulte->setField(self::FIELD_PRENOMADULTE, $this->initVar(self::FIELD_PRENOMADULTE));
             $this->objAdulte->setField(self::FIELD_MAILADULTE, $this->initVar(self::FIELD_MAILADULTE));
             $this->objAdulte->setField(self::FIELD_ADHERENT, $this->initVar(self::FIELD_ADHERENT, 0));
-            
+            $strPhoneAdulte = str_replace(' ', '', $this->initVar(self::FIELD_PHONEADULTE));
+            $this->objAdulte->setField(self::FIELD_PHONEADULTE, $strPhoneAdulte);
+
             // Si le contrôle des données est ok
             if ($this->objAdulte->controlerDonnees($strNotification, $strMessage)) {
                 // Si l'id n'est pas défini
@@ -143,30 +145,6 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
     {
         $baseUrl = $this->getUrl(array(self::CST_SUBONGLET=>''));
         return $this->objAdulte->getBean()->getForm($baseUrl);
-    }
-    
-    /**
-     * @param boolean $blnHasEditorRights
-     * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.07
-     */
-    public function getListControlTools($blnHasEditorRights=false)
-    {
-        $divContent = $this->getRefreshButton().self::CST_NBSP;
-        
-        // Si on a les droits, on ajoute le bouton de download
-        if ($blnHasEditorRights) {
-            $divContent .= $this->getDownloadButton();
-        }
-        
-        // On ajoute le div de pagination, s'il y a lieu
-        if ($this->blnHasPagination) {
-            $divContent .= $this->getDiv($this->strPagination, array(self::ATTR_CLASS=>'float-right'));
-        }
-        
-        $divAttributes = array(self::ATTR_CLASS=>$this->slugOnglet.'-controls toolbox-controls');
-        return $this->getDiv($divContent, $divAttributes);
     }
     
     /**

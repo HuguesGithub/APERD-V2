@@ -42,4 +42,63 @@ class LocalServices implements ConstantsInterface, UrlsInterface, LabelsInterfac
     protected function getValueToSearch($arrFilters, $tag, $default=self::SQL_JOKER)
     { return ($this->isNonEmptyAndNoArray($arrFilters, $tag) ? $arrFilters[$tag] : $default); }
     
+    /**
+     * @param mixed $obj
+     * @return array
+     * @since 2.22.12.08
+     * @version 2.22.12.08
+     */
+    public function getParamsForInsert($obj)
+    {
+        $arrParams = array();
+        foreach (array_keys($obj->getFields()) as $field) {
+            if ($field==self::FIELD_ID) {
+                continue;
+            }
+            array_push($arrParams, $obj->getField($field));
+        }
+        return $arrParams;
+    }
+    
+    /**
+     * @param mixed $obj
+     * @return array
+     * @since 2.22.12.08
+     * @version 2.22.12.08
+     */
+    public function getParamsForUpdate($obj)
+    {
+        $arrParams = array();
+        foreach (array_keys($obj->getFields()) as $field) {
+            if ($field==self::FIELD_ID) {
+                $id = $obj->getField($field);
+                continue;
+            }
+            array_push($arrParams, $obj->getField($field));
+        }
+        array_push($arrParams, $id);
+        return $arrParams;
+    }
+
+    /**
+     * @param array $arrFilters
+     * @param string $orderBy
+     * @param string $order
+     * @return array
+     * @since 2.22.12.08
+     * @version 2.22.12.08
+     */
+    public function initRequestParams($arrFilters, $orderBy, $order)
+    {
+        if ($orderBy==self::SQL_ORDER_RAND) {
+            $order = '';
+        }
+        $arrParams = array(
+            self::SQL_ORDERBY => $orderBy,
+            self::SQL_ORDER => $order,
+            self::SQL_LIMIT => -1,
+            self::SQL_WHERE => $this->buildFilters($arrFilters),
+        );
+        return $arrParams;
+    }
 }

@@ -2,6 +2,7 @@
 	<form action="#" method="post" id="post-edit">
     	<div class="card-header"><strong>%1$s</strong></div>
         <div class="card-body">
+        
             <div class="row">
               <div class="col-md">
                 <div class="form-floating mb-3">
@@ -16,6 +17,7 @@
                 </div>
               </div>
             </div>
+            
             <div class="row">
               <div class="col-md">
                 <div class="form-floating mb-3">
@@ -34,6 +36,18 @@
                 	</div>
                 </div>
             </div>
+            
+            <div class="row">
+              <div class="col-md">
+                <div class="form-floating mb-3">
+                  <input id="phoneAdulte" type="text" class="form-control" placeholder="01 23 45 67 89" value="%8$s" name="phoneAdulte">
+                  <label for="phoneAdulte">Téléphone Parent</label>
+                </div>
+              </div>
+              <div class="col-md">
+              </div>
+            </div>
+            
         </div>
         <div class="card-footer">
             <div class="btn-group btn-group-toggle">

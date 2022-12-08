@@ -106,7 +106,6 @@ class LocalDaoImpl implements ConstantsInterface, UrlsInterface, LabelsInterface
     public function crud($request, $attributes)
     {
         $prepRequest = vsprintf($request, $attributes);
-        
         //////////////////////////////
         // Exécution de la requête
         MySQLClass::wpdbQuery($prepRequest);

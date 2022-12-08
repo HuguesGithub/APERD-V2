@@ -103,6 +103,8 @@ class AdulteBean extends LocalBean
             $this->obj->getField(self::FIELD_MAILADULTE),
             // Parent Adhérent ? - 7
             ($this->obj->getField(self::FIELD_ADHERENT)==1 ? ' '.self::CST_CHECKED : ''),
+            // Téléphone du Parent - 8
+            $this->obj->getField(self::FIELD_PHONEADULTE),
         );
         return $this->getRender($urlTemplate, $attributes);
     }

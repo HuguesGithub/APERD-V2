@@ -24,9 +24,7 @@ class AdulteServices extends LocalServices
      * @version 2.22.12.08
      */
     public function __construct()
-    {
-        $this->objDao = new AdulteDaoImpl();
-    }
+    { $this->objDao = new AdulteDaoImpl(); }
 
     //////////////////////////////////////////////////
     // METHODS
@@ -48,29 +46,12 @@ class AdulteServices extends LocalServices
     }
     
     /**
-     * @param array $arrFilters
-     * @param string $orderby
-     * @param string $order
-     * @return array
+     * @param AdulteClass $obj
      * @since 2.22.12.08
      * @version 2.22.12.08
      */
-    public function getAdultesWithFilters($arrFilters=array(), $orderBy='', $order='')
-    {
-        if ($orderBy=='') {
-            $orderBy = self::FIELD_NOMADULTE;
-        }
-        if ($order=='' && $orderBy!=self::SQL_ORDER_RAND) {
-            $order = self::SQL_ORDER_ASC;
-        }
-        $arrParams = array(
-            self::SQL_ORDERBY => $orderBy,
-            self::SQL_ORDER => $order,
-            self::SQL_LIMIT => -1,
-            self::SQL_WHERE => $this->buildFilters($arrFilters),
-        );
-        return $this->objDao->getAdultesWithFilters($arrParams);
-    }
+    public function delete($obj)
+    { $this->objDao->deleteAdulte(array($obj->getField(self::FIELD_ID))); }
     
     /**
      * @param integer $adulteId
@@ -80,7 +61,22 @@ class AdulteServices extends LocalServices
      */
     public function getAdulteById($adulteId)
     { return $this->objDao->getAdulteById($adulteId); }
-
+    
+    /**
+     * @param array $arrFilters
+     * @param string $orderby
+     * @param string $order
+     * @return array
+     * @since 2.22.12.08
+     * @version 2.22.12.08
+     */
+    public function getAdultesWithFilters($arrFilters=array(), $orderBy=self::FIELD_NOMADULTE,
+        $order=self::SQL_ORDER_ASC)
+    {
+        $arrParams = $this->initRequestParams($arrFilters, $orderBy, $order);
+        return $this->objDao->getAdultesWithFilters($arrParams);
+    }
+    
     /**
      * @param AdulteClass $obj
      * @since 2.22.12.08
@@ -88,13 +84,7 @@ class AdulteServices extends LocalServices
      */
     public function insert(&$obj)
     {
-        $arrParams = array(
-            $obj->getField(self::FIELD_NOMADULTE),
-            $obj->getField(self::FIELD_PRENOMADULTE),
-            $obj->getField(self::FIELD_MAILADULTE),
-            $obj->getField(self::FIELD_ADHERENT),
-        );
-        $id = $this->objDao->insertAdulte($arrParams);
+        $id = $this->objDao->insertAdulte($this->getParamsForInsert($obj));
         $obj->setField(self::FIELD_ID, $id);
     }
     
@@ -104,27 +94,5 @@ class AdulteServices extends LocalServices
      * @version 2.22.12.08
      */
     public function update($obj)
-    {
-        $arrParams = array(
-            $obj->getField(self::FIELD_NOMADULTE),
-            $obj->getField(self::FIELD_PRENOMADULTE),
-            $obj->getField(self::FIELD_MAILADULTE),
-            $obj->getField(self::FIELD_ADHERENT),
-            $obj->getField(self::FIELD_ID),
-        );
-        $this->objDao->updateAdulte($arrParams);
-    }
-    
-    /**
-     * @param AdulteClass $obj
-     * @since 2.22.12.08
-     * @version 2.22.12.08
-     */
-    public function delete($obj)
-    {
-        $arrParams = array(
-            $obj->getField(self::FIELD_ID),
-        );
-        $this->objDao->deleteAdulte($arrParams);
-    }
+    { $this->objDao->updateAdulte($this->getParamsForUpdate($obj)); }
 }

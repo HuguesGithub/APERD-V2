@@ -24,9 +24,7 @@ class AdministrationServices extends LocalServices
      * @version 2.22.12.05
      */
     public function __construct()
-    {
-        $this->objDao = new AdministrationDaoImpl();
-    }
+    { $this->objDao = new AdministrationDaoImpl(); }
 
     //////////////////////////////////////////////////
     // METHODS
@@ -47,29 +45,12 @@ class AdministrationServices extends LocalServices
     }
     
     /**
-     * @param array $arrFilters
-     * @param string $orderby
-     * @param string $order
-     * @return array
-     * @since 2.22.12.05
-     * @version 2.22.12.05
+     * @param AdministrationClass $obj
+     * @since 2.22.12.07
+     * @version 2.22.12.07
      */
-    public function getAdministrationsWithFilters($arrFilters=array(), $orderBy='', $order='')
-    {
-        if ($orderBy=='') {
-            $orderBy = self::FIELD_NOMTITULAIRE;
-        }
-        if ($order=='' && $orderBy!=self::SQL_ORDER_RAND) {
-            $order = self::SQL_ORDER_ASC;
-        }
-        $arrParams = array(
-            self::SQL_ORDERBY => $orderBy,
-            self::SQL_ORDER => $order,
-            self::SQL_LIMIT => -1,
-            self::SQL_WHERE => $this->buildFilters($arrFilters),
-        );
-        return $this->objDao->getAdministrationsWithFilters($arrParams);
-    }
+    public function delete($obj)
+    { $this->objDao->deleteAdministration(array($obj->getField(self::FIELD_ID))); }
     
     /**
      * @param integer $adminId
@@ -79,6 +60,29 @@ class AdministrationServices extends LocalServices
      */
     public function getAdministrationById($adminId)
     { return $this->objDao->getAdministrationById($adminId); }
+    
+    /**
+     * @param array $arrFilters
+     * @param string $orderby
+     * @param string $order
+     * @return array
+     * @since 2.22.12.05
+     * @version 2.22.12.08
+     */
+    public function getAdministrationsWithFilters($arrFilters=array(), $orderBy=self::FIELD_NOMTITULAIRE,
+        $order=self::SQL_ORDER_ASC)
+    {
+        if ($orderBy==self::SQL_ORDER_RAND) {
+            $order = '';
+        }
+        $arrParams = array(
+            self::SQL_ORDERBY => $orderBy,
+            self::SQL_ORDER => $order,
+            self::SQL_LIMIT => -1,
+            self::SQL_WHERE => $this->buildFilters($arrFilters),
+        );
+        return $this->objDao->getAdministrationsWithFilters($arrParams);
+    }
 
     /**
      * @param AdministrationClass $obj
@@ -110,18 +114,5 @@ class AdministrationServices extends LocalServices
             $obj->getField(self::FIELD_ID),
         );
         $this->objDao->updateAdministration($arrParams);
-    }
-    
-    /**
-     * @param AdministrationClass $obj
-     * @since 2.22.12.07
-     * @version 2.22.12.07
-     */
-    public function delete($obj)
-    {
-        $arrParams = array(
-            $obj->getField(self::FIELD_ID),
-        );
-        $this->objDao->deleteAdministration($arrParams);
     }
 }

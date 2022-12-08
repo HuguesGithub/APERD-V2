@@ -18,6 +18,8 @@ if (!defined('ABSPATH')) {
  */
 class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInterface
 {
+    protected $arrFields;
+    
     //////////////////////////////////////////////////
     // CONSTRUCT
     //////////////////////////////////////////////////
@@ -40,8 +42,16 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
         $this->objAdministrationServices = new AdministrationServices();
         $this->objAdulteServices         = new AdulteServices();
     }
-
-    /*
+    
+    /**
+     * @return array
+     * @since 2.22.12.08
+     * @version 2.22.12.08
+     */
+    public function getFields()
+    { return $this->arrFields; }
+    
+    /**
      * @param string $key
      * @param string
      * @since 2.22.12.05
@@ -50,7 +60,7 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
     public function getField($key)
     { return (property_exists($this, $key) ? $this->{$key} : null); }
      
-    /*
+    /**
      * @param string $key
      * @param string $value
      * @since 2.22.12.05

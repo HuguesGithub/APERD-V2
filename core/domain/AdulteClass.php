@@ -22,6 +22,7 @@ class AdulteClass extends LocalDomainClass
     protected $prenomAdulte;
     protected $mailAdulte;
     protected $adherent;
+    protected $phoneAdulte;
 
     //////////////////////////////////////////////////
     // GETTERS & SETTERS
@@ -55,6 +56,7 @@ class AdulteClass extends LocalDomainClass
             self::FIELD_PRENOMADULTE => self::LABEL_NOMPRENOM,
             self::FIELD_MAILADULTE => self::LABEL_MAIL,
             self::FIELD_ADHERENT => self::LABEL_ADHERENT,
+            self::FIELD_PHONEADULTE => self::LABEL_PHONE,
         );
     }
 
