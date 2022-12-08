@@ -61,19 +61,18 @@ class AdministrationDaoImpl extends LocalDaoImpl
     }
     
     /**
-     * @param int $adminId
+     * @param int $id
      * @return AdministrationClass
      * @since 2.22.12.05
      * @version 2.22.12.05
      */
-    public function getAdministrationById($adminId)
+    public function getAdministrationById($id)
     {
         //////////////////////////////
         // Construction de la requête
         $request  = "SELECT id, genre, nomTitulaire, labelPoste FROM ".$this->dbTable." ";
         $request .= "WHERE id='%s' ";
-        
-        $prepRequest = vsprintf($request, array($adminId));
+        $prepRequest = vsprintf($request, array($id));
         
         //////////////////////////////
         // Exécution de la requête

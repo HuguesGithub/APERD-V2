@@ -32,9 +32,17 @@ class AjaxActions extends LocalActions
         return $returned;
     }
   
+    /**
+     * Réoriente vers les exports CSV dédiés
+     * @since 1.22.12.08
+     * @version 1.22.12.08
+     */
     public static function dealWithCsvExport()
     {
         switch ($_POST[self::ATTR_TYPE]) {
+            case self::ONGLET_PARENTS :
+                $returned = AdulteActions::getCsvExport();
+                break;
             case self::ONGLET_ADMINISTRATIFS :
                 $returned = AdministrationActions::getCsvExport();
                 break;

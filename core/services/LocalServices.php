@@ -93,12 +93,11 @@ class LocalServices implements ConstantsInterface, UrlsInterface, LabelsInterfac
         if ($orderBy==self::SQL_ORDER_RAND) {
             $order = '';
         }
-        $arrParams = array(
+        return array(
             self::SQL_ORDERBY => $orderBy,
             self::SQL_ORDER => $order,
             self::SQL_LIMIT => -1,
             self::SQL_WHERE => $this->buildFilters($arrFilters),
         );
-        return $arrParams;
     }
 }

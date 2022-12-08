@@ -36,7 +36,7 @@ class AdulteServices extends LocalServices
      * @since 2.22.12.08
      * @version 2.22.12.08
      */
-    private function buildFilters($arrFilters)
+    public function buildFilters($arrFilters)
     {
         $arrParams = array();
         array_push($arrParams, $this->getValueToSearch($arrFilters, self::FIELD_NOMADULTE));
@@ -70,9 +70,9 @@ class AdulteServices extends LocalServices
      * @since 2.22.12.08
      * @version 2.22.12.08
      */
-    public function getAdultesWithFilters($arrFilters=array(), $orderBy=self::FIELD_NOMADULTE,
-        $order=self::SQL_ORDER_ASC)
-    {
+    public function getAdultesWithFilters(
+        $arrFilters=array(), $orderBy=self::FIELD_NOMADULTE, $order=self::SQL_ORDER_ASC
+    ) {
         $arrParams = $this->initRequestParams($arrFilters, $orderBy, $order);
         return $this->objDao->getAdultesWithFilters($arrParams);
     }

@@ -33,7 +33,6 @@ class AdulteClass extends LocalDomainClass
      * @since 2.22.12.08
      * @version 2.22.12.08
      */
-
     public function getName()
     { return $this->nomAdulte.' '.$this->prenomAdulte; }
 

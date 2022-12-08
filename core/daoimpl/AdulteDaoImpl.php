@@ -61,18 +61,18 @@ class AdulteDaoImpl extends LocalDaoImpl
     }
     
     /**
-     * @param int $adminId
+     * @param int $id
      * @return AdulteClass
      * @since 2.22.12.08
      * @version 2.22.12.08
      */
-    public function getAdulteById($adminId)
+    public function getAdulteById($id)
     {
         //////////////////////////////
         // Construction de la requête
         $request  = "SELECT id, nomAdulte, prenomAdulte, mailAdulte, adherent, phoneAdulte FROM ".$this->dbTable." ";
         $request .= "WHERE id='%s' ";
-        $prepRequest = vsprintf($request, array($adminId));
+        $prepRequest = vsprintf($request, array($id));
         
         //////////////////////////////
         // Exécution de la requête

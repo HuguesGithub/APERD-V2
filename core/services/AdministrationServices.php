@@ -69,50 +69,29 @@ class AdministrationServices extends LocalServices
      * @since 2.22.12.05
      * @version 2.22.12.08
      */
-    public function getAdministrationsWithFilters($arrFilters=array(), $orderBy=self::FIELD_NOMTITULAIRE,
-        $order=self::SQL_ORDER_ASC)
-    {
-        if ($orderBy==self::SQL_ORDER_RAND) {
-            $order = '';
-        }
-        $arrParams = array(
-            self::SQL_ORDERBY => $orderBy,
-            self::SQL_ORDER => $order,
-            self::SQL_LIMIT => -1,
-            self::SQL_WHERE => $this->buildFilters($arrFilters),
-        );
+    public function getAdministrationsWithFilters(
+        $arrFilters=array(), $orderBy=self::FIELD_NOMTITULAIRE, $order=self::SQL_ORDER_ASC
+    ) {
+        $arrParams = $this->initRequestParams($arrFilters, $orderBy, $order);
         return $this->objDao->getAdministrationsWithFilters($arrParams);
     }
 
     /**
      * @param AdministrationClass $obj
      * @since 2.22.12.07
-     * @version 2.22.12.07
+     * @version 2.22.12.08
      */
     public function insert(&$obj)
     {
-        $arrParams = array(
-            $obj->getField(self::FIELD_GENRE),
-            $obj->getField(self::FIELD_NOMTITULAIRE),
-            $obj->getField(self::FIELD_LABELPOSTE),
-        );
-        $id = $this->objDao->insertAdministration($arrParams);
+        $id = $this->objDao->insertAdministration($this->getParamsForInsert($obj));
         $obj->setField(self::FIELD_ID, $id);
     }
     
     /**
      * @param AdministrationClass $obj
      * @since 2.22.12.07
-     * @version 2.22.12.07
+     * @version 2.22.12.08
      */
     public function update($obj)
-    {
-        $arrParams = array(
-            $obj->getField(self::FIELD_GENRE),
-            $obj->getField(self::FIELD_NOMTITULAIRE),
-            $obj->getField(self::FIELD_LABELPOSTE),
-            $obj->getField(self::FIELD_ID),
-        );
-        $this->objDao->updateAdministration($arrParams);
-    }
+    { $this->objDao->updateAdministration($this->getParamsForUpdate($obj)); }
 }
