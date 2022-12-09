@@ -40,12 +40,15 @@ interface LabelsInterface
     
     /////////////////////////////////////////////////
     // Messages d'erreurs
+    const MSG_ERREUR_CONTROL_ENTETE           = 'La première ligne ne correspond pas aux champs attendus : <strong>%s</strong>.';
+
     const MSG_ERREUR_CONTROL_EXISTENCE_NORMEE = 'Champ obligatoire [<strong>%s</strong>] non saisi. ';
     const MSG_ERREUR_CONTROL_IDENTIFICATION   = "Une erreur est survenue lors de la saisie de votre identifiant et de votre mot de passe.<br>L'un des champs était vide, ou les deux ne correspondaient pas à une valeur attendue.<br>Veuillez réessayer ou contacter un administrateur.<br><br>";
     
     /////////////////////////////////////////////////
     // Messages de succès
     const MSG_SUCCESS_EXPORT = 'Exportation réussie. Le fichier peut être téléchargé <a href="%s" class="text-white">ici</a>.';
+      const MSG_SUCCESS_IMPORT                  = 'L\'importation des données s\'est correctement déroulée.';
 
     /////////////////////////////////////////////////
     // Messages dynamiques

@@ -205,7 +205,7 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
         $trContent .= $this->getTh(self::LABEL_NOMTITULAIRE);
         $trContent .= $this->getTh(self::LABEL_LABELPOSTE);
         if ($blnHasEditorRights) {
-            $trContent .= $this->getTh(self::LABEL_ACTIONS);
+            $trContent .= $this->getTh(self::LABEL_ACTIONS, array(self::ATTR_CLASS=>'text-center'));
         }
         return $this->getBalise(self::TAG_TR, $trContent);
     }

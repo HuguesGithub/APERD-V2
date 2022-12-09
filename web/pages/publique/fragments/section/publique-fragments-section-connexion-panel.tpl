@@ -1,4 +1,4 @@
-<section class="content col-12 col-lg-4 offset-lg-4 pt-5 %1$s" style="position: absolute;">
+<section class="content col-12 col-lg-4 offset-lg-4 pt-5 %1$s" style="position: relative;">
 	<div class="container-fluid">
 		<div class="card card-outline card-warning">
 			<div class="card-header text-center"><strong>Erreur</strong></div>
@@ -7,7 +7,7 @@
 	</div>
 </section>
 
-<section class="content login-panel col-12 col-lg-4 offset-lg-4">
+<section class="content login-panel col-12 col-lg-4 pt-5 offset-lg-4">
 	<div class="container-fluid">
 		<div class="login-box" style="width: inherit;">
 			<div class="card card-outline card-primary">

@@ -126,7 +126,23 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
         return $blnOk;
     }
 
-
+  /**
+   * @param string $rowContent
+   * @param string &$notif
+   * @param string &$msg
+   * @return boolean
+   * @version 2.22.12.09
+   * @since 2.22.12.09
+   */
+	public function controlerEntete($rowContent, &$notif, &$msg)
+	{
+		if (str_replace(self::CST_EOL, '', $rowContent)!=$this->getCsvEntete()) {
+			$notif = self::NOTIF_DANGER;
+			$msg = sprintf(self::MSG_ERREUR_CONTROL_ENTETE, $this->getCsvEntete());
+			return false;
+		}
+		return true;
+	}
 
 
 
@@ -187,23 +203,7 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
   public static function getWpUserId()
   { return get_current_user_id(); }
 
-  /**
-   * @param string $rowContent
-   * @param string &$notif
-   * @param string &$msg
-   * @return boolean
-   * @version 1.21.06.09
-   * @since 1.21.06.01
-   *
-  public function controleEntete($rowContent, &$notif, &$msg)
-  {
-    if ($rowContent!=$this->getCsvEntete()) {
-      $notif = self::NOTIF_DANGER;
-      $msg = sprintf(self::MSG_ERREUR_CONTROL_ENTETE, $this->getCsvEntete());
-      return true;
-    }
-    return false;
-  }
+
   /**
    * @param string &$notif
    * @param string &$msg
@@ -253,38 +253,6 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
         $notif = self::NOTIF_SUCCESS;
         $msg   = self::MSG_SUCCESS_UPDATE;
         return true;
-      }
-    }
-    return false;
-  }
-  /**
-   * @param string $rowContent
-   * @param string $sep
-   * @param string &$notif
-   * @param string &$msg
-   * @return boolean
-   * @version 1.21.06.17
-   * @since 1.21.06.17
-   *
-  public function controleDonneesAndAct($Obj, &$notif, &$msg)
-  {
-    if (!$this->controleDonnees($notif, $msg)) {
-      return true;
-    }
-    $id = $Obj->getId();
-    // Si les contrôles sont okay, on peut insérer ou mettre à jour
-    if ($id=='') {
-      // Si id n'est pas renseigné. C'est une création. Il faut vérifier que le label n'existe pas déjà.
-      $this->Services->insertLocal($Obj);
-    } else {
-      $ObjectInBase = $this->Services->selectLocal($id);
-      if ($ObjectInBase->getId()=='') {
-        // Sinon, si id n'existe pas, c'est une création. Cf au-dessus
-        $this->Services->insertLocal($Obj);
-      } else {
-        // Si id existe, c'est une édition, même contrôle que ci-dessus.
-        $this->setId($id);
-        $this->Services->updateLocal($Obj);
       }
     }
     return false;

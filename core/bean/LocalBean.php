@@ -55,7 +55,7 @@ class LocalBean extends UtilitiesBean
         $strButton = $this->getButton($strIcon, array(self::ATTR_CLASS=>'btn btn-sm btn-danger'));
         $divContent .= $this->getLink($strButton, $urlSuppression, '', array(self::ATTR_TITLE=>self::LABEL_SUPPRIMER));
         
-        $tdContent = $this->getDiv($divContent, array(self::ATTR_CLASS=>'row-actions'));
+        $tdContent = $this->getDiv($divContent, array(self::ATTR_CLASS=>'row-actions text-center'));
         return $this->getBalise(self::TAG_TD, $tdContent, array(self::ATTR_CLASS=>'column-actions'));
     }
 }

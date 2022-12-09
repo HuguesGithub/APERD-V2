@@ -41,7 +41,7 @@ class WpPageAdminBean extends WpPageBean
             $wpUser = wp_authenticate_email_password(null, $userMail, $userPassword);
             
             // Si on a un wpUser qui correspond au mail et au mot de passe.
-            if (get_class($wpUser)=='WP_Error') {
+            if ($wpUser==null || get_class($wpUser)=='WP_Error') {
                 // On a raté l'identification, on va essayé d'afficher la popup d'erreur.
                 $_SESSION[self::SESSION_APERD_ID] = self::CST_ERR_LOGIN;
             } else {
@@ -56,6 +56,11 @@ class WpPageAdminBean extends WpPageBean
             // On navigue sur le site en étant identifié.
             // TODO : Initialiser l'utilisateur courant.
         }
+		$sqlAttributes = array(self::FIELD_MAILADULTE=>$_SESSION[self::SESSION_APERD_ID]);
+		$objsAdulte = $this->objAdulteServices->getAdultesWithFilters($sqlAttributes);
+		if (count($objsAdulte)==1) {
+			$this->curUser = array_shift($objsAdulte);
+		}
         
         // TODO : Récupération des paramètres plus vaste que des initVar multiples ?
         // $this->analyzeUri();
@@ -204,7 +209,7 @@ class WpPageAdminBean extends WpPageBean
             // La barre de navigation
             $this->getNavigationBar(),
             // Le nom
-            'Joneaux Hugues',
+            $this->curUser->getName(),
             // La sidebar
             $this->getSideBar(),
             // Header
@@ -315,6 +320,7 @@ class WpPageAdminBean extends WpPageBean
             // Construction du lien
             $urlElements = array(
                 self::CST_ONGLET => $strOnglet,
+                self::CST_SUBONGLET => '',
             );
             $aContent  = $this->getIcon($arrOnglet[self::CST_ICON], 'nav-icon');
             $aContent .= $this->getBalise(self::TAG_P, $pContent);
@@ -447,6 +453,46 @@ class WpPageAdminBean extends WpPageBean
     }
     
     */
+    
+    /**
+     * @return string
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function getBulkDeleteButton()
+    {
+        ///////////////////////////////////////////
+        // On groupe un bouton de download
+        $btnContent = $this->getIcon(self::I_DELETE);
+        $btnAttributes = array(
+            self::ATTR_CLASS => 'btn-light ajaxAction',
+            self::ATTR_TITLE => 'Supprimer la liste',
+        );
+        $btnBulkDelete = $this->getButton($btnContent, $btnAttributes);
+
+        // Avec un dropdown Sélection / Tous, avec Tous par défaut.
+        $btnAttributes = array(
+            self::ATTR_ID => 'dropdownTrash',
+            self::ATTR_CLASS => 'btn-light dropdown-toggle',
+            'data-bs-toggle' => 'dropdown',
+            'aria-expanded' => 'false',
+        );
+        $btnDropdown = $this->getButton('Tous', $btnAttributes);
+        
+        // Les choix possibles
+        $ulContent  = $this->getBalise(self::TAG_LI, $this->getLink('Sélection', '#', 'dropdown-item text-white ajaxAction', array('data-trigger'=>'click', 'data-ajax'=>'dropdown', 'data-target'=>'#dropdownTrash')));
+        $ulContent .= $this->getBalise(self::TAG_LI, $this->getLink('Tous', '#', 'dropdown-item text-white ajaxAction', array('data-trigger'=>'click', 'data-ajax'=>'dropdown', 'data-target'=>'#dropdownTrash')));
+        $ulAttributes = array(
+            self::ATTR_CLASS => 'dropdown-menu',
+            self::ATTR_STYLE => 'position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(93.6px, 427.2px, 0px);',
+            'data-popper-placement' => 'bottom-start',
+        );
+        $ulDropdown = $this->getBalise(self::TAG_UL, $ulContent, $ulAttributes);
+        
+        $divGroup = $this->getDiv($btnDropdown.$ulDropdown, array('role'=>'group', self::ATTR_CLASS=>'btn-group'));
+        
+        return $this->getDiv($btnBulkDelete.$divGroup, array('role'=>'group', self::ATTR_CLASS=>'btn-group', 'aria-label'=>'Choix suppression'));
+    }
     
     /**
      * @return string
@@ -623,6 +669,7 @@ class WpPageAdminBean extends WpPageBean
         $blnIsEditorPage    = ($this->slugSubOnglet==self::CST_WRITE);
         $blnIsDeletePage    = ($this->slugSubOnglet==self::CST_DELETE);
         $blnConfirm         = $this->initVar(self::CST_CONFIRM, false);
+		$strBlocImport = '';
         
         // Définition éventuelle du bouton Création / Annulaiton
         // Définition du contenu de la page.
@@ -652,6 +699,11 @@ class WpPageAdminBean extends WpPageBean
                 $strBtnCreationAnnulation = $this->getCreateButton();
                 // Interface de liste
                 $strMainContent = $this->getListContent($blnHasEditorRights);
+				
+				$url = self::WEB_PPFC_UPLOAD;
+				$impAttributes = array($this->slugOnglet);
+				$strBlocImport  = $this->getRender($url, $impAttributes);
+				$strBlocImport .= $this->getDiv('', array(self::ATTR_ID=>'alertBlock'));
             }
         } else {
             // Interface de liste
@@ -664,8 +716,8 @@ class WpPageAdminBean extends WpPageBean
             $this->slugOnglet,
             // Un éventuel bouton de Création / Annulation si on a les droits
             $strBtnCreationAnnulation,
-            // Un bloc de présentation
-            $this->getRender($this->urlOngletContentTemplate),
+            // Un bloc de présentation + un éventuel bloc d'import
+            $this->getRender($this->urlOngletContentTemplate).$strBlocImport,
             // Une liste d'administratifs ou un formulaire d'édition.
             $strMainContent,
         );
@@ -684,6 +736,7 @@ class WpPageAdminBean extends WpPageBean
         
         // Si on a les droits, on ajoute le bouton de download
         if ($blnHasEditorRights) {
+			$divContent .= $this->getBulkDeleteButton().self::CST_NBSP;
             $divContent .= $this->getDownloadButton();
         }
         

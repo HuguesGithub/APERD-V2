@@ -162,9 +162,9 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         }
         $trContent .= $this->getTh(self::LABEL_NOMPRENOM);
         $trContent .= $this->getTh(self::LABEL_MAIL);
-        $trContent .= $this->getTh(self::LABEL_ADHERENT);
+        $trContent .= $this->getTh(self::LABEL_ADHERENT, array(self::ATTR_CLASS=>'text-center'));
         if ($blnHasEditorRights) {
-            $trContent .= $this->getTh(self::LABEL_ACTIONS);
+            $trContent .= $this->getTh(self::LABEL_ACTIONS, array(self::ATTR_CLASS=>'text-center'));
         }
         return $this->getBalise(self::TAG_TR, $trContent);
     }
