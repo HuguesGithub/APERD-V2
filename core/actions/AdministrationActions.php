@@ -101,7 +101,8 @@ class AdministrationActions extends LocalActions
             $notif = self::NOTIF_SUCCESS;
             $msg   = self::MSG_SUCCESS_IMPORT;
             $theList = '';
-            return '{"the-list": '.json_encode($theList).',"alertBlock": '.json_encode($this->getDismissableButton($notif, $msg)).'}';
+            $jsonAlertBlock = json_encode($this->getDismissableButton($notif, $msg));
+            return '{"the-list": '.json_encode($theList).',"alertBlock": '.$jsonAlertBlock.'}';
         } else {
             return '{"alertBlock": '.json_encode($this->getDismissableButton($notif, $msgError)).'}';
         }

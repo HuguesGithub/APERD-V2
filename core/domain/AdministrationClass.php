@@ -116,7 +116,8 @@ class AdministrationClass extends LocalDomainClass
         $this->setField(self::FIELD_ID, $id);
         $this->setField(self::FIELD_GENRE, ucfirst(strtolower(trim($genre))));
         $this->setField(self::FIELD_NOMTITULAIRE, ucfirst(strtolower(trim($nomTitulaire))));
-        $this->setField(self::FIELD_LABELPOSTE, trim(str_replace(array("'", self::CST_EOL), array("''", ''), $labelPoste)));
+        $labelPoste = trim(str_replace(array("'", self::CST_EOL), array("''", ''), $labelPoste));
+        $this->setField(self::FIELD_LABELPOSTE, $labelPoste);
 
         return $this->controlerDonneesAndAct($notif, $msg);
     }

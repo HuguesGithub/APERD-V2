@@ -486,16 +486,19 @@ class WpPageAdminBean extends WpPageBean
         // Les choix possibles
         $ulContent  = $this->getLiDropdown('Sélection', 'dropdownTrash');
         $ulContent .= $this->getLiDropdown('Tous', 'dropdownTrash');
+        $strStyle  = 'position: absolute; inset: 0px auto auto 0px; margin: 0px; ';
+        $strStyle .= 'transform: translate3d(93.6px, 427.2px, 0px);';
         $ulAttributes = array(
             self::ATTR_CLASS => 'dropdown-menu',
-            self::ATTR_STYLE => 'position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(93.6px, 427.2px, 0px);',
+            self::ATTR_STYLE => $strStyle,
             'data-popper-placement' => 'bottom-start',
         );
         $ulDropdown = $this->getBalise(self::TAG_UL, $ulContent, $ulAttributes);
         
         $divGroup = $this->getDiv($btnDropdown.$ulDropdown, array('role'=>'group', self::ATTR_CLASS=>'btn-group'));
         
-        return $this->getDiv($btnBulkDelete.$divGroup, array('role'=>'group', self::ATTR_CLASS=>'btn-group', 'aria-label'=>'Choix suppression'));
+        $attributes = array('role'=>'group', self::ATTR_CLASS=>'btn-group', 'aria-label'=>'Choix suppression');
+        return $this->getDiv($btnBulkDelete.$divGroup, $attributes);
     }
     
     public function getLiDropdown($label, $tag)
@@ -540,16 +543,19 @@ class WpPageAdminBean extends WpPageBean
         // Les choix possibles
         $ulContent  = $this->getLiDropdown('Sélection', 'dropdownSelection');
         $ulContent .= $this->getLiDropdown('Tous', 'dropdownSelection');
+        $strStyle  = 'position: absolute; inset: 0px auto auto 0px; margin: 0px; ';
+        $strStyle .= 'transform: translate3d(93.6px, 427.2px, 0px);';
         $ulAttributes = array(
             self::ATTR_CLASS => 'dropdown-menu',
-            self::ATTR_STYLE => 'position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(93.6px, 427.2px, 0px);',
+            self::ATTR_STYLE => $strStyle,
             'data-popper-placement' => 'bottom-start',
         );
         $ulDropdown = $this->getBalise(self::TAG_UL, $ulContent, $ulAttributes);
         
         $divGroup = $this->getDiv($btnDropdown.$ulDropdown, array('role'=>'group', self::ATTR_CLASS=>'btn-group'));
         
-        return $this->getDiv($btnDownload.$divGroup, array('role'=>'group', self::ATTR_CLASS=>'btn-group', 'aria-label'=>'Choix export'));
+        $attributes = array('role'=>'group', self::ATTR_CLASS=>'btn-group', 'aria-label'=>'Choix export');
+        return $this->getDiv($btnDownload.$divGroup, $attributes);
     }
     
     public function getCancelButton()

@@ -33,49 +33,36 @@ $objAperd = new AperdV2();
 spl_autoload_register(PLUGIN_PACKAGE.'_autoloader');
 function aperd_v2_autoloader($classname)
 {
-    $pattern = "/(Bean|DaoImpl|Dao|Services|Actions|Utils|Interface|Class)/";
+    $matches = array();
+    $arr = array(
+        'Actions' => 'actions',
+        'Bean' => 'bean',
+        'Class' => 'domain',
+        'DaoImpl' => 'daoimpl',
+        'Interface' => 'interfaceimpl',
+        'Services' => 'services',
+    );
+    $pattern = "/(Actions|Bean|Class|DaoImpl|Interface|Services)/";
     if (preg_match($pattern, $classname, $matches)) {
-        if (isset($matches[1])) {
-            if (strpos($classname, '\\')!==false) {
-                $classname = substr($classname, strrpos($classname, '\\')+1);
-            }
-            switch ($matches[1]) {
-                case 'Interface' :
-                    if (file_exists(PLUGIN_PATH.'core/interfaceimpl/'.$classname.'.php')) {
-                        include_once(PLUGIN_PATH.'core/interfaceimpl/'.$classname.'.php');
-                    }
-                    break;
-                case 'Class' :
-                    if (file_exists(PLUGIN_PATH.'core/domain/'.$classname.'.php')) {
-                        include_once(PLUGIN_PATH.'core/domain/'.$classname.'.php');
-                    }
-                    break;
-                case 'Bean' :
-                    if (file_exists(PLUGIN_PATH.'core/bean/'.$classname.'.php')) {
-                        include_once(PLUGIN_PATH.'core/bean/'.$classname.'.php');
-                    }
-                    break;
-        case 'Actions' :
-      case 'Dao' :
-      case 'DaoImpl' :
-      case 'Services' :
-        if (file_exists(PLUGIN_PATH.'core/'.strtolower($matches[1]).'/'.$classname.'.php')) {
-          include_once(PLUGIN_PATH.'core/'.strtolower($matches[1]).'/'.$classname.'.php');
+        if (strpos($classname, '\\')!==false) {
+            $classname = substr($classname, strrpos($classname, '\\')+1);
         }
-      break;
-      default :
-        // On est dans un cas o? on a match? mais pas pr?vu le traitement...
-      break;
-    }
+
+        $filePath = PLUGIN_PATH.'core/'.$arr[$matches[1]].'/'.$classname.'.php';
+        if (isset($arr[$matches[1]]) && file_exists($filePath)) {
+            include_once($filePath);
         }
     } else {
+        /*
         $classfile = sprintf('%score/domain/%s.class.php', PLUGIN_PATH, str_replace('_', '-', $classname));
         if (!file_exists($classfile)) {
-            $classfile = sprintf('%s../mycommon/core/domain/%s.class.php', PLUGIN_PATH, str_replace('_', '-', $classname));
+            $strSrc = '%s../mycommon/core/domain/%s.class.php';
+            $classfile = sprintf($strSrc, PLUGIN_PATH, str_replace('_', '-', $classname));
         }
         if (file_exists($classfile)) {
             include_once($classfile);
         }
+        */
     }
 }
 
@@ -90,7 +77,8 @@ function aperd_v2_menu()
   if (function_exists('add_menu_page')) {
     $uploadFiles = 'upload_files';
     $pluginName = 'APERD v2';
-    add_menu_page($pluginName, $pluginName, $uploadFiles, $urlRoot, '', plugins_url('/hj-v2-aperd/web/rsc/img/icons/aperd.png'));
+    $imgUrl = plugins_url('/hj-v2-aperd/web/rsc/img/icons/aperd.png');
+    add_menu_page($pluginName, $pluginName, $uploadFiles, $urlRoot, '', $imgUrl);
     if (function_exists('add_submenu_page')) {
       $arrUrlSubMenu = array(
         'administration' => 'Administratifs',
