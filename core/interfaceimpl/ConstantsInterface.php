@@ -19,6 +19,7 @@ interface ConstantsInterface
     // Attributs
     const ATTR_CLASS             = 'class';
     const ATTR_DATA_AJAX         = 'data-ajax';
+    const ATTR_DATA_TARGET       = 'data-target';
     const ATTR_DATA_TRIGGER      = 'data-trigger';
     const ATTR_DATA_TYPE         = 'data-type';
     const ATTR_HREF              = 'href';

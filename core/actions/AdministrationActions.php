@@ -63,13 +63,13 @@ class AdministrationActions extends LocalActions
 	public static function importFile()
 	{
 		$importType = $_POST['importType'];
-		if (is_uploaded_file($_FILES['fileToImport']['tmp_name'])) {
-			$dirName  = dirname(__FILE__).'/../../web/rsc/csv-files/';
-			$fileName = 'import_'.$importType.'.csv';
-			if (rename($_FILES['fileToImport']['tmp_name'], $dirName.$fileName)) {
-				$obj = new AdministrationActions();
-				return $obj->dealWithImport($dirName.$fileName);
-			}
+		$dirName    = dirname(__FILE__).'/../../web/rsc/csv-files/';
+		$fileName   = $dirName.'import_'.self::ONGLET_ADMINISTRATIFS.'.csv';
+		if ($importType==self::ONGLET_ADMINISTRATIFS &&
+		    is_uploaded_file($_FILES['fileToImport']['tmp_name']) &&
+			rename($_FILES['fileToImport']['tmp_name'], $fileName)) {
+            $obj = new AdministrationActions();
+			return $obj->dealWithImport($fileName);
 		}
 	}
 	

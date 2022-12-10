@@ -1,6 +1,8 @@
 <?php
 namespace core\bean;
 
+use core\domain\AdulteClass;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -60,6 +62,8 @@ class WpPageAdminBean extends WpPageBean
 		$objsAdulte = $this->objAdulteServices->getAdultesWithFilters($sqlAttributes);
 		if (count($objsAdulte)==1) {
 			$this->curUser = array_shift($objsAdulte);
+		} else {
+		    $this->curUser = new AdulteClass();
 		}
         
         // TODO : Récupération des paramètres plus vaste que des initVar multiples ?
@@ -480,8 +484,8 @@ class WpPageAdminBean extends WpPageBean
         $btnDropdown = $this->getButton('Tous', $btnAttributes);
         
         // Les choix possibles
-        $ulContent  = $this->getBalise(self::TAG_LI, $this->getLink('Sélection', '#', 'dropdown-item text-white ajaxAction', array('data-trigger'=>'click', 'data-ajax'=>'dropdown', 'data-target'=>'#dropdownTrash')));
-        $ulContent .= $this->getBalise(self::TAG_LI, $this->getLink('Tous', '#', 'dropdown-item text-white ajaxAction', array('data-trigger'=>'click', 'data-ajax'=>'dropdown', 'data-target'=>'#dropdownTrash')));
+        $ulContent  = $this->getLiDropdown('Sélection', 'dropdownTrash');
+        $ulContent .= $this->getLiDropdown('Tous', 'dropdownTrash');
         $ulAttributes = array(
             self::ATTR_CLASS => 'dropdown-menu',
             self::ATTR_STYLE => 'position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(93.6px, 427.2px, 0px);',
@@ -492,6 +496,17 @@ class WpPageAdminBean extends WpPageBean
         $divGroup = $this->getDiv($btnDropdown.$ulDropdown, array('role'=>'group', self::ATTR_CLASS=>'btn-group'));
         
         return $this->getDiv($btnBulkDelete.$divGroup, array('role'=>'group', self::ATTR_CLASS=>'btn-group', 'aria-label'=>'Choix suppression'));
+    }
+    
+    public function getLiDropdown($label, $tag)
+    {
+        $strClasse  = 'dropdown-item text-white ajaxAction';
+        $attributes = array(
+            self::ATTR_DATA_TRIGGER => 'click',
+            self::ATTR_DATA_AJAX => 'dropdown',
+            self::ATTR_DATA_TARGET => '#'.$tag
+        );
+        return $this->getBalise(self::TAG_LI, $this->getLink($label, '#', $strClasse, $attributes));
     }
     
     /**
@@ -523,8 +538,8 @@ class WpPageAdminBean extends WpPageBean
         $btnDropdown = $this->getButton('Tous', $btnAttributes);
         
         // Les choix possibles
-        $ulContent  = $this->getBalise(self::TAG_LI, $this->getLink('Sélection', '#', 'dropdown-item text-white ajaxAction', array('data-trigger'=>'click', 'data-ajax'=>'dropdown', 'data-target'=>'#dropdownSelection')));
-        $ulContent .= $this->getBalise(self::TAG_LI, $this->getLink('Tous', '#', 'dropdown-item text-white ajaxAction', array('data-trigger'=>'click', 'data-ajax'=>'dropdown', 'data-target'=>'#dropdownSelection')));
+        $ulContent  = $this->getLiDropdown('Sélection', 'dropdownSelection');
+        $ulContent .= $this->getLiDropdown('Tous', 'dropdownSelection');
         $ulAttributes = array(
             self::ATTR_CLASS => 'dropdown-menu',
             self::ATTR_STYLE => 'position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(93.6px, 427.2px, 0px);',
