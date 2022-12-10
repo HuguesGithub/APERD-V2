@@ -50,7 +50,6 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
                     $this->objAdulte->update();
                 }
             } else {
-                echo "$strNotification, $strMessage";
                 // TODO : Le contrôle de données n'est pas bon. Afficher l'erreur.
             }
             // TODO : de manière générale, ce serait bien d'afficher le résultat de l'opération.

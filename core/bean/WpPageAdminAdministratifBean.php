@@ -63,58 +63,6 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
 
     /**
      * @return string
-     * @since 1.22.10.19
-     * @version 1.22.10.19
-     *
-    public function initBoard()
-    {
-        /////////////////////////////////////////
-        // Création du Breadcrumbs
-        $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET, self::CST_FILE_OPENED);
-        $this->buildBreadCrumbs('Enquêtes', self::ONGLET_ENQUETE, true);
-
-        ////////////////////////////////////////////////////////
-        // Si formulaire soumis, mise à jour ou insertion.
-        if (isset($this->urlParams[self::CST_WRITE_ACTION])) {
-            // Insertion / Mise à jour de l'enquête saisie via le formulaire
-            // Mais seulement si le nom de l'enquête a été saisi.
-            if ($this->urlParams[self::FIELD_NOM_ENQUETE]!='') {
-                if ($this->urlParams[self::FIELD_ID]!='') {
-                    $this->CopsEnquete = CopsEnqueteActions::updateEnquete($this->urlParams);
-                } else {
-                    $this->CopsEnquete = CopsEnqueteActions::insertEnquete($this->urlParams);
-                }
-            }
-        } elseif (isset($this->urlParams[self::CST_ACTION])) {
-            // Mise à jour du statut (et donc de la dernière date de modification) sur le lien de la liste.
-            // On récupère l'enquête associée à l'id.
-            $this->CopsEnquete = $this->CopsEnqueteServices->getEnquete($this->urlParams[self::FIELD_ID]);
-            // Si elle existe, on effectue le traitement qui va bien.
-            $intStatut = $this->CopsEnquete->getField(self::FIELD_STATUT_ENQUETE);
-            if ($this->CopsEnquete->getField(self::FIELD_ID)==$this->urlParams[self::FIELD_ID]
-                && $intStatut!=self::CST_ENQUETE_CLOSED
-                && ($intStatut==self::CST_ENQUETE_OPENED
-                    || $intStatut==self::CST_ENQUETE_COLDED
-                    && $this->urlParams[self::CST_ACTION]==self::CST_ENQUETE_OPENED)) {
-                        // Si l'enquête existe.
-                        // Si l'enquête n'est pas déjà transférée au DA.
-                        // Si l'enquête est coldcase, elle ne peut pas être transférée au DA
-
-                        // Si tout est bon,
-                        // on classe une enquête, on la réouvre ou on la transfère au DA
-                        $this->CopsEnquete->setField(self::FIELD_STATUT_ENQUETE, $this->urlParams[self::CST_ACTION]);
-                        $this->CopsEnquete->setField(self::FIELD_DLAST, self::getCopsDate('tsnow'));
-                        $this->CopsEnqueteServices->updateEnquete($this->CopsEnquete);
-            }
-        } else {
-            // On récupère l'enquête associée à l'id.
-            $this->CopsEnquete = $this->CopsEnqueteServices->getEnquete($this->urlParams[self::FIELD_ID]);
-        }
-        ////////////////////////////////////////////////////////
-    }
-
-    /**
-     * @return string
      * @since 2.22.12.07
      * @version 2.22.12.07
      */

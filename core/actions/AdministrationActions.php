@@ -76,6 +76,7 @@ class AdministrationActions extends LocalActions
     public function dealWithImport($srcFile)
     {
         $notif = '';
+        $msg = '';
         $msgError = '';
         
         $fileContent = file_get_contents($srcFile);

@@ -98,6 +98,55 @@ class AdulteClass extends LocalDomainClass
     }
     
     /**
+     * @param string $rowContent
+     * @param string &$notif
+     * @param string &$msg
+     * @return boolean
+     * @since 2.22.12.10
+     * @version 2.22.12.10
+     */
+    public function controlerImportRow($rowContent, &$notif, &$msg)
+    {
+        list($id, $nom, $prenom, $mail, $adherent, $phone) = explode(self::CSV_SEP, $rowContent);
+        $this->setField(self::FIELD_ID, $id);
+        $this->setField(self::FIELD_NOMADULTE, ucfirst(strtolower(trim($nom))));
+        $this->setField(self::FIELD_PRENOMADULTE, ucfirst(strtolower(trim($prenom))));
+        $this->setField(self::FIELD_MAILADULTE, ucfirst(strtolower(trim($mail))));
+        $this->setField(self::FIELD_ADHERENT, $adherent);
+        $this->setField(self::FIELD_PHONEADULTE, trim($phone));
+        
+        return $this->controlerDonneesAndAct($notif, $msg);
+    }
+    
+    /**
+     * @param string &$notif
+     * @param string &$msg
+     * @return boolean
+     * @since 2.22.12.08
+     * @version 2.22.12.08
+     */
+    public function controlerDonneesAndAct(&$notif, &$msg)
+    {
+        if (!$this->controlerDonnees($notif, $msg)) {
+            return false;
+        }
+        
+        // Si les contrôles sont okay, on peut insérer ou mettre à jour
+        $id = $this->id;
+        if ($id=='') {
+            $this->insert();
+        } else {
+            $objectInBase = $this->objAdulteServices->getAdulteById($id);
+            if ($objectInBase->getField(self::FIELD_ID)=='') {
+                $this->insert();
+            } else {
+                $this->update();
+            }
+        }
+        return true;
+    }
+    
+    /**
      * @since 2.22.12.08
      * @version 2.22.12.08
      */

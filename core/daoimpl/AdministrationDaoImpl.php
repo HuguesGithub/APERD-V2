@@ -25,7 +25,7 @@ class AdministrationDaoImpl extends LocalDaoImpl
      */
     public function __construct()
     {
-        $this->dbTable = 'wp_14_aperd_administration';
+        $this->dbTable = self::__PREFIX_DB__.'administration';
         parent::__construct();
     }
     

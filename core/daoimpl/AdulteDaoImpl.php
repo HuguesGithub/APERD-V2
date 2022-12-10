@@ -25,7 +25,7 @@ class AdulteDaoImpl extends LocalDaoImpl
      */
     public function __construct()
     {
-        $this->dbTable = 'wp_14_aperd_adulte';
+        $this->dbTable = self::__PREFIX_DB__.'adulte';
         parent::__construct();
     }
     

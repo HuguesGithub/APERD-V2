@@ -38,6 +38,10 @@ class AdministrationBean extends LocalBean
      */
     public function getRow($blnHasEditorRights, $blnChecked=false)
     {
+        $attributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE);
+        
+        ///////////////////////////////////////////////
+        // Les cases à cocher
         if ($blnHasEditorRights) {
             $id = $this->obj->getField(self::FIELD_ID);
             
@@ -45,30 +49,26 @@ class AdministrationBean extends LocalBean
             $this->baseUrl .= '?'.self::CST_ONGLET.'='.self::ONGLET_ADMINISTRATIFS;
             $this->baseUrl .= self::CST_AMP.self::FIELD_ID.'='.$id;
                         
-            $attributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE);
             // Case à cocher
             $trContent  = $this->getCellInput($blnChecked);
+        }
+        ///////////////////////////////////////////////
+        
+        ///////////////////////////////////////////////
+        // La partie commune
+        // Nom sans le lien d'édition
+        $label = $this->getBalise(self::TAG_STRONG, $this->obj->getName());
+        $trContent  = $this->getBalise(self::TAG_TD, $label, $attributes);
             
-            // Nom + Lien d'édition
-            $urlEdition = $this->baseUrl.self::CST_AMP.self::CST_SUBONGLET.'='.self::CST_EDIT;
-            $aLink = $this->getLink($this->obj->getName(), $urlEdition, self::CST_TEXT_WHITE.' row-title');
-            $label = $this->getBalise(self::TAG_STRONG, $aLink);
-            $trContent .= $this->getBalise(self::TAG_TD, $label, $attributes);
-            
-            // Poste
-            $trContent .= $this->getBalise(self::TAG_TD, $this->obj->getField(self::FIELD_LABELPOSTE), $attributes);
-            
+        // Poste
+        $trContent .= $this->getBalise(self::TAG_TD, $this->obj->getField(self::FIELD_LABELPOSTE), $attributes);
+        ///////////////////////////////////////////////
+        
+        ///////////////////////////////////////////////
+        // Les boutons d'action
+        if ($blnHasEditorRights) {
             // Actions
             $trContent .= $this->getCellActions();
-        } else {
-            $attributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE);
-            
-            // Nom
-            $label = $this->getBalise(self::TAG_STRONG, $this->obj->getName());
-            $trContent  = $this->getBalise(self::TAG_TD, $label, $attributes);
-            
-            // Poste
-            $trContent .= $this->getBalise(self::TAG_TD, $this->obj->getField(self::FIELD_LABELPOSTE), $attributes);
         }
         return $this->getBalise(self::TAG_TR, $trContent, $attributes);
     }

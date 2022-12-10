@@ -11,6 +11,8 @@ if (!defined('ABSPATH')) {
  */
 interface ConstantsInterface
 {
+    const __PREFIX_DB__          = 'wp_20_aperd_';
+    
     /////////////////////////////////////////////////
     // Action Ajax
     const AJAX_ACTION            = 'ajaxAction';

@@ -103,7 +103,6 @@ class AdministrationClass extends LocalDomainClass
 
   /**
    * @param string $rowContent
-   * @param string $sep
    * @param string &$notif
    * @param string &$msg
    * @return boolean
@@ -123,7 +122,6 @@ class AdministrationClass extends LocalDomainClass
     }
     
   /**
-   * @param string $sep
    * @param string &$notif
    * @param string &$msg
    * @return boolean
