@@ -82,6 +82,10 @@ class WpPageAdminBean extends WpPageBean
                 self::CST_ICON  => self::I_USERS,
                 self::CST_LABEL => self::LABEL_PARENTS,
             ),
+            self::ONGLET_DIVISIONS => array(
+                self::CST_ICON  => self::I_USERS,
+                self::CST_LABEL => self::LABEL_DIVISIONS,
+            ),
         );
         // TODO : on garde un exemple d'entrée avec des enfants. Et le merge pour ajouter les menus des personnes
         // identifiées. Si ce différentiel est maintenu
@@ -181,11 +185,14 @@ class WpPageAdminBean extends WpPageBean
         
         try {
             switch ($this->slugOnglet) {
-                case self::ONGLET_PARENTS :
-                    $objBean = new WpPageAdminAdulteBean();
-                    break;
                 case self::ONGLET_ADMINISTRATIFS :
                     $objBean = new WpPageAdminAdministratifBean();
+                    break;
+                case self::ONGLET_DIVISIONS :
+                    $objBean = new WpPageAdminDivisionBean();
+                    break;
+                case self::ONGLET_PARENTS :
+                    $objBean = new WpPageAdminAdulteBean();
                     break;
                 case self::ONGLET_DESK   :
                 default       :

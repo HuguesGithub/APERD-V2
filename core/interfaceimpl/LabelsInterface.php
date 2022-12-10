@@ -13,12 +13,15 @@ interface LabelsInterface
 {
     /////////////////////////////////////////////////
     // Labels de champs
-    const LABEL_GENRE        = 'Genre';
-    const LABEL_LABELPOSTE   = 'Libellé du poste';
-    const LABEL_NOMTITULAIRE = 'Nom du titulaire';
-    const LABEL_NOMPRENOM    = 'Nom et prénom';
-    const LABEL_MAIL         = 'Email';
-    const LABEL_ADHERENT     = 'Adhérent';
+    const LABEL_GENRE         = 'Genre';
+    const LABEL_LABELPOSTE    = 'Libellé du poste';
+    const LABEL_NOMTITULAIRE  = 'Nom du titulaire';
+    const LABEL_NOMPRENOM     = 'Nom et prénom';
+    const LABEL_NOM           = 'Nom';
+    const LABEL_PRENOM        = 'Prénom';
+    const LABEL_MAIL          = 'Email';
+    const LABEL_ADHERENT      = 'Adhérent';
+    const LABEL_LABELDIVISION = 'Division';
     
     /////////////////////////////////////////////////
     // Libellés divers
@@ -29,9 +32,11 @@ interface LabelsInterface
     const LABEL_CREATION            = 'Création';
     const LABEL_CREER               = 'Créer';
     const LABEL_CREER_ENTREE        = 'Créer une entrée';
+    const LABEL_DIVISIONS           = 'Divisions';
     const LABEL_EXPORTER_LISTE      = 'Exporter la liste';
     const LABEL_LIST_ADMINISTRATIFS = 'Liste des Administratifs';
     const LABEL_LIST_PARENTS        = 'Liste des Parents d\'élèves';
+    const LABEL_LIST_DIVISIONS      = 'Liste des Divisions';
     const LABEL_MODIFIER            = 'Modifier';
     const LABEL_PARENTS             = 'Parents';
     const LABEL_RETOUR              = 'Retour';

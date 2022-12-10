@@ -80,6 +80,8 @@ interface ConstantsInterface
     const FIELD_MAILADULTE       = 'mailAdulte';
     const FIELD_ADHERENT         = 'adherent';
     const FIELD_PHONEADULTE      = 'phoneAdulte';
+    // Table Division
+    const FIELD_LABELDIVISION    = 'labelDivision';
     
     /////////////////////////////////////////////////
     // Icons
@@ -106,6 +108,7 @@ interface ConstantsInterface
     // Onglets
     const ONGLET_ADMINISTRATIFS   = 'administratifs';
     const ONGLET_DESK             = 'desk';
+    const ONGLET_DIVISIONS        = 'divisions';
     const ONGLET_PARENTS          = 'parents';
     
     /////////////////////////////////////////////////

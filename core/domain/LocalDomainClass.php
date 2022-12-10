@@ -3,6 +3,7 @@ namespace core\domain;
 
 use core\services\AdministrationServices;
 use core\services\AdulteServices;
+use core\services\DivisionServices;
 use core\interfaceimpl\ConstantsInterface;
 use core\interfaceimpl\UrlsInterface;
 use core\interfaceimpl\LabelsInterface;
@@ -41,6 +42,7 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
         // Initialisation des Services
         $this->objAdministrationServices = new AdministrationServices();
         $this->objAdulteServices         = new AdulteServices();
+        $this->objDivisionServices       = new DivisionServices();
     }
     
     /**
