@@ -58,13 +58,13 @@ class WpPageAdminBean extends WpPageBean
             // On navigue sur le site en étant identifié.
             // TODO : Initialiser l'utilisateur courant.
         }
-		$sqlAttributes = array(self::FIELD_MAILADULTE=>$_SESSION[self::SESSION_APERD_ID]);
-		$objsAdulte = $this->objAdulteServices->getAdultesWithFilters($sqlAttributes);
-		if (count($objsAdulte)==1) {
-			$this->curUser = array_shift($objsAdulte);
-		} else {
-		    $this->curUser = new AdulteClass();
-		}
+        $sqlAttributes = array(self::FIELD_MAILADULTE=>$_SESSION[self::SESSION_APERD_ID]);
+        $objsAdulte = $this->objAdulteServices->getAdultesWithFilters($sqlAttributes);
+        if (count($objsAdulte)==1) {
+            $this->curUser = array_shift($objsAdulte);
+        } else {
+            $this->curUser = new AdulteClass();
+        }
         
         // TODO : Récupération des paramètres plus vaste que des initVar multiples ?
         // $this->analyzeUri();
@@ -684,7 +684,7 @@ class WpPageAdminBean extends WpPageBean
         $blnIsEditorPage    = ($this->slugSubOnglet==self::CST_WRITE);
         $blnIsDeletePage    = ($this->slugSubOnglet==self::CST_DELETE);
         $blnConfirm         = $this->initVar(self::CST_CONFIRM, false);
-		$strBlocImport = '';
+        $strBlocImport = '';
         
         // Définition éventuelle du bouton Création / Annulaiton
         // Définition du contenu de la page.
@@ -714,11 +714,11 @@ class WpPageAdminBean extends WpPageBean
                 $strBtnCreationAnnulation = $this->getCreateButton();
                 // Interface de liste
                 $strMainContent = $this->getListContent($blnHasEditorRights);
-				
-				$url = self::WEB_PPFC_UPLOAD;
-				$impAttributes = array($this->slugOnglet);
-				$strBlocImport  = $this->getRender($url, $impAttributes);
-				$strBlocImport .= $this->getDiv('', array(self::ATTR_ID=>'alertBlock'));
+                
+                $url = self::WEB_PPFC_UPLOAD;
+                $impAttributes = array($this->slugOnglet);
+                $strBlocImport  = $this->getRender($url, $impAttributes);
+                $strBlocImport .= $this->getDiv('', array(self::ATTR_ID=>'alertBlock'));
             }
         } else {
             // Interface de liste
@@ -751,7 +751,7 @@ class WpPageAdminBean extends WpPageBean
         
         // Si on a les droits, on ajoute le bouton de download
         if ($blnHasEditorRights) {
-			$divContent .= $this->getBulkDeleteButton().self::CST_NBSP;
+            $divContent .= $this->getBulkDeleteButton().self::CST_NBSP;
             $divContent .= $this->getDownloadButton();
         }
         

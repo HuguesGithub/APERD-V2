@@ -123,16 +123,18 @@ function addDragAndDropHandler(obj) {
 }
 
  function handleFileUpload(files, obj) {
-	for (let i = 0; i < files.length; i++) {
+	//for (let i = 0; i < files.length; i++) {
+    for (let file of files ) {
 		let fd = new FormData();
         fd.append('action', 'dealWithAjax');
         fd.append('ajaxAction', 'importFile');
         fd.append('importType', $('#post-import-drag-drop input[name="importType"]').val());
-        fd.append('fileToImport', files[i]);
+//        fd.append('fileToImport', files[i]);
+        fd.append('fileToImport', file);
 
         let status = new createStatusbar(obj);
-        status.setFileNameSize(files[i].name,files[i].size);
-        sendFileToServer(fd,status);
+        status.setFileNameSize(file.name, file.size);
+        sendFileToServer(fd, status);
    }
 }
 

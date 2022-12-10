@@ -81,7 +81,7 @@ interface ConstantsInterface
     
     /////////////////////////////////////////////////
     // Icons
-    const I_ANGLE_LEFT           = 'angle-left'; 
+    const I_ANGLE_LEFT           = 'angle-left';
     const I_ANGLES_LEFT          = 'angles-left';
     const I_CARET_LEFT           = 'caret-left';
     const I_CARET_RIGHT          = 'caret-right';

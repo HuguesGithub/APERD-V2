@@ -138,18 +138,20 @@ function dealWithAjax_callback()
 ### Description: Met en forme les exceptions
 #######################################################################################
 */
-function exception_handler($Exception) {
+function exception_handler($objException)
+{
   echo
     '<div class="card border-danger" style="max-width: 100%;margin-right: 15px;">'.
-    '  <div class="card-header bg-danger text-white"><strong>'.$Exception->getMessage().'</strong></div>'.
+    '  <div class="card-header bg-danger text-white"><strong>'.$objException->getMessage().'</strong></div>'.
     '  <div class="card-body text-danger">'.
-    '    <p>Une erreur est survenue dans le fichier <strong>'.$Exception->getFile().
-    '</strong> à la ligne <strong>'.$Exception->getLine().'</strong>.</p>'.
+    '    <p>Une erreur est survenue dans le fichier <strong>'.$objException->getFile().
+    '</strong> à la ligne <strong>'.$objException->getLine().'</strong>.</p>'.
     '    <ul class="list-group">';
 
-    $arrTraces = $Exception->getTrace();
+  $arrTraces = $objException->getTrace();
     foreach ($arrTraces as $trace) {
-        echo '<li class="list-group-item">Fichier <strong>'.$trace['file'].'</strong> ligne <em>'.$trace['line'].'</em> :<br>';
+        echo '<li class="list-group-item">Fichier <strong>'.$trace['file'];
+        echo '</strong> ligne <em>'.$trace['line'].'</em> :<br>';
         if (is_array($trace['args'])) {
             echo $trace['function'].'()</li>';
         } else {

@@ -110,17 +110,17 @@ class AdministrationClass extends LocalDomainClass
      * @since 2.22.12.08
      * @version 2.22.12.08
    */
-	public function controlerImportRow($rowContent, &$notif, &$msg)
-	{
-		list($id, $genre, $nomTitulaire, $labelPoste) = explode(self::CSV_SEP, $rowContent);
-		$this->setField(self::FIELD_ID, $id);
-		$this->setField(self::FIELD_GENRE, ucfirst(strtolower(trim($genre))));
-		$this->setField(self::FIELD_NOMTITULAIRE, ucfirst(strtolower(trim($nomTitulaire))));
-		$this->setField(self::FIELD_LABELPOSTE, trim(str_replace(array("'", self::CST_EOL), array("''", ''), $labelPoste)));
+    public function controlerImportRow($rowContent, &$notif, &$msg)
+    {
+        list($id, $genre, $nomTitulaire, $labelPoste) = explode(self::CSV_SEP, $rowContent);
+        $this->setField(self::FIELD_ID, $id);
+        $this->setField(self::FIELD_GENRE, ucfirst(strtolower(trim($genre))));
+        $this->setField(self::FIELD_NOMTITULAIRE, ucfirst(strtolower(trim($nomTitulaire))));
+        $this->setField(self::FIELD_LABELPOSTE, trim(str_replace(array("'", self::CST_EOL), array("''", ''), $labelPoste)));
 
-		return $this->controlerDonneesAndAct($notif, $msg);
-	}
-	
+        return $this->controlerDonneesAndAct($notif, $msg);
+    }
+    
   /**
    * @param string $sep
    * @param string &$notif
@@ -129,27 +129,26 @@ class AdministrationClass extends LocalDomainClass
      * @since 2.22.12.08
      * @version 2.22.12.08
    */
-	public function controlerDonneesAndAct(&$notif, &$msg)
-	{
-		if (!$this->controlerDonnees($notif, $msg)) {
-			return false;
-		}
-		
-		// Si les contrôles sont okay, on peut insérer ou mettre à jour
-		$id = $this->id;
-		if ($id=='') {
-			$this->insert();
-		} else {
-			$objectInBase = $this->objAdministrationServices->getAdministrationById($id);
-			if ($objectInBase->getField(self::FIELD_ID)=='') {
-				$this->insert();
-			} else {
-				$this->update();
-			}
-		}
-		return true;
+    public function controlerDonneesAndAct(&$notif, &$msg)
+    {
+        if (!$this->controlerDonnees($notif, $msg)) {
+            return false;
+        }
+        
+        // Si les contrôles sont okay, on peut insérer ou mettre à jour
+        $id = $this->id;
+        if ($id=='') {
+            $this->insert();
+        } else {
+            $objectInBase = $this->objAdministrationServices->getAdministrationById($id);
+            if ($objectInBase->getField(self::FIELD_ID)=='') {
+                $this->insert();
+            } else {
+                $this->update();
+            }
+        }
+        return true;
   }
-	
   
     /**
      * @since 2.22.12.07

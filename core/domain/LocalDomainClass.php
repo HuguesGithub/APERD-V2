@@ -134,15 +134,15 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
    * @version 2.22.12.09
    * @since 2.22.12.09
    */
-	public function controlerEntete($rowContent, &$notif, &$msg)
-	{
-		if (str_replace(self::CST_EOL, '', $rowContent)!=$this->getCsvEntete()) {
-			$notif = self::NOTIF_DANGER;
-			$msg = sprintf(self::MSG_ERREUR_CONTROL_ENTETE, $this->getCsvEntete());
-			return false;
-		}
-		return true;
-	}
+    public function controlerEntete($rowContent, &$notif, &$msg)
+    {
+        if (str_replace(self::CST_EOL, '', $rowContent)!=$this->getCsvEntete()) {
+            $notif = self::NOTIF_DANGER;
+            $msg = sprintf(self::MSG_ERREUR_CONTROL_ENTETE, $this->getCsvEntete());
+            return false;
+        }
+        return true;
+    }
 
 
 

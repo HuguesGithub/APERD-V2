@@ -39,9 +39,9 @@ class AdulteBean extends LocalBean
     public function getRow($blnHasEditorRights, $blnChecked=false)
     {
         $attributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE);
-		
-		///////////////////////////////////////////////:
-		// Les cases à cocher
+        
+        ///////////////////////////////////////////////
+        // Les cases à cocher
         if ($blnHasEditorRights) {
             $id = $this->obj->getField(self::FIELD_ID);
             
@@ -51,46 +51,38 @@ class AdulteBean extends LocalBean
                         
             // Case à cocher
             $trContent  = $this->getCellInput($blnChecked);
-		}
-		///////////////////////////////////////////////:
-		
-		///////////////////////////////////////////////:
-		// La partie commune
-		// Nom sans le lien d'édition
-		$label = $this->getBalise(self::TAG_STRONG, $this->obj->getName());
-		$trContent .= $this->getBalise(self::TAG_TD, $label, $attributes);
-		
-		// Mail
-		$trContent .= $this->getBalise(self::TAG_TD, $this->obj->getField(self::FIELD_MAILADULTE), $attributes);
-		
-		// Adhérent
-		if ($this->obj->getField(self::FIELD_ADHERENT)==1) {
-			$extra = 'btn-success';
-			$strIcon = $this->getIcon(self::I_SQUARE_CHECK);
-		} else {
-			$extra = 'btn-danger';
-			$strIcon = $this->getIcon(self::I_SQUARE_XMARK);
-		}
-		$strAdherent = $this->getButton($strIcon, array(self::ATTR_CLASS=>'disabled '.$extra));
-		$adhAttributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE.' text-center');
-		$trContent .= $this->getBalise(self::TAG_TD, $strAdherent, $adhAttributes);
-		///////////////////////////////////////////////:
-		
-		///////////////////////////////////////////////:
-		// Les boutons d'action
+        }
+        ///////////////////////////////////////////////
+        
+        ///////////////////////////////////////////////
+        // La partie commune
+        // Nom sans le lien d'édition
+        $label = $this->getBalise(self::TAG_STRONG, $this->obj->getName());
+        $trContent .= $this->getBalise(self::TAG_TD, $label, $attributes);
+        
+        // Mail
+        $trContent .= $this->getBalise(self::TAG_TD, $this->obj->getField(self::FIELD_MAILADULTE), $attributes);
+        
+        // Adhérent
+        if ($this->obj->getField(self::FIELD_ADHERENT)==1) {
+            $extra = 'btn-success';
+            $strIcon = $this->getIcon(self::I_SQUARE_CHECK);
+        } else {
+            $extra = 'btn-danger';
+            $strIcon = $this->getIcon(self::I_SQUARE_XMARK);
+        }
+        $strAdherent = $this->getButton($strIcon, array(self::ATTR_CLASS=>'disabled '.$extra));
+        $adhAttributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE.' text-center');
+        $trContent .= $this->getBalise(self::TAG_TD, $strAdherent, $adhAttributes);
+        ///////////////////////////////////////////////
+        
+        ///////////////////////////////////////////////
+        // Les boutons d'action
         if ($blnHasEditorRights) {
             // Actions
             $trContent .= $this->getCellActions();
         }
-		///////////////////////////////////////////////:
-
-
-
-		else {
-            $attributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE);
-            
-            
-        }
+        ///////////////////////////////////////////////
         return $this->getBalise(self::TAG_TR, $trContent, $attributes);
     }
     
