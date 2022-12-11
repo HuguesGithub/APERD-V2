@@ -3,12 +3,26 @@ $(document).ready(function(){
     $('.ajaxAction[data-trigger="click"]').on('click', function(){
         ajaxActionClick($(this));
     });
+    
+    // Pour les éléments ayant un trigger de click, on ajoute l'événement qui correspond
+    $('ul[data-widget="treeview"] a p i').unbind().on('click', function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        addTreeviewAction($(this));
+    });
 	
 	// S'il y a une interface d'upload de fichier
 	if ($('#draganddrophandler')) {
 		addDragAndDropHandler($(this));
 	}
 });
+
+//////////////////////////////////////////////////////////
+// L'objet cliqué
+function addTreeviewAction(obj) {
+    console.log(obj);
+    obj.parent().parent().parent().toggleClass('menu-open');
+}
 
 //////////////////////////////////////////////////////////
 // L'objet cliqué, différentes actions sont possibles

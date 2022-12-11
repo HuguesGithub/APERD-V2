@@ -78,29 +78,18 @@ class WpPageAdminBean extends WpPageBean
                 self::CST_ICON  => self::I_USERS,
                 self::CST_LABEL => self::LABEL_ADMINISTRATIFS,
             ),
+            self::ONGLET_DIVISIONS => array(
+                self::CST_ICON  => self::I_SCHOOL,
+                self::CST_LABEL => self::LABEL_DIVISIONS,
+            ),
             self::ONGLET_PARENTS => array(
                 self::CST_ICON  => self::I_USERS,
                 self::CST_LABEL => self::LABEL_PARENTS,
-            ),
-            self::ONGLET_DIVISIONS => array(
-                self::CST_ICON  => self::I_USERS,
-                self::CST_LABEL => self::LABEL_DIVISIONS,
+                self::CST_CHILDREN => array(
+                    self::CST_PARENTS_DELEGUES  => 'Délégués',
+                ),
             ),
         );
-        // TODO : on garde un exemple d'entrée avec des enfants. Et le merge pour ajouter les menus des personnes
-        // identifiées. Si ce différentiel est maintenu
-        /*
-                self::ONGLET_CALENDAR => array(
-                    self::FIELD_ICON   => 'calendar-days',
-                    self::FIELD_LABEL  => 'Calendrier',
-                    self::CST_CHILDREN => array(
-                        self::CST_CAL_MONTH  => 'Calendrier',
-                        self::CST_CAL_EVENT  => 'Événements',
-                        self::CST_CAL_PARAM  => 'Paramètres',
-                    ),
-                ),
-            $this->arrSidebarContent = array_merge($this->arrSidebarContent, $this->arrSidebarContentNonGuest);
-        */
         
         // Le lien vers la Home
         $aContent = $this->getIcon(self::I_DESKTOP);
@@ -319,11 +308,13 @@ class WpPageAdminBean extends WpPageBean
 
         $sidebarContent = '';
         foreach ($this->arrSidebarContent as $strOnglet => $arrOnglet) {
-            // Si c'est l'onglet courant ou par défaut
-            $blnCurrent = ($this->slugOnglet==$strOnglet || $this->slugOnglet=='' && $strOnglet==self::ONGLET_DESK);
             // Le lien a-t-il des enfants ?
             $hasChildren = isset($arrOnglet[self::CST_CHILDREN]);
-
+            
+            // Mise en évidence de l'élément du menu sélectionné.
+            $blnMenuOpen = ($strOnglet==$this->slugOnglet && isset($arrOnglet[self::CST_CHILDREN][$this->slugSubOnglet]));
+            $blnMenuActive = (!$blnMenuOpen && ($this->slugOnglet==$strOnglet || $this->slugOnglet=='' && $strOnglet==self::ONGLET_DESK));
+            
             // Construction du label
             $pContent  = $arrOnglet[self::CST_LABEL];
             $pContent .= ($hasChildren ? $this->getIcon(self::I_ANGLE_LEFT, self::CST_RIGHT) : '');
@@ -337,15 +328,32 @@ class WpPageAdminBean extends WpPageBean
             $aContent .= $this->getBalise(self::TAG_P, $pContent);
             $aAttributes = array(
                 self::ATTR_HREF  => $this->getUrl($urlElements),
-                self::ATTR_CLASS => 'nav-link'.($blnCurrent ? ' '.self::CST_ACTIVE : ''),
+                self::ATTR_CLASS => 'nav-link'.($blnMenuActive ? ' '.self::CST_ACTIVE : ''),
             );
             $superLiContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
             
-            // TODO : Gestion des enfants
+            // S'il a des enfants, on enrichit
+            if ($hasChildren) {
+                $ulContent = '';
+                foreach ($arrOnglet[self::CST_CHILDREN] as $strSubOnglet => $label) {
+                    $aContent  = $this->getIcon(self::I_CIRCLE, 'nav-icon').$this->getBalise(self::TAG_P, $label);
+                    $urlElements = array(
+                        self::CST_ONGLET => $strOnglet,
+                        self::CST_SUBONGLET => $strSubOnglet,
+                    );
+                    $aAttributes = array(
+                        self::ATTR_HREF  => $this->getUrl($urlElements),
+                        self::ATTR_CLASS => 'nav-link'.($strSubOnglet==$this->slugSubOnglet ? ' '.self::CST_ACTIVE : ''),
+                    );
+                    $liContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
+                    $ulContent .= $this->getBalise(self::TAG_LI, $liContent, array(self::ATTR_CLASS=>'nav-item'));
+                }
+                $liAttributes = array(self::ATTR_CLASS=>'nav nav-treeview');
+                $superLiContent .= $this->getBalise(self::TAG_UL, $ulContent, $liAttributes);
+            }
             
             // Construction de l'élément de la liste
-            //.($this->slugOnglet ? ' menu-open' : '') ne sert à rien pour le moment
-            $liAttributes = array(self::ATTR_CLASS=>'nav-item');
+            $liAttributes = array(self::ATTR_CLASS=>'nav-item'.($blnMenuOpen ? ' menu-open' : ''));
             $sidebarContent .= $this->getBalise(self::TAG_LI, $superLiContent, $liAttributes);
         }
         

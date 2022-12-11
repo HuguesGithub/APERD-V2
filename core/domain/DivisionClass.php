@@ -68,11 +68,10 @@ class DivisionClass extends LocalDomainClass
         
         /////////////////////////////////////////////
         // Le libellé doit être renseigné
-        $blnOk = $this->controlerSaisie(self::FIELD_LABELDIVISION, $notif, $msg);
+        return $this->controlerSaisie(self::FIELD_LABELDIVISION, $notif, $msg);
 
         /////////////////////////////////////////////
         // Fin des contrôles
-        return $blnOk;
     }
     
     /**

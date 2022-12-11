@@ -20,15 +20,16 @@ class AjaxActions extends LocalActions
      */
     public static function dealWithAjax()
     {
-        switch ($_POST[self::AJAX_ACTION]) {
-            case 'importFile':
-                $returned = self::dealWithImportFile();
-                break;
-            case 'csvExport':
+        $ajaxAction = $_POST[self::AJAX_ACTION];
+        switch ($ajaxAction) {
+            case self::AJAX_CSV_EXPORT:
                 $returned = self::dealWithCsvExport();
                 break;
+            case self::AJAX_IMORT_FILE:
+                $returned = self::dealWithImportFile();
+                break;
             default :
-                $saisie = stripslashes($_POST[self::AJAX_ACTION]);
+                $saisie = stripslashes($ajaxAction);
                 $returned  = 'Erreur dans AjaxActions le $_POST['.self::AJAX_ACTION.'] : '.$saisie.'<br>';
                 break;
         }
@@ -55,7 +56,7 @@ class AjaxActions extends LocalActions
             default :
                 $obj = new AjaxActions();
                 $saisie = stripslashes($_POST[self::ATTR_TYPE]);
-                $msg = vsprintf(self::MSG_ERREUR_AJAX_DATA, array('csvExport', $saisie, self::ATTR_TYPE));
+                $msg = vsprintf(self::MSG_ERREUR_AJAX_DATA, array(self::AJAX_CSV_EXPORT, $saisie, self::ATTR_TYPE));
                 $returned = $obj->getToastContentJson(self::NOTIF_DANGER, 'Echec', $msg);
                 break;
         }
@@ -82,7 +83,7 @@ class AjaxActions extends LocalActions
             default :
                 $obj = new AjaxActions();
                 $saisie = stripslashes($_POST[self::ATTR_TYPE]);
-                $msg = vsprintf(self::MSG_ERREUR_AJAX_DATA, array('importFile', $saisie, 'importType'));
+                $msg = vsprintf(self::MSG_ERREUR_AJAX_DATA, array(self::AJAX_IMORT_FILE, $saisie, 'importType'));
                 $returned = $obj->getToastContentJson(self::NOTIF_DANGER, 'Echec', $msg);
                 break;
         }

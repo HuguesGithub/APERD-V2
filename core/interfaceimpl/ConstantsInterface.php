@@ -11,11 +11,13 @@ if (!defined('ABSPATH')) {
  */
 interface ConstantsInterface
 {
-    const __PREFIX_DB__          = 'wp_20_aperd_';
+    const DB_PREFIX              = 'wp_20_aperd_';
     
     /////////////////////////////////////////////////
     // Action Ajax
     const AJAX_ACTION            = 'ajaxAction';
+    const AJAX_CSV_EXPORT        = 'csvExport';
+    const AJAX_IMORT_FILE        = 'importFile';
     
     /////////////////////////////////////////////////
     // Attributs
@@ -60,6 +62,7 @@ interface ConstantsInterface
     const CST_LABEL              = 'label';
     const CST_NBSP               = '&nbsp;';
     const CST_ONGLET             = 'onglet';
+    const CST_PARENTS_DELEGUES   = 'parentDelegue';
     const CST_POST_ACTION        = 'postAction';
     const CST_RIGHT              = 'right';
     const CSV_SEP                = ';';
@@ -89,19 +92,21 @@ interface ConstantsInterface
     const I_ANGLES_LEFT          = 'angles-left';
     const I_CARET_LEFT           = 'caret-left';
     const I_CARET_RIGHT          = 'caret-right';
+    const I_CIRCLE               = 'circle';
     const I_DELETE               = 'trash-can';
     const I_DESKTOP              = 'desktop';
     const I_DOWNLOAD             = 'download';
     const I_EDIT                 = 'pen-to-square';
     const I_REFRESH              = 'arrows-rotate';
-    const I_SQUARE_CHECK = 'square-check';
-    const I_SQUARE_XMARK = 'square-xmark';
+    const I_SCHOOL               = 'school';
+    const I_SQUARE_CHECK         = 'square-check';
+    const I_SQUARE_XMARK         = 'square-xmark';
     const I_USERS                = 'users';
     
     /////////////////////////////////////////////////
     // Notifications
     const NOTIF_DANGER           = 'danger';
-    const NOTIF_SUCCESS    = 'success';
+    const NOTIF_SUCCESS          = 'success';
     const NOTIF_WARNING          = 'warning';
 
     /////////////////////////////////////////////////
@@ -113,37 +118,37 @@ interface ConstantsInterface
     
     /////////////////////////////////////////////////
     // Pages
-    const PAGE_ADMIN             = 'admin';
+    const PAGE_ADMIN              = 'admin';
     
     /////////////////////////////////////////////////
     // Variable de Session
-    const SESSION_APERD_ID       = 'aperd_id';
+    const SESSION_APERD_ID        = 'aperd_id';
     
     /////////////////////////////////////////////////
     // SQL
-    const SQL_JOKER              = '%';
-    const SQL_LIMIT              = '__limit__';
-    const SQL_ORDER_ASC          = 'ASC';
-    const SQL_ORDER_DESC         = 'DESC';
-    const SQL_ORDER_RAND         = 'RAND()';
-    const SQL_ORDER              = '__sql_order__';
-    const SQL_ORDERBY            = '__sql_orderby__';
-    const SQL_WHERE              = '__sql_where__';
+    const SQL_JOKER               = '%';
+    const SQL_LIMIT               = '__limit__';
+    const SQL_ORDER_ASC           = 'ASC';
+    const SQL_ORDER_DESC          = 'DESC';
+    const SQL_ORDER_RAND          = 'RAND()';
+    const SQL_ORDER               = '__sql_order__';
+    const SQL_ORDERBY             = '__sql_orderby__';
+    const SQL_WHERE               = '__sql_where__';
     
     /////////////////////////////////////////////////
     // Tags
-    const TAG_A                  = 'a';
-    const TAG_BUTTON             = 'button';
-    const TAG_DIV                = 'div';
-    const TAG_I                  = 'i';
-    const TAG_INPUT              = 'input';
-    const TAG_LI                 = 'li';
-    const TAG_P                  = 'p';
-    const TAG_STRONG             = 'strong';
-    const TAG_TD                 = 'td';
-    const TAG_TH                 = 'th';
-    const TAG_TR                 = 'tr';
-    const TAG_UL                 = 'ul';
+    const TAG_A                   = 'a';
+    const TAG_BUTTON              = 'button';
+    const TAG_DIV                 = 'div';
+    const TAG_I                   = 'i';
+    const TAG_INPUT               = 'input';
+    const TAG_LI                  = 'li';
+    const TAG_P                   = 'p';
+    const TAG_STRONG              = 'strong';
+    const TAG_TD                  = 'td';
+    const TAG_TH                  = 'th';
+    const TAG_TR                  = 'tr';
+    const TAG_UL                  = 'ul';
     
     /*
   /////////////////////////////////////////////////
