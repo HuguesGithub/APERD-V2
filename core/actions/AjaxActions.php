@@ -43,15 +43,20 @@ class AjaxActions extends LocalActions
     public static function dealWithCsvExport()
     {
         switch ($_POST[self::ATTR_TYPE]) {
-            case self::ONGLET_PARENTS :
-                $returned = AdulteActions::getCsvExport();
-                break;
             case self::ONGLET_ADMINISTRATIFS :
                 $returned = AdministrationActions::getCsvExport();
                 break;
+            case self::ONGLET_DIVISIONS :
+                $returned = DivisionActions::getCsvExport();
+                break;
+            case self::ONGLET_PARENTS :
+                $returned = AdulteActions::getCsvExport();
+                break;
             default :
+                $obj = new AjaxActions();
                 $saisie = stripslashes($_POST[self::ATTR_TYPE]);
-                $returned  = 'Erreur dans AjaxActions csvExport, le $_POST['.self::ATTR_TYPE.'] : '.$saisie.'<br>';
+                $msg = vsprintf(self::MSG_ERREUR_AJAX_DATA, array('csvExport', $saisie, self::ATTR_TYPE));
+                $returned = $obj->getToastContentJson(self::NOTIF_DANGER, 'Echec', $msg);
                 break;
         }
         return $returned;
@@ -65,15 +70,20 @@ class AjaxActions extends LocalActions
     public static function dealWithImportFile()
     {
         switch ($_POST['importType']) {
-            case self::ONGLET_PARENTS :
-                $returned = AdulteActions::importFile();
-                break;
             case self::ONGLET_ADMINISTRATIFS :
                 $returned = AdministrationActions::importFile();
                 break;
+            case self::ONGLET_DIVISIONS :
+                $returned = DivisionActions::importFile();
+                break;
+            case self::ONGLET_PARENTS :
+                $returned = AdulteActions::importFile();
+                break;
             default :
+                $obj = new AjaxActions();
                 $saisie = stripslashes($_POST[self::ATTR_TYPE]);
-                $returned  = 'Erreur dans AjaxActions importFile, le $_POST[importType] : '.$saisie.'<br>';
+                $msg = vsprintf(self::MSG_ERREUR_AJAX_DATA, array('importFile', $saisie, 'importType'));
+                $returned = $obj->getToastContentJson(self::NOTIF_DANGER, 'Echec', $msg);
                 break;
         }
         return $returned;

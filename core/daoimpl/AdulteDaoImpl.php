@@ -25,7 +25,7 @@ class AdulteDaoImpl extends LocalDaoImpl
      */
     public function __construct()
     {
-        $this->dbTable = self::__PREFIX_DB__.'adulte';
+        $this->dbTable = self::DB_PREFIX.'adulte';
         parent::__construct();
     }
     

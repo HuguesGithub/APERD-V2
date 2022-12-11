@@ -58,7 +58,7 @@ class AdministrationBean extends LocalBean
         // La partie commune
         // Nom sans le lien d'édition
         $label = $this->getBalise(self::TAG_STRONG, $this->obj->getName());
-        $trContent  = $this->getBalise(self::TAG_TD, $label, $attributes);
+        $trContent .= $this->getBalise(self::TAG_TD, $label, $attributes);
             
         // Poste
         $trContent .= $this->getBalise(self::TAG_TD, $this->obj->getField(self::FIELD_LABELPOSTE), $attributes);

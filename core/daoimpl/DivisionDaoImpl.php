@@ -25,7 +25,7 @@ class DivisionDaoImpl extends LocalDaoImpl
      */
     public function __construct()
     {
-        $this->dbTable = self::__PREFIX_DB__.'division';
+        $this->dbTable = self::DB_PREFIX.'division';
         parent::__construct();
     }
     

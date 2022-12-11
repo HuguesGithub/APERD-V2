@@ -25,7 +25,7 @@ class AdministrationDaoImpl extends LocalDaoImpl
      */
     public function __construct()
     {
-        $this->dbTable = self::__PREFIX_DB__.'administration';
+        $this->dbTable = self::DB_PREFIX.'administration';
         parent::__construct();
     }
     

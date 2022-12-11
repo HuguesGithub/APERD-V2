@@ -44,7 +44,7 @@ class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
         $fileName = '/wp-content/plugins/hj-v2-aperd/web/rsc/csv-files/'.$fileName;
         
         $objActions = new LocalActions();
-        return $objActions->getToastContentJson('success', 'Succès', sprintf(self::MSG_SUCCESS_EXPORT, $fileName));
+        return $objActions->getToastContentJson(self::NOTIF_SUCCESS, 'Succès', sprintf(self::MSG_SUCCESS_EXPORT, $fileName));
     }
     
     /**
