@@ -34,9 +34,24 @@ class AdulteActions extends LocalActions
         
         // On vérifie si on veut tous les éléments ou seulement une sélection
         $ids = $_POST[self::CST_IDS];
+        $filters = $_POST['filter'];
         if ($ids==self::CST_ALL) {
             // On récupère toutes les données
             $objsAdulte = $objAdulteServices->getAdultesWithFilters();
+            foreach ($objsAdulte as $objAdulte) {
+                $arrToExport[] = $objAdulte->toCsv();
+            }
+        } elseif ($ids=='filter') {
+            list(, $value) = explode('=', $filters);
+            if ($value=='oui') { $adh = 1; }
+            elseif ($value=='non') { $adh = 0; }
+            else { $adh = '%'; }
+
+            $arrFilters = array(
+                    self::FIELD_ADHERENT => $adh,
+            );
+            // On récupère toutes les données spécifiques au filtre
+            $objsAdulte = $objAdulteServices->getAdultesWithFilters($arrFilters);
             foreach ($objsAdulte as $objAdulte) {
                 $arrToExport[] = $objAdulte->toCsv();
             }

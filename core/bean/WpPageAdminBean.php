@@ -32,6 +32,7 @@ class WpPageAdminBean extends WpPageBean
         $this->slugPage = self::PAGE_ADMIN;
         $this->slugOnglet = $this->initVar(self::CST_ONGLET);
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
+		$this->blnBoutonCreation = true;
 
         if (isset($_POST['mail'])) {
             // TODO : Mettre en place les contrôles
@@ -86,7 +87,7 @@ class WpPageAdminBean extends WpPageBean
                 self::CST_ICON  => self::I_USERS,
                 self::CST_LABEL => self::LABEL_PARENTS,
                 self::CST_CHILDREN => array(
-                    self::CST_PARENTS_DELEGUES  => 'Délégués',
+                    self::CST_PARENTS_DIVISIONS  => 'Délégués',
                 ),
             ),
         );
@@ -181,7 +182,7 @@ class WpPageAdminBean extends WpPageBean
                     $objBean = new WpPageAdminDivisionBean();
                     break;
                 case self::ONGLET_PARENTS :
-                    $objBean = new WpPageAdminAdulteBean();
+                    $objBean = WpPageAdminAdulteBean::getStaticWpPageBean($this->slugSubOnglet);
                     break;
                 case self::ONGLET_DESK   :
                 default       :
@@ -495,11 +496,13 @@ class WpPageAdminBean extends WpPageBean
             self::ATTR_CLASS => 'btn-light dropdown-toggle',
             'data-bs-toggle' => 'dropdown',
             'aria-expanded' => 'false',
+            'data-filter' => $this->getActiveFilters(),
         );
         $btnDropdown = $this->getButton('Tous', $btnAttributes);
         
         // Les choix possibles
         $ulContent  = $this->getLiDropdown('Sélection', 'dropdownTrash');
+        $ulContent .= $this->getLiDropdown('Filtre', 'dropdownTrash');
         $ulContent .= $this->getLiDropdown('Tous', 'dropdownTrash');
         $strStyle  = 'position: absolute; inset: 0px auto auto 0px; margin: 0px; ';
         $strStyle .= 'transform: translate3d(93.6px, 427.2px, 0px);';
@@ -542,8 +545,15 @@ class WpPageAdminBean extends WpPageBean
             self::ATTR_TITLE => self::LABEL_EXPORTER_LISTE,
             self::ATTR_DATA_TRIGGER => 'click',
             self::ATTR_DATA_AJAX => self::CST_CSV_EXPORT,
-            self::ATTR_DATA_TYPE => $this->slugOnglet,
+            'data-filter' => $this->getActiveFilters(),
         );
+        if ($this->slugSubOnglet=='') {
+            $btnAttributes[self::ATTR_DATA_TYPE] = $this->slugOnglet;
+        } else {
+            $btnAttributes[self::ATTR_DATA_TYPE] = $this->slugSubOnglet;
+        }
+        
+        
         $btnDownload = $this->getButton($btnContent, $btnAttributes);
 
         // Avec un dropdown Sélection / Tous, avec Tous par défaut.
@@ -557,6 +567,7 @@ class WpPageAdminBean extends WpPageBean
         
         // Les choix possibles
         $ulContent  = $this->getLiDropdown('Sélection', 'dropdownSelection');
+        $ulContent .= $this->getLiDropdown('Filtre', 'dropdownSelection');
         $ulContent .= $this->getLiDropdown('Tous', 'dropdownSelection');
         $strStyle  = 'position: absolute; inset: 0px auto auto 0px; margin: 0px; ';
         $strStyle .= 'transform: translate3d(93.6px, 427.2px, 0px);';
@@ -572,6 +583,9 @@ class WpPageAdminBean extends WpPageBean
         $attributes = array('role'=>'group', self::ATTR_CLASS=>'btn-group', 'aria-label'=>'Choix export');
         return $this->getDiv($btnDownload.$divGroup, $attributes);
     }
+    
+    public function getActiveFilters()
+    { return ''; }
     
     public function getCancelButton()
     {
@@ -669,7 +683,7 @@ class WpPageAdminBean extends WpPageBean
         $this->blnHasPagination = false;
         $this->strPagination = $this->buildPagination($objItems);
         /////////////////////////////////////////
-        $strContent = '';
+        $strContent = $this->getTrFiltres($blnHasEditorRights);
         while (!empty($objItems)) {
             $objItem = array_shift($objItems);
             $strContent .= $objItem->getBean()->getRow($blnHasEditorRights);
@@ -691,6 +705,11 @@ class WpPageAdminBean extends WpPageBean
             $strContent,
         );
         return $this->getRender(self::WEB_PPFC_LIST_DEFAULT, $attributes);
+    }
+    
+    public function getTrFiltres($blnHasEditorRights)
+    {
+        return '';
     }
     
     /**
@@ -737,7 +756,11 @@ class WpPageAdminBean extends WpPageBean
                 $strMainContent = $this->getListContent($blnHasEditorRights);
                 
                 $url = self::WEB_PPFC_UPLOAD;
-                $impAttributes = array($this->slugOnglet);
+                if ($this->slugSubOnglet=='') {
+                    $impAttributes = array($this->slugOnglet);
+                } else {
+                    $impAttributes = array($this->slugSubOnglet);
+                }
                 $strBlocImport  = $this->getRender($url, $impAttributes);
                 $strBlocImport .= $this->getDiv('', array(self::ATTR_ID=>'alertBlock'));
             }
@@ -745,7 +768,10 @@ class WpPageAdminBean extends WpPageBean
             // Interface de liste
             $strMainContent = $this->getListContent($blnHasEditorRights);
         }
-        
+        if (!$this->blnBoutonCreation ) {
+            $strBtnCreationAnnulation = '';
+        }
+
         $urlTemplate = self::WEB_PPFS_CONTENT_ONE_4TH;
         $attributes = array(
             // Identifiant de la page
@@ -768,11 +794,11 @@ class WpPageAdminBean extends WpPageBean
      */
     public function getListControlTools($blnHasEditorRights=false)
     {
-        $divContent = $this->getRefreshButton().self::CST_NBSP;
+        $divContent = '';//$this->getRefreshButton().self::CST_NBSP;
         
         // Si on a les droits, on ajoute le bouton de download
         if ($blnHasEditorRights) {
-            $divContent .= $this->getBulkDeleteButton().self::CST_NBSP;
+//            $divContent .= $this->getBulkDeleteButton().self::CST_NBSP;
             $divContent .= $this->getDownloadButton();
         }
         

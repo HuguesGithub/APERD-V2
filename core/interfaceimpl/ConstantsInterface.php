@@ -29,6 +29,7 @@ interface ConstantsInterface
     const ATTR_HREF              = 'href';
     const ATTR_ID                = 'id';
     const ATTR_NAME              = 'name';
+    const ATTR_SELECTED    = 'selected';
     const ATTR_STYLE             = 'style';
     const ATTR_TITLE             = 'title';
     const ATTR_TYPE              = 'type';
@@ -63,6 +64,7 @@ interface ConstantsInterface
     const CST_NBSP               = '&nbsp;';
     const CST_ONGLET             = 'onglet';
     const CST_PARENTS_DELEGUES   = 'parentDelegue';
+    const CST_PARENTS_DIVISIONS   = 'parentDelegue';
     const CST_POST_ACTION        = 'postAction';
     const CST_RIGHT              = 'right';
     const CSV_SEP                = ';';
@@ -83,6 +85,10 @@ interface ConstantsInterface
     const FIELD_MAILADULTE       = 'mailAdulte';
     const FIELD_ADHERENT         = 'adherent';
     const FIELD_PHONEADULTE      = 'phoneAdulte';
+    // Table AdulteDivision
+    const FIELD_ADULTEID = 'adulteId';
+    const FIELD_DIVISIONID = 'divisionId';
+    const FIELD_DELEGUE = 'delegue';
     // Table Division
     const FIELD_LABELDIVISION    = 'labelDivision';
     
@@ -115,6 +121,7 @@ interface ConstantsInterface
     const ONGLET_DESK             = 'desk';
     const ONGLET_DIVISIONS        = 'divisions';
     const ONGLET_PARENTS          = 'parents';
+    const SUBONGLET_PARENTS_DELEGUES          = 'parentDelegue';
     
     /////////////////////////////////////////////////
     // Pages
@@ -143,7 +150,9 @@ interface ConstantsInterface
     const TAG_I                   = 'i';
     const TAG_INPUT               = 'input';
     const TAG_LI                  = 'li';
+    const TAG_OPTION             = 'option';
     const TAG_P                   = 'p';
+    const TAG_SELECT             = 'select';
     const TAG_STRONG              = 'strong';
     const TAG_TD                  = 'td';
     const TAG_TH                  = 'th';
@@ -166,7 +175,6 @@ interface ConstantsInterface
   const ATTR_READONLY    = 'readonly';
   const ATTR_REQUIRED    = 'required';
   const ATTR_ROWS        = 'rows';
-  const ATTR_SELECTED    = 'selected';
 
     /////////////////////////////////////////////////
     // On conserve malgré tout quelques constantes
@@ -200,7 +208,6 @@ interface ConstantsInterface
     const FIELD_ICON             = 'icon';
     const FIELD_LABEL            = 'label';
   
-  const FIELD_ADHERENT              = 'adherent';
   const FIELD_ADMINISTRATION_ID     = 'administrationId';
   const FIELD_ANNEESCOLAIRE         = 'anneeScolaire';
   const FIELD_ANNEESCOLAIRE_ID      = 'anneeScolaireId';
@@ -208,7 +215,6 @@ interface ConstantsInterface
   const FIELD_BILANELEVES           = 'bilanEleves';
   const FIELD_BILANPARENTS          = 'bilanParents';
   const FIELD_BILANPROFPRINCIPAL    = 'bilanProfPrincipal';
-  const FIELD_CLASSE_ID             = 'classeId';
   const FIELD_COMPTERENDU_ID        = 'compteRenduId';
   const FIELD_CONFIG_KEY            = 'configKey';
   const FIELD_CONFIG_VALUE          = 'configValue';
@@ -216,18 +222,13 @@ interface ConstantsInterface
   const FIELD_DATA                  = 'data';
   const FIELD_DATECONSEIL           = 'dateConseil';
   const FIELD_DATEREDACTION         = 'dateRedaction';
-  const FIELD_DELEGUE               = 'delegue';
-  const FIELD_DIVISION_ID           = 'divisionId';
   const FIELD_DISPLAY_ORDER         = 'displayOrder';
   const FIELD_ENFANT1               = 'delegueEleve1Id';
   const FIELD_ENFANT2               = 'delegueEleve2Id';
   const FIELD_ENSEIGNANT_ID         = 'enseignantId';
   const FIELD_ENSEIGNANT_MATIERE_ID = 'enseignantMatiereId';
-  const FIELD_LABELCLASSE           = 'labelClasse';
-  const FIELD_LABELDIVISION         = 'labelDivision';
   const FIELD_LABELMATIERE          = 'labelMatiere';
   const FIELD_MAILCONTACT           = 'mailContact';
-  const FIELD_MAILPARENT            = 'mailParent';
   const FIELD_MATIERE_ID            = 'matiereId';
   const FIELD_NBCOMPLIMENTS         = 'nbCompliments';
   const FIELD_NBELEVES              = 'nbEleves';
@@ -236,17 +237,13 @@ interface ConstantsInterface
   const FIELD_NBMGCPT               = 'nbMgComportement';
   const FIELD_NBMGTVL               = 'nbMgTravail';
   const FIELD_NBMGCPTTVL            = 'nbMgComportementTravail';
-  const FIELD_NOMADULTE             = 'nomAdulte';
   const FIELD_NOMELEVE              = 'nomEleve';
   const FIELD_NOMENSEIGNANT         = 'nomEnseignant';
-  const FIELD_NOMPARENT             = 'nomParent';
   const FIELD_OBSERVATIONS          = 'observations';
   const FIELD_PARENT1               = 'delegueParent1Id';
   const FIELD_PARENT2               = 'delegueParent2Id';
-  const FIELD_PARENT_ID             = 'parentId';
   const FIELD_PRENOMELEVE           = 'prenomEleve';
   const FIELD_PRENOMENSEIGNANT      = 'prenomEnseignant';
-  const FIELD_PRENOMPARENT          = 'prenomParent';
   const FIELD_PROFPRINCIPAL_ID      = 'profPrincId';
   const FIELD_STATUS                = 'status';
   const FIELD_TRIMESTRE             = 'trimestre';
@@ -343,8 +340,6 @@ interface ConstantsInterface
     /////////////////////////////////////////////////
     // Tags
     const TAG_IMG                = 'img';
-    const TAG_OPTION             = 'option';
-    const TAG_SELECT             = 'select';
     const TAG_SPAN               = 'span';
     const TAG_TEXTAREA           = 'textarea';
 

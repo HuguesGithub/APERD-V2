@@ -29,7 +29,7 @@ class LocalServices implements ConstantsInterface, UrlsInterface, LabelsInterfac
      * @version 2.22.12.07
      */
     protected function isNonEmptyAndNoArray($arrFilters, $tag)
-    { return !empty($arrFilters[$tag]) && !is_array($arrFilters[$tag]); }
+    { return (isset($arrFilters[$tag]) && ''!=$arrFilters[$tag]) && !is_array($arrFilters[$tag]); }
     
     /**
      * @param array $arrFilters

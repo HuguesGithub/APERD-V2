@@ -36,9 +36,11 @@ interface LabelsInterface
     const LABEL_EXPORTER_LISTE      = 'Exporter la liste';
     const LABEL_LIST_ADMINISTRATIFS = 'Liste des Administratifs';
     const LABEL_LIST_PARENTS        = 'Liste des Parents d\'élèves';
+    const LABEL_LIST_PARENTS_DELEGUES        = 'Liste des Parents d\'élèves délégués';
     const LABEL_LIST_DIVISIONS      = 'Liste des Divisions';
     const LABEL_MODIFIER            = 'Modifier';
     const LABEL_PARENTS             = 'Parents';
+    const LABEL_PARENTS_DELEGUES    = 'Parents Délégués';
     const LABEL_RETOUR              = 'Retour';
     const LABEL_SUPPRIMER           = 'Supprimer';
     const LABEL_PHONE               = 'Téléphone';

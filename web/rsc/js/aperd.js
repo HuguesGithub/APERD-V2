@@ -57,15 +57,19 @@ function dropdownElement(obj) {
 // Export des données sélectionnées ou de toutes, selon la valeur de la dropdown box
 function csvExport(obj) {
     let ids = '';
+    let filter = '';
     let values = obj.next().find('button').html();
     if (values=='Tous') {
         ids = 'all';        
+    } else if (values=='Filtre') {
+        ids = 'filter';
+        filter = obj.data('filter');
     } else {
         $('input[name="post[]"]:checked').each(function(){
             ids += $(this).val()+',';
         });
     }
-    let data = {'action': 'dealWithAjax', 'ajaxAction': 'csvExport', 'type': obj.data('type'), 'ids': ids};
+    let data = {'action': 'dealWithAjax', 'ajaxAction': 'csvExport', 'type': obj.data('type'), 'ids': ids, 'filter': filter};
 
     // On a un appel ajax pour rechercher les équivalences au numéro
     $.post(
