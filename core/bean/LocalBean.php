@@ -12,34 +12,13 @@ if (!defined('ABSPATH')) {
  */
 class LocalBean extends UtilitiesBean
 {
-
-    /**
-     * @param boolean $blnChecked
-     * @return string
-     * @since 2.22.12.05
-     * @version 2.22.12.07
-     */
-    public function getCellInput($blnChecked)
-    {
-        $id = $this->obj->getField(self::FIELD_ID);
-        $attributes = array(
-            self::ATTR_ID   => 'cb-select-'.$id,
-            self::ATTR_NAME  => 'post[]',
-            self::ATTR_VALUE => $id,
-            self::ATTR_TYPE  => 'checkbox',
-        );
-        if ($blnChecked) {
-            $attributes[self::CST_CHECKED] = self::CST_CHECKED;
-        }
-        return $this->getBalise(self::TAG_TD, $this->getBalise(self::TAG_INPUT, '', $attributes));
-    }
     
     /**
      * @return string
      * @since 2.22.12.08
      * @version 2.22.12.08
      */
-    public function getCellActions()
+    protected function getCellActions()
     {
         // Bouton Edition
         $urlEdition = $this->baseUrl.self::CST_AMP.self::CST_ACTION.'='.self::CST_WRITE;
@@ -57,5 +36,26 @@ class LocalBean extends UtilitiesBean
         
         $tdContent = $this->getDiv($divContent, array(self::ATTR_CLASS=>'row-actions text-center'));
         return $this->getBalise(self::TAG_TD, $tdContent, array(self::ATTR_CLASS=>'column-actions'));
+    }
+    
+    /**
+     * @param boolean $blnChecked
+     * @return string
+     * @since 2.22.12.05
+     * @version 2.22.12.07
+     */
+    protected function getCellInput($blnChecked)
+    {
+        $id = $this->obj->getField(self::FIELD_ID);
+        $attributes = array(
+            self::ATTR_ID   => 'cb-select-'.$id,
+            self::ATTR_NAME  => 'post[]',
+            self::ATTR_VALUE => $id,
+            self::ATTR_TYPE  => 'checkbox',
+        );
+        if ($blnChecked) {
+            $attributes[self::CST_CHECKED] = self::CST_CHECKED;
+        }
+        return $this->getBalise(self::TAG_TD, $this->getBalise(self::TAG_INPUT, '', $attributes));
     }
 }

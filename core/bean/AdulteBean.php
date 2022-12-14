@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
  * Classe AdulteBean
  * @author Hugues
  * @since 2.22.12.08
- * @version 2.22.12.08
+ * @version 2.22.12.14
  */
 class AdulteBean extends LocalBean
 {
@@ -18,10 +18,11 @@ class AdulteBean extends LocalBean
      * Class Constructor
      * @param AdulteClass $objAdulte
      * @since 2.22.12.08
-     * @version 2.22.12.08
+     * @version 2.22.12.14
      */
     public function __construct($objAdulte='')
     {
+        parent::__construct();
         $this->obj = ($objAdulte=='' ? new AdulteClass() : $objAdulte);
     }
     

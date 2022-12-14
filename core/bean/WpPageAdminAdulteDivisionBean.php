@@ -1,8 +1,6 @@
 <?php
 namespace core\bean;
 
-use core\domain\MySQLClass;
-
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }

@@ -22,6 +22,7 @@ class AdministrationBean extends LocalBean
      */
     public function __construct($objAdministration='')
     {
+        parent::__construct();
         $this->obj = ($objAdministration=='' ? new AdministrationClass() : $objAdministration);
     }
     

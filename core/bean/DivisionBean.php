@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
  * Classe DivisionBean
  * @author Hugues
  * @since 2.22.12.10
- * @version 2.22.12.10
+ * @version 2.22.12.14
  */
 class DivisionBean extends LocalBean
 {
@@ -18,10 +18,11 @@ class DivisionBean extends LocalBean
      * Class Constructor
      * @param DivisionClass $objDivision
      * @since 2.22.12.10
-     * @version 2.22.12.10
+     * @version 2.22.12.14
      */
     public function __construct($objDivision='')
     {
+        parent::__construct();
         $this->obj = ($objDivision=='' ? new DivisionClass() : $objDivision);
     }
     
@@ -74,33 +75,22 @@ class DivisionBean extends LocalBean
     /**
      * @param string $baseUrl
      * @return string
-     * @since 2.22.12.10
-     * @version 2.22.12.10
+     * @since 2.22.12.14
+     * @version 2.22.12.14
      */
     public function getForm($baseUrl)
     {
-        /*
-         * TODO
-        $urlTemplate = self::WEB_A_FORM_ADULTE;
+        $urlTemplate = self::WEB_A_FORM_DIVISION;
         $attributes = array(
             // Création - 1
             ($this->obj->getField(self::FIELD_ID)=='' ? self::LABEL_CREER : self::LABEL_MODIFIER),
-            // Identifiant de l'Adulte - 2
+            // Identifiant de la Division - 2
             $this->obj->getField(self::FIELD_ID),
             // Annuler - 3
             $baseUrl,
-            // Nom du Parent - 4
-            $this->obj->getField(self::FIELD_NOMADULTE),
-            // Prénom du Parent - 5
-            $this->obj->getField(self::FIELD_PRENOMADULTE),
-            // Mail du Parent - 6
-            $this->obj->getField(self::FIELD_MAILADULTE),
-            // Parent Adhérent ? - 7
-            ($this->obj->getField(self::FIELD_ADHERENT)==1 ? ' '.self::CST_CHECKED : ''),
-            // Téléphone du Parent - 8
-            $this->obj->getField(self::FIELD_PHONEADULTE),
+            // Libellé de la Division - 4
+            $this->obj->getField(self::FIELD_LABELDIVISION),
         );
         return $this->getRender($urlTemplate, $attributes);
-        */
     }
 }

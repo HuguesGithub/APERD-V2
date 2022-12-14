@@ -27,7 +27,23 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
         $this->objAdulteDivisionServices = new AdulteDivisionServices();
         $this->objDivisionServices       = new DivisionServices();
     }
-  
+    
+    /**
+     * @return int
+     * @since 2.22.12.05
+     * @version 2.22.12.05
+     */
+    public static function getWpUserId()
+    { return get_current_user_id(); }
+    
+    /**
+     * @return bool
+     * @since 2.22.12.05
+     * @version 2.22.12.05
+     */
+    public static function isAdmin()
+    { return current_user_can('manage_options'); }
+    
     /**
      * @return bool
      */
@@ -35,6 +51,31 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
     {
         // On va checker dans les variables de SESSION si les infos relatives à l'APERD y sont stockées.
         return (isset($_SESSION[self::SESSION_APERD_ID]) && $_SESSION[self::SESSION_APERD_ID]!=self::CST_ERR_LOGIN);
+    }
+    
+    /**
+     * @return bool
+     * @since 2.22.12.05
+     * @version 2.22.12.05
+     */
+    public static function isLogged()
+    { return is_user_logged_in(); }
+    
+    /**
+     * @param array $attributes
+     * @return string
+     * @since 2.22.12.05
+     * @version 2.22.12.05
+     */
+    private function getExtraAttributes($attributes)
+    {
+        $extraAttributes = '';
+        if (!empty($attributes)) {
+            foreach ($attributes as $key => $value) {
+                $extraAttributes .= ' '.$key.'="'.$value.'"';
+            }
+        }
+        return $extraAttributes;
     }
     
     /**
@@ -47,7 +88,7 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
      */
     protected function getBalise($balise, $label='', $attributes=array())
     {
-        $strBalise = '<'.$balise.$this->getExtraAttributesString($attributes);
+        $strBalise = '<'.$balise.$this->getExtraAttributes($attributes);
         if (in_array($balise, array(self::TAG_INPUT))) {
             $strBalise .= '/>';
         } else {
@@ -57,31 +98,29 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
     }
     
     /**
+     * @param string $label
      * @param array $attributes
      * @return string
      * @since 2.22.12.05
      * @version 2.22.12.05
      */
-    private function getExtraAttributesString($attributes)
+    protected function getButton($label, $attributes=array())
     {
-        $extraAttributes = '';
+        $buttonAttributes = array(
+            self::ATTR_TYPE => self::TAG_BUTTON,
+            self::ATTR_CLASS => 'btn btn-default btn-sm',
+        );
         if (!empty($attributes)) {
             foreach ($attributes as $key => $value) {
-                $extraAttributes .= ' '.$key.'="'.$value.'"';
+                if (!isset($buttonAttributes[$key])) {
+                    $buttonAttributes[$key]  = $value;
+                } elseif ($key==self::ATTR_CLASS) {
+                    $buttonAttributes[$key] .= ' '.$value;
+                }
             }
         }
-        return $extraAttributes;
+        return $this->getBalise(self::TAG_BUTTON, $label, $buttonAttributes);
     }
-
-    /**
-     * @param string $urlTemplate
-     * @param array $args
-     * @return string
-     * @since 2.22.12.05
-     * @version 2.22.12.05
-     */
-    public function getRender($urlTemplate, $args=array())
-    { return vsprintf(file_get_contents(PLUGIN_PATH.$urlTemplate), $args); }
     
     /**
      * @param string $label
@@ -90,16 +129,8 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
      * @since 2.22.12.05
      * @version 2.22.12.05
      */
-    public function getDiv($label, $attributes=array())
-    {
-        $divAttributes = array();
-        if (!empty($attributes)) {
-            foreach ($attributes as $key => $value) {
-                $divAttributes[$key]  = $value;
-            }
-        }
-        return $this->getBalise(self::TAG_DIV, $label, $divAttributes);
-    }
+    protected function getDiv($label, $attributes=array())
+    { return $this->getBalise(self::TAG_DIV, $label, $attributes); }
     
     /**
      * @param string
@@ -109,7 +140,7 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
      * @since 2.22.12.05
      * @version 2.22.12.05
      */
-    public function getIcon($tag, $prefix='', $label='')
+    protected function getIcon($tag, $prefix='', $label='')
     {
         if ($prefix!='') {
             $prefix .= ' ';
@@ -142,29 +173,14 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
     }
     
     /**
-     * @param string $label
-     * @param array $attributes
+     * @param string $urlTemplate
+     * @param array $args
      * @return string
      * @since 2.22.12.05
      * @version 2.22.12.05
      */
-    public function getButton($label, $attributes=array())
-    {
-        $buttonAttributes = array(
-            self::ATTR_TYPE => self::TAG_BUTTON,
-            self::ATTR_CLASS => 'btn btn-default btn-sm',
-        );
-        if (!empty($attributes)) {
-            foreach ($attributes as $key => $value) {
-                if (!isset($buttonAttributes[$key])) {
-                    $buttonAttributes[$key]  = $value;
-                } elseif ($key==self::ATTR_CLASS) {
-                    $buttonAttributes[$key] .= ' '.$value;
-                }
-            }
-        }
-        return $this->getBalise(self::TAG_BUTTON, $label, $buttonAttributes);
-    }
+    protected function getRender($urlTemplate, $args=array())
+    { return vsprintf(file_get_contents(PLUGIN_PATH.$urlTemplate), $args); }
     
     /**
      * @param string $label
@@ -173,7 +189,7 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
      * @since 2.22.12.05
      * @version 2.22.12.05
      */
-    public function getTh($label, $attributes=array())
+    protected function getTh($label, $attributes=array())
     {
         $buttonAttributes = array(
             'scope' => 'col',
@@ -185,30 +201,6 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
         }
         return $this->getBalise(self::TAG_TH, $label, $buttonAttributes);
     }
-    
-    /**
-     * @return bool
-     * @since 2.22.12.05
-     * @version 2.22.12.05
-     */
-    public static function isAdmin()
-    { return current_user_can('manage_options'); }
-     
-    /**
-     * @return bool
-     * @since 2.22.12.05
-     * @version 2.22.12.05
-     */
-    public static function isLogged()
-    { return is_user_logged_in(); }
-    
-    /**
-     * @return int
-     * @since 2.22.12.05
-     * @version 2.22.12.05
-     */
-    public static function getWpUserId()
-    { return get_current_user_id(); }
       
     /**
      * @param string $id
@@ -217,7 +209,7 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
      * @since 2.22.12.05
      * @version 2.22.12.05
      */
-    public function initVar($id, $default='')
+    protected function initVar($id, $default='')
     {
         if (isset($_POST[$id])) {
             return $_POST[$id];

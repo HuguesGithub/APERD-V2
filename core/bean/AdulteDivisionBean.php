@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
  * Classe AdulteBean
  * @author Hugues
  * @since 2.22.12.12
- * @version 2.22.12.12
+ * @version 2.22.12.14
  */
 class AdulteDivisionBean extends LocalBean
 {
@@ -18,10 +18,11 @@ class AdulteDivisionBean extends LocalBean
      * Class Constructor
      * @param AdulteDivisionClass $objAdulteDivision
      * @since 2.22.12.12
-     * @version 2.22.12.12
+     * @version 2.22.12.14
      */
     public function __construct($objAdulteDivision='')
     {
+        parent::__construct();
         $this->obj = ($objAdulteDivision=='' ? new AdulteDivisionClass() : $objAdulteDivision);
     }
     
@@ -97,38 +98,5 @@ class AdulteDivisionBean extends LocalBean
         }
         ///////////////////////////////////////////////
         return $this->getBalise(self::TAG_TR, $trContent, $attributes);
-    }
-    
-    /**
-     * @param string $baseUrl
-     * @return string
-     * @since 2.22.12.12
-     * @version 2.22.12.12
-     */
-    public function getForm($baseUrl)
-    {
-        return '';
-        /*
-        $urlTemplate = self::WEB_A_FORM_ADULTE;
-        $attributes = array(
-            // Création - 1
-            ($this->obj->getField(self::FIELD_ID)=='' ? self::LABEL_CREER : self::LABEL_MODIFIER),
-            // Identifiant de l'Adulte - 2
-            $this->obj->getField(self::FIELD_ID),
-            // Annuler - 3
-            $baseUrl,
-            // Nom du Parent - 4
-            $this->obj->getField(self::FIELD_NOMADULTE),
-            // Prénom du Parent - 5
-            $this->obj->getField(self::FIELD_PRENOMADULTE),
-            // Mail du Parent - 6
-            $this->obj->getField(self::FIELD_MAILADULTE),
-            // Parent Adhérent ? - 7
-            ($this->obj->getField(self::FIELD_ADHERENT)==1 ? ' '.self::CST_CHECKED : ''),
-            // Téléphone du Parent - 8
-            $this->obj->getField(self::FIELD_PHONEADULTE),
-        );
-        return $this->getRender($urlTemplate, $attributes);
-        */
     }
 }
