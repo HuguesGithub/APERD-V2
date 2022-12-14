@@ -33,7 +33,7 @@ class WpPageAdminBean extends WpPageBean
         $this->slugOnglet = $this->initVar(self::CST_ONGLET);
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
         $this->slugAction = $this->initVar(self::CST_ACTION);
-		$this->blnBoutonCreation = true;
+        $this->blnBoutonCreation = true;
 
         if (isset($_POST['mail'])) {
             // TODO : Mettre en place les contrôles

@@ -64,8 +64,6 @@ class DivisionClass extends LocalDomainClass
      */
     public function controlerDonnees(&$notif, &$msg)
     {
-        $blnOk = true;
-        
         /////////////////////////////////////////////
         // Le libellé doit être renseigné
         return $this->controlerSaisie(self::FIELD_LABELDIVISION, $notif, $msg);

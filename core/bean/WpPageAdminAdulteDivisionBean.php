@@ -280,7 +280,8 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
                 $attr = array(
                     self::ATTR_VALUE => $objDivision->getField(self::FIELD_ID),
                 );
-                if ($objDivision->getField(self::FIELD_ID)==$this->objAdulteDivision->getField(self::FIELD_DIVISIONID)) {
+                $divisionId = $this->objAdulteDivision->getField(self::FIELD_DIVISIONID);
+                if ($objDivision->getField(self::FIELD_ID)==$divisionId) {
                     $attr = array(self::ATTR_SELECTED=>self::ATTR_SELECTED);
                 }
                 $label = $objDivision->getField(self::FIELD_LABELDIVISION);
