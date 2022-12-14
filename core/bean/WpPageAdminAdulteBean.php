@@ -25,8 +25,8 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         $id = $this->initVar(self::ATTR_ID);
         $this->objAdulte = $this->objAdulteServices->getAdulteById($id);
         $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
-		$this->filtreAdherent = $this->initVar('filter-adherent', 'all');
-		$this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
+        $this->filtreAdherent = $this->initVar('filter-adherent', 'all');
+        $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
         
         /////////////////////////////////////////
         // Vérification de la soumission d'un formulaire
@@ -175,47 +175,55 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         }
         return $this->getBalise(self::TAG_TR, $trContent);
     }
-	
+    
     public function getActiveFilters()
     { return 'filter-adherent='.$this->filtreAdherent; }
-	
     
-	public function getTrFiltres($blnHasEditorRights)
-	{
+    
+    public function getTrFiltres($blnHasEditorRights)
+    {
         /////////////////////////////////////////
-		// On va mettre en place la ligne de Filtre
-		$trContent = '';
+        // On va mettre en place la ligne de Filtre
+        $trContent = '';
         if ($blnHasEditorRights) {
             $trContent .= $this->getTh(self::CST_NBSP);
         }
         $trContent .= $this->getTh(self::CST_NBSP);
         $trContent .= $this->getTh(self::CST_NBSP);
-		// Filtre Adhérent
+        // Filtre Adhérent
         $trContent .= '<th class="text-center"><div role="group" class="btn-group">';
-		$trContent .= '<button type="button" class="btn btn-default btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">';
-		if ($this->filtreAdherent=='oui') {
-			$trContent .= 'Oui';
-		} elseif ($this->filtreAdherent=='non') {
-			$trContent .= 'Non';
-		} else {
-			$trContent .= 'Tous';
-		}
-		$trContent .= '</button>';
-		$trContent .= '<ul class="dropdown-menu" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(93.6px, 427.2px, 0px);" data-popper-placement="bottom-start">';
-		$trContent .= '<li><a href="/admin?onglet=parents&amp;filter-adherent=oui" class="dropdown-item text-white">Oui</a></li>';
-		$trContent .= '<li><a href="/admin?onglet=parents&amp;filter-adherent=non" class="dropdown-item text-white">Non</a></li>';
-		$trContent .= '<li><a href="/admin?onglet=parents&amp;filter-adherent=all" class="dropdown-item text-white">Tous</a></li>';
-		$trContent .= '</ul></div></th>';
-		
+        $trContent .= '<button type="button" class="btn btn-default btn-sm btn-light dropdown-toggle" ';
+        $trContent .= 'data-bs-toggle="dropdown" aria-expanded="false">';
+        if ($this->filtreAdherent=='oui') {
+            $trContent .= 'Oui';
+        } elseif ($this->filtreAdherent=='non') {
+            $trContent .= 'Non';
+        } else {
+            $trContent .= 'Tous';
+        }
+        $trContent .= '</button>';
+        $trContent .= '<ul class="dropdown-menu" style="position: absolute; inset: ';
+        $trContent .= '0px auto auto 0px; margin: 0px; transform: translate3d(93.6px, 427.2px, 0px);" ';
+        $trContent .= 'data-popper-placement="bottom-start">';
+        $trContent .= '<li><a href="/admin?onglet=parents&amp;filter-adherent=oui" ';
+        $trContent .= 'class="dropdown-item text-white">Oui</a></li>';
+        $trContent .= '<li><a href="/admin?onglet=parents&amp;filter-adherent=non" ';
+        $trContent .= 'class="dropdown-item text-white">Non</a></li>';
+        $trContent .= '<li><a href="/admin?onglet=parents&amp;filter-adherent=all" ';
+        $trContent .= 'class="dropdown-item text-white">Tous</a></li>';
+        $trContent .= '</ul></div></th>';
+        
 
         if ($blnHasEditorRights) {
-			$trContent .= '<th class="column-actions"><div class="row-actions text-center">';
-			$trContent .= '<a href="/admin?onglet=parents" class="" title="Nettoyer le filtre"><button type="button" class="btn btn-default btn-sm"><i class="fa-solid fa-filter-circle-xmark"></i></button></a>';
-			$trContent .= '</div></th>';
+            $trContent .= '<th class="column-actions"><div class="row-actions text-center">';
+            $trContent .= '<a href="/admin?onglet=parents" class="" title="Nettoyer le filtre">';
+            $trContent .= '<button type="button" class="btn btn-default btn-sm"><i class="fa-solid ';
+            $trContent .= 'fa-filter-circle-xmark"></i></button></a>';
+            $trContent .= '</div></th>';
         }
-		return $this->getBalise(self::TAG_TR, $trContent);
-	}
-	
+        return $this->getBalise(self::TAG_TR, $trContent);
+    }
+    
     /**
      * @return string
      * @since 2.22.12.07
@@ -226,13 +234,13 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         $this->attrDescribeList = self::LABEL_LIST_PARENTS;
         /////////////////////////////////////////
         // On va prendre en compte les éventuels filters
-		$arrFilters = array();
-		if ($this->filtreAdherent=='oui') {
-			$arrFilters[self::FIELD_ADHERENT] = 1;
-		} elseif ($this->filtreAdherent=='non') {
-			$arrFilters[self::FIELD_ADHERENT] = 0;
-		}
-		
+        $arrFilters = array();
+        if ($this->filtreAdherent=='oui') {
+            $arrFilters[self::FIELD_ADHERENT] = 1;
+        } elseif ($this->filtreAdherent=='non') {
+            $arrFilters[self::FIELD_ADHERENT] = 0;
+        }
+        
         /////////////////////////////////////////
         // On va chercher les éléments à afficher
         $objItems = $this->objAdulteServices->getAdultesWithFilters($arrFilters);

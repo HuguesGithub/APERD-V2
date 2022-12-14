@@ -316,8 +316,10 @@ class WpPageAdminBean extends WpPageBean
             $hasChildren = isset($arrOnglet[self::CST_CHILDREN]);
             
             // Mise en évidence de l'élément du menu sélectionné.
-            $blnMenuOpen = ($strOnglet==$this->slugOnglet && isset($arrOnglet[self::CST_CHILDREN][$this->slugSubOnglet]));
-            $blnMenuActive = (!$blnMenuOpen && ($this->slugOnglet==$strOnglet || $this->slugOnglet=='' && $strOnglet==self::ONGLET_DESK));
+            $blnMenuOpen = ($strOnglet==$this->slugOnglet &&
+                isset($arrOnglet[self::CST_CHILDREN][$this->slugSubOnglet]));
+            $blnMenuActive = (!$blnMenuOpen &&
+                ($this->slugOnglet==$strOnglet || $this->slugOnglet=='' && $strOnglet==self::ONGLET_DESK));
             
             // Construction du label
             $pContent  = $arrOnglet[self::CST_LABEL];
@@ -345,9 +347,10 @@ class WpPageAdminBean extends WpPageBean
                         self::CST_ONGLET => $strOnglet,
                         self::CST_SUBONGLET => $strSubOnglet,
                     );
+                    $strIsActive = ($strSubOnglet==$this->slugSubOnglet ? ' '.self::CST_ACTIVE : '');
                     $aAttributes = array(
                         self::ATTR_HREF  => $this->getUrl($urlElements),
-                        self::ATTR_CLASS => 'nav-link'.($strSubOnglet==$this->slugSubOnglet ? ' '.self::CST_ACTIVE : ''),
+                        self::ATTR_CLASS => 'nav-link'.$strIsActive,
                     );
                     $liContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
                     $ulContent .= $this->getBalise(self::TAG_LI, $liContent, array(self::ATTR_CLASS=>'nav-item'));
@@ -419,63 +422,6 @@ class WpPageAdminBean extends WpPageBean
      */
     public function getOngletContent()
     { return 'A définir : Bureau'; }
-  
-    /**
-     * @since 1.22.10.18
-     * @version 1.22.10.18
-     *
-    public function getFolderBlock()
-    {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-li-menu-folder.php';
-        /////////////////////////////////////////
-        // Construction du panneau de gauche
-        $strLeftPanel = '';
-        foreach ($this->arrSubOnglets as $slug => $subOnglet) {
-            // On exclu les sous onglets sans icones
-            if (!isset($subOnglet[self::FIELD_ICON])) {
-                continue;
-            }
-            // On construit l'entrée de l'onglet/
-            $attributes = array(
-                // Menu sélectionné ou pas ?
-                ($slug==$this->slugSubOnglet ? ' '.self::CST_ACTIVE : ''),
-                // L'url du folder
-                $this->getSubOngletUrl($slug),
-                // L'icône
-                $subOnglet[self::FIELD_ICON],
-                // Le libellé
-                $subOnglet[self::FIELD_LABEL],
-            );
-            $strLeftPanel .= $this->getRender($urlTemplate, $attributes);
-        }
-        /////////////////////////////////////////
-        return $strLeftPanel;
-    }
-
-    /**
-     * @param array $urlElements
-     * @return string
-     * @since 1.22.10.28
-     * @version 1.22.10.28
-     *
-    public function getOngletUrl($urlElements=array())
-    {
-        $url = $this->getPageUrl().'?'.self::CST_ONGLET.'='.$this->slugOnglet;
-        if (isset($urlElements[self::CST_SUBONGLET])) {
-            $url .= self::CST_AMP.self::CST_SUBONGLET.'='.$urlElements[self::CST_SUBONGLET];
-            unset($urlElements[self::CST_SUBONGLET]);
-        }
-        if (!empty($urlElements)) {
-            foreach ($urlElements as $key => $value) {
-                if ($value!='') {
-                    $url .= self::CST_AMP.$key.'='.$value;
-                }
-            }
-        }
-        return $url;
-    }
-    
-    */
     
     /**
      * @return string
@@ -710,11 +656,6 @@ class WpPageAdminBean extends WpPageBean
         return $this->getRender(self::WEB_PPFC_LIST_DEFAULT, $attributes);
     }
     
-    public function getTrFiltres($blnHasEditorRights)
-    {
-        return '';
-    }
-    
     /**
      * @return string
      * @since 2.22.12.08
@@ -771,7 +712,7 @@ class WpPageAdminBean extends WpPageBean
             // Interface de liste
             $strMainContent = $this->getListContent($blnHasEditorRights);
         }
-        if (!$this->blnBoutonCreation ) {
+        if (!$this->blnBoutonCreation) {
             $strBtnCreationAnnulation = '';
         }
 
@@ -797,11 +738,10 @@ class WpPageAdminBean extends WpPageBean
      */
     public function getListControlTools($blnHasEditorRights=false)
     {
-        $divContent = '';//$this->getRefreshButton().self::CST_NBSP;
+        $divContent = '';
         
         // Si on a les droits, on ajoute le bouton de download
         if ($blnHasEditorRights) {
-//            $divContent .= $this->getBulkDeleteButton().self::CST_NBSP;
             $divContent .= $this->getDownloadButton();
         }
         
