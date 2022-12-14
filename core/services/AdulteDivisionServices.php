@@ -42,6 +42,7 @@ class AdulteDivisionServices extends LocalServices
         array_push($arrParams, $this->getValueToSearch($arrFilters, self::FIELD_ADULTEID));
         array_push($arrParams, $this->getValueToSearch($arrFilters, self::FIELD_DIVISIONID));
         array_push($arrParams, $this->getValueToSearch($arrFilters, self::FIELD_DELEGUE));
+        array_push($arrParams, $this->getValueToSearch($arrFilters, self::FIELD_ADHERENT));
         return $arrParams;
     }
     
@@ -72,7 +73,7 @@ class AdulteDivisionServices extends LocalServices
      */
     public function getAdulteDivisionsWithFilters(
         $arrFilters=array(),
-        $orderBy=self::FIELD_DIVISION,
+        $orderBy=self::FIELD_LABELDIVISION,
         $order=self::SQL_ORDER_ASC
     ) {
         $arrParams = $this->initRequestParams($arrFilters, $orderBy, $order);

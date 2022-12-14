@@ -51,7 +51,7 @@ class AdulteDivisionDaoImpl extends LocalDaoImpl
      * @param array $attributes
      * @return array
      * @since 2.22.12.12
-     * @version 2.22.12.12
+     * @version 2.22.12.14
      */
     public function getAdulteDivisionsWithFilters($attributes)
     {
@@ -60,7 +60,8 @@ class AdulteDivisionDaoImpl extends LocalDaoImpl
         $request  = "SELECT ad.id AS id, adulteId, divisionId, delegue FROM ".$this->dbTable." AS ad ";
         $request .= "INNER JOIN ".$this->dbTable_adulte." AS a ON a.id=adulteId ";
         $request .= "INNER JOIN ".$this->dbTable_division." AS d ON d.id=divisionId ";
-        $request .= "WHERE 1=1 AND adulteId  LIKE '%s' AND divisionId LIKE '%s' AND delegue LIKE '%s' ";
+        $request .= "WHERE 1=1 AND adulteId LIKE '%s' AND divisionId LIKE '%s' AND delegue LIKE '%s' ";
+        $request .= "AND adherent LIKE '%s' ";
         return $this->getRequestWithFilters($request, $attributes);
     }
     

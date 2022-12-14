@@ -32,6 +32,7 @@ class WpPageAdminBean extends WpPageBean
         $this->slugPage = self::PAGE_ADMIN;
         $this->slugOnglet = $this->initVar(self::CST_ONGLET);
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
+        $this->slugAction = $this->initVar(self::CST_ACTION);
 		$this->blnBoutonCreation = true;
 
         if (isset($_POST['mail'])) {
@@ -58,11 +59,13 @@ class WpPageAdminBean extends WpPageBean
         } elseif (isset($_SESSION[self::SESSION_APERD_ID])) {
             // On navigue sur le site en étant identifié.
             // TODO : Initialiser l'utilisateur courant.
-        }
-        $sqlAttributes = array(self::FIELD_MAILADULTE=>$_SESSION[self::SESSION_APERD_ID]);
-        $objsAdulte = $this->objAdulteServices->getAdultesWithFilters($sqlAttributes);
-        if (count($objsAdulte)==1) {
-            $this->curUser = array_shift($objsAdulte);
+            $sqlAttributes = array(self::FIELD_MAILADULTE=>$_SESSION[self::SESSION_APERD_ID]);
+            $objsAdulte = $this->objAdulteServices->getAdultesWithFilters($sqlAttributes);
+            if (count($objsAdulte)==1) {
+                $this->curUser = array_shift($objsAdulte);
+            } else {
+                $this->curUser = new AdulteClass();
+            }
         } else {
             $this->curUser = new AdulteClass();
         }
@@ -590,21 +593,21 @@ class WpPageAdminBean extends WpPageBean
     public function getCancelButton()
     {
         $label = $this->getIcon(self::I_ANGLES_LEFT).self::CST_NBSP.self::LABEL_ANNULER;
-        $href = $this->getUrl(array(self::CST_SUBONGLET=>''));
+        $href = $this->getUrl();
         return $this->getLinkedButton($label, $href);
     }
     
     public function getReturnButton()
     {
         $label = $this->getIcon(self::I_ANGLES_LEFT).self::CST_NBSP.self::LABEL_RETOUR;
-        $href = $this->getUrl(array(self::CST_SUBONGLET=>''));
+        $href = $this->getUrl();
         return $this->getLinkedButton($label, $href);
     }
     
     public function getCreateButton()
     {
         $label = $this->getIcon(self::I_EDIT).self::CST_NBSP.self::LABEL_CREER_ENTREE;
-        $href = $this->getUrl(array(self::CST_SUBONGLET=>self::CST_WRITE));
+        $href = $this->getUrl(array(self::CST_ACTION=>self::CST_WRITE));
         return $this->getLinkedButton($label, $href);
     }
     
@@ -721,8 +724,8 @@ class WpPageAdminBean extends WpPageBean
     {
         // Définition des droits de l'utilisateur
         $blnHasEditorRights = self::isAdmin();
-        $blnIsEditorPage    = ($this->slugSubOnglet==self::CST_WRITE);
-        $blnIsDeletePage    = ($this->slugSubOnglet==self::CST_DELETE);
+        $blnIsEditorPage    = ($this->slugAction==self::CST_WRITE);
+        $blnIsDeletePage    = ($this->slugAction==self::CST_DELETE);
         $blnConfirm         = $this->initVar(self::CST_CONFIRM, false);
         $strBlocImport = '';
         

@@ -86,6 +86,7 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
         $urlElements = array(
             self::ATTR_ID => $ids,
             self::CST_CONFIRM => 1,
+            self::CST_ACTION=>self::CST_DELETE,
         );
         $urlTemplate = self::WEB_PPFC_DEL_ADM;
         $attributes = array(
@@ -94,7 +95,7 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
             // Url de confirmation
             $this->getUrl($urlElements),
             // URl d'annulation
-            $this->getUrl(array(self::CST_SUBONGLET=>'')),
+            $this->getUrl(),
         );
         return $this->getRender($urlTemplate, $attributes);
     }
@@ -116,7 +117,7 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
             // Liste des éléments supprimés
             $strElements,
             // URl d'annulation
-            $this->getUrl(array(self::CST_SUBONGLET=>'')),
+            $this->getUrl(),
         );
         return $this->getRender($urlTemplate, $attributes);
     }

@@ -184,8 +184,15 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
         /////////////////////////////////////////
         // On va chercher les éléments à afficher
         $attributes = array(
-            self::FIELD_DELEGUE => 1,  
+            self::FIELD_DELEGUE => 1,
         );
+        
+        if ($this->filtreAdherent=='oui') {
+            $attributes[self::FIELD_ADHERENT] = 1;
+        } elseif ($this->filtreAdherent=='non') {
+            $attributes[self::FIELD_ADHERENT] = 0;
+        }
+        
         $objItems = $this->objAdulteDivisionServices->getAdulteDivisionsWithFilters($attributes, self::FIELD_LABELDIVISION);
         /////////////////////////////////////////
         return $this->getDefaultListContent($objItems, $blnHasEditorRights);
