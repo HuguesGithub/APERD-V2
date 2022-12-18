@@ -65,4 +65,25 @@ class LocalBean extends UtilitiesBean
         }
         return $this->getBalise(self::TAG_TD, $this->getBalise(self::TAG_INPUT, '', $attributes));
     }
+    
+    /**
+     * Retourne une checkbox en fontawesome selon la valeur
+     * @param boolean $blnChecked
+     * @return string
+     * @since v2.22.12.18
+     * @version v2.22.12.18
+     */
+    public function getIconCheckbox($blnChecked)
+    {
+        if ($blnChecked) {
+            $extra = 'btn-success';
+            $strIcon = $this->getIcon(self::I_SQUARE_CHECK);
+        } else {
+            $extra = 'btn-danger';
+            $strIcon = $this->getIcon(self::I_SQUARE_XMARK);
+        }
+        $label = $this->getButton($strIcon, array(self::ATTR_CLASS=>'disabled '.$extra));
+        $attributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE.' text-center');
+        return $this->getBalise(self::TAG_TD, $label, $attributes);
+    }
 }

@@ -65,16 +65,8 @@ class AdulteBean extends LocalBean
         $trContent .= $this->getBalise(self::TAG_TD, $this->obj->getField(self::FIELD_MAILADULTE), $attributes);
         
         // Adhérent
-        if ($this->obj->getField(self::FIELD_ADHERENT)==1) {
-            $extra = 'btn-success';
-            $strIcon = $this->getIcon(self::I_SQUARE_CHECK);
-        } else {
-            $extra = 'btn-danger';
-            $strIcon = $this->getIcon(self::I_SQUARE_XMARK);
-        }
-        $strAdherent = $this->getButton($strIcon, array(self::ATTR_CLASS=>'disabled '.$extra));
-        $adhAttributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE.' text-center');
-        $trContent .= $this->getBalise(self::TAG_TD, $strAdherent, $adhAttributes);
+        $blnChecked = ($this->obj->getField(self::FIELD_ADHERENT)==1);
+        $trContent .= $this->getIconCheckbox($blnChecked);
         ///////////////////////////////////////////////
         
         ///////////////////////////////////////////////

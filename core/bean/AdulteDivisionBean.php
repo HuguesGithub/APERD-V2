@@ -68,28 +68,12 @@ class AdulteDivisionBean extends LocalBean
         $trContent .= $this->getBalise(self::TAG_TD, $label, $attributes);
 
         // Mail
-        if ($this->obj->getAdulte()->getField(self::FIELD_MAILADULTE)!='') {
-            $extra = 'btn-success';
-            $strIcon = $this->getIcon(self::I_SQUARE_CHECK);
-        } else {
-            $extra = 'btn-danger';
-            $strIcon = $this->getIcon(self::I_SQUARE_XMARK);
-        }
-        $strMail = $this->getButton($strIcon, array(self::ATTR_CLASS=>'disabled '.$extra));
-        $mailAttributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE.' text-center');
-        $trContent .= $this->getBalise(self::TAG_TD, $strMail, $mailAttributes);
+        $blnChecked = ($this->obj->getAdulte()->getField(self::FIELD_MAILADULTE)!='');
+        $trContent .= $this->getIconCheckbox($blnChecked);
         
         // Adhérent
-        if ($this->obj->getAdulte()->getField(self::FIELD_ADHERENT)==1) {
-            $extra = 'btn-success';
-            $strIcon = $this->getIcon(self::I_SQUARE_CHECK);
-        } else {
-            $extra = 'btn-danger';
-            $strIcon = $this->getIcon(self::I_SQUARE_XMARK);
-        }
-        $strAdherent = $this->getButton($strIcon, array(self::ATTR_CLASS=>'disabled '.$extra));
-        $adhAttributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE.' text-center');
-        $trContent .= $this->getBalise(self::TAG_TD, $strAdherent, $adhAttributes);
+        $blnChecked = ($this->obj->getAdulte()->getField(self::FIELD_ADHERENT)==1);
+        $trContent .= $this->getIconCheckbox($blnChecked);
         ///////////////////////////////////////////////
         
         ///////////////////////////////////////////////
