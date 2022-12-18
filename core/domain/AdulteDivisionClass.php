@@ -50,9 +50,9 @@ class AdulteDivisionClass extends LocalDomainClass
         // Définition des champs de l'objet
         $this->arrFields = array(
             self::FIELD_ID => self::FIELD_ID,
-            self::FIELD_ADULTEID => '',
-            self::FIELD_DIVISIONID => '',
-            self::FIELD_DELEGUE => '',
+            self::FIELD_ADULTEID => self::LABEL_NOMPRENOM,
+            self::FIELD_DIVISIONID => self::LABEL_LABELDIVISION,
+            self::FIELD_DELEGUE => self::LABEL_DELEGUE,
         );
     }
 
@@ -67,6 +67,21 @@ class AdulteDivisionClass extends LocalDomainClass
     //////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////
+    
+    /**
+     * @return string
+     * @since 2.22.12.18
+     * @version 2.22.12.18
+     */
+    public function toCsv()
+    {
+        $arrValues = array();
+        array_push($arrValues, $this->getField(self::FIELD_ID));
+        array_push($arrValues, $this->getAdulte()->getName());
+        array_push($arrValues, $this->getDivision()->getField(self::FIELD_LABELDIVISION));
+        array_push($arrValues, $this->getField(self::FIELD_DELEGUE));
+        return implode(self::CSV_SEP, $arrValues);
+    }
     
     /**
      * @param string &$notif

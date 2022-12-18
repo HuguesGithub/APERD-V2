@@ -32,6 +32,7 @@ interface LabelsInterface
     const LABEL_CREATION            = 'Création';
     const LABEL_CREER               = 'Créer';
     const LABEL_CREER_ENTREE        = 'Créer une entrée';
+    const LABEL_DELEGUE             = 'Délégué';
     const LABEL_DIVISIONS           = 'Divisions';
     const LABEL_EXPORTER_LISTE      = 'Exporter la liste';
     const LABEL_LIST_ADMINISTRATIFS = 'Liste des Administratifs';

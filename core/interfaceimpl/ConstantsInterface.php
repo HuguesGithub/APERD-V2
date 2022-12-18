@@ -17,7 +17,7 @@ interface ConstantsInterface
     // Action Ajax
     const AJAX_ACTION            = 'ajaxAction';
     const AJAX_CSV_EXPORT        = 'csvExport';
-    const AJAX_IMORT_FILE        = 'importFile';
+    const AJAX_IMPORT_FILE       = 'importFile';
     
     /////////////////////////////////////////////////
     // Attributs
