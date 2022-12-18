@@ -43,9 +43,13 @@ class AdulteActions extends LocalActions
             }
         } elseif ($ids=='filter') {
             list(, $value) = explode('=', $filters);
-            if ($value=='oui') { $adh = 1; }
-            elseif ($value=='non') { $adh = 0; }
-            else { $adh = '%'; }
+            if ($value=='oui') {
+                $adh = 1;
+            } elseif ($value=='non') {
+                $adh = 0;
+            } else {
+                $adh = '%';
+            }
 
             $arrFilters = array(
                     self::FIELD_ADHERENT => $adh,

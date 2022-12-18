@@ -52,17 +52,6 @@ function aperd_v2_autoloader($classname)
         if (isset($arr[$matches[1]]) && file_exists($filePath)) {
             include_once($filePath);
         }
-    } else {
-        /*
-        $classfile = sprintf('%score/domain/%s.class.php', PLUGIN_PATH, str_replace('_', '-', $classname));
-        if (!file_exists($classfile)) {
-            $strSrc = '%s../mycommon/core/domain/%s.class.php';
-            $classfile = sprintf($strSrc, PLUGIN_PATH, str_replace('_', '-', $classname));
-        }
-        if (file_exists($classfile)) {
-            include_once($classfile);
-        }
-        */
     }
 }
 
