@@ -70,4 +70,33 @@ class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
         $strContent .= '</div>';
         return $strContent;
     }
+    
+    public function getDismissableButton($notif, $msg)
+    {
+        $strContent  = '<div class="alert alert-'.$notif.' alert-dismissible fade show" role="alert">';
+        $strContent .= $msg.'<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+        $strContent .= '<span aria-hidden="true">×</span></button></div>';
+        return $strContent;
+    }
+    
+    public function dealWithImport($srcFile)
+    {
+        $notif = '';
+        $msg = '';
+        $msgError = '';
+        
+        $fileContent = file_get_contents($srcFile);
+        $arrContent  = explode(self::CST_EOL, $fileContent);
+        $blnOk = $this->controlerDonneesImport($arrContent,  $notif, $msg, $msgError);
+        
+        if ($blnOk) {
+            $notif = self::NOTIF_SUCCESS;
+            $msg   = self::MSG_SUCCESS_IMPORT;
+            $theList = '';
+            $jsonAlertBlock = json_encode($this->getDismissableButton($notif, $msg));
+            return '{"the-list": '.json_encode($theList).',"alertBlock": '.$jsonAlertBlock.'}';
+        } else {
+            return '{"alertBlock": '.json_encode($this->getDismissableButton($notif, $msgError)).'}';
+        }
+    }
 }

@@ -72,15 +72,19 @@ class DivisionActions extends LocalActions
                 return $obj->dealWithImport($fileName);
             }
     }
-    public function dealWithImport($srcFile)
+
+    /**
+     * Vérifie la validité du fichier importé.
+     * @param array $arrContent
+     * @param string $notif
+     * @param string $msg
+     * @param string $msgError
+     * @return boolean
+     * @since v2.22.12.18
+     * @version v2.22.12.18
+     */
+    public function controlerDonneesImport($arrContent, &$notif, &$msg, &$msgError)
     {
-        $notif = '';
-        $msg = '';
-        $msgError = '';
-        
-        $fileContent = file_get_contents($srcFile);
-        $arrContent  = explode(self::CST_EOL, $fileContent);
-        
         $headerRow   = array_shift($arrContent);
         $objDivision = new DivisionClass();
         $blnOk       = $objDivision->controlerEntete($headerRow, $notif, $msgError);
@@ -96,24 +100,6 @@ class DivisionActions extends LocalActions
                 $rkRow++;
             }
         }
-        
-        if ($blnOk) {
-            $notif = self::NOTIF_SUCCESS;
-            $msg   = self::MSG_SUCCESS_IMPORT;
-            $theList = '';
-            $jsonAlertBlock = json_encode($this->getDismissableButton($notif, $msg));
-            return '{"the-list": '.json_encode($theList).',"alertBlock": '.$jsonAlertBlock.'}';
-        } else {
-            return '{"alertBlock": '.json_encode($this->getDismissableButton($notif, $msgError)).'}';
-        }
+        return $blnOk;
     }
-    
-    public function getDismissableButton($notif, $msg)
-    {
-        $strContent  = '<div class="alert alert-'.$notif.' alert-dismissible fade show" role="alert">';
-        $strContent .= $msg.'<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
-        $strContent .= '<span aria-hidden="true">×</span></button></div>';
-        return $strContent;
-    }
-    
 }
