@@ -19,6 +19,10 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
         $this->slugOnglet = self::ONGLET_PARENTS;
         $this->slugSubOnglet = self::SUBONGLET_PARENTS_DELEGUES;
         $this->titreOnglet = self::LABEL_PARENTS_DELEGUES;
+        $this->blnBoutonCreation = false;
+        
+        // Initialisation des templates
+        $this->urlOngletContentTemplate = '';
         
         $strNotification = '';
         $strMessage = '';
@@ -61,114 +65,42 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
     }
-
+    
     /**
+     * Construction d'une liste d'éléments dont les identifiants sont passés en paramètre.
+     * Si $blnDelete est à true, on en profite pour effacer l'élément.
+     * @param int|string $ids
+     * @param boolean $blnDelete
      * @return string
-     * @since 2.22.12.08
-     * @version 2.22.12.08
+     * @since v2.22.12.18
+     * @version v2.22.12.18
      */
-    public function getOngletContent()
+    public function getListElements($ids, $blnDelete=false)
     {
-        $this->blnBoutonCreation = false;
-        $this->urlOngletContentTemplate = '';
-        return $this->getCommonOngletContent();
-    }
-
-    /**
-     * @return string
-     * @since 2.22.12.08
-     * @version 2.22.12.08
-     */
-    public function getDeleteContent()
-    {
-        return '';
         $strElements = '';
-        
         // On peut avoir une liste d'id en cas de suppression multiple.
-        $ids = $this->initVar(self::ATTR_ID);
         foreach (explode(',', $ids) as $id) {
-            $objAdulte = $this->objAdulteServices->getAdulteById($id);
-            $strElements .= $this->getBalise(self::TAG_LI, $objAdulte->getName());
+            $objAdulteDivision = $this->objAdulteDivisionServices->getAdulteDivisionById($id);
+            $strElements .= $this->getBalise(self::TAG_LI, $objAdulteDivision->getLibelle());
+            if ($blnDelete) {
+                $objAdulteDivision->delete();
+            }
         }
-        
-        $urlElements = array(
-            self::ATTR_ID => $ids,
-            self::CST_CONFIRM => 1,
-        );
-        $urlTemplate = self::WEB_PPFC_DEL_ADM;
-        $attributes = array(
-            // Liste des éléments supprimés
-            $strElements,
-            // Url de confirmation
-            $this->getUrl($urlElements),
-            // URl d'annulation
-            $this->getUrl(array(self::CST_SUBONGLET=>'')),
-        );
-        return $this->getRender($urlTemplate, $attributes);
+        return $strElements;
     }
     
     /**
      * @return string
-     * @since 2.22.12.08
-     * @version 2.22.12.08
+     * @since 2.22.12.18
+     * @version 2.22.12.18
      */
-    public function getDeletedContent()
-    {
-        return '';
-        $strElements = '';
-        
-        // On peut avoir une liste d'id en cas de suppression multiple.
-        $ids = $this->initVar(self::ATTR_ID);
-        foreach (explode(',', $ids) as $id) {
-            $objAdulte = $this->objAdulteServices->getAdulteById($id);
-            $strElements .= $this->getBalise(self::TAG_LI, $objAdulte->getName());
-            $objAdulte->delete();
-        }
-        
-        $urlTemplate = self::WEB_PPFC_CONF_DEL;
-        $attributes = array(
-            // Liste des éléments supprimés
-            $strElements,
-            // URl d'annulation
-            $this->getUrl(array(self::CST_SUBONGLET=>'')),
-        );
-        return $this->getRender($urlTemplate, $attributes);
-    }
-    
-    /**
-     * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.0
-     */
-    public function getEditContent()
-    {
-        return '';
-        $baseUrl = $this->getUrl(array(self::CST_SUBONGLET=>''));
-        return $this->objAdulte->getBean()->getForm($baseUrl);
-    }
-    
-    /**
-     * @param boolean $blnHasEditorRights
-     * @return string
-     * @since 2.22.12.12
-     * @version 2.22.12.12
-     */
-    public function getListHeaderRow($blnHasEditorRights=false)
+    public function getSpecificHeaderRow()
     {
         $cellCenter = array(self::ATTR_CLASS=>'text-center');
-        // Selon qu'on a les droit d'administration ou non, on n'aura pas autant de colonnes à afficher.
-        $trContent = '';
-        if ($blnHasEditorRights) {
-            $trContent .= $this->getTh(self::CST_NBSP);
-        }
-        $trContent .= $this->getTh(self::LABEL_NOMPRENOM);
+        $trContent  = $this->getTh(self::LABEL_NOMPRENOM);
         $trContent .= $this->getTh(self::LABEL_DIVISIONS);
         $trContent .= $this->getTh(self::LABEL_MAIL, $cellCenter);
-        $trContent .= $this->getTh(self::LABEL_ADHERENT, $cellCenter);
-        if ($blnHasEditorRights) {
-            $trContent .= $this->getTh(self::LABEL_ACTIONS, $cellCenter);
-        }
-        return $this->getBalise(self::TAG_TR, $trContent);
+        return $trContent.$this->getTh(self::LABEL_ADHERENT, $cellCenter);
     }
     
     /**
@@ -176,11 +108,11 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
      * @since 2.22.12.12
      * @version 2.22.12.12
      */
-    public function getListContent($blnHasEditorRights=false)
+    public function getListContent()
     {
         $this->attrDescribeList = self::LABEL_LIST_PARENTS_DELEGUES;
         /////////////////////////////////////////
-        // On va chercher les éléments à afficher
+        // On va prendre en compte les éventuels filtres
         $attributes = array(
             self::FIELD_DELEGUE => 1,
         );
@@ -191,18 +123,26 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
             $attributes[self::FIELD_ADHERENT] = 0;
         }
         $sensTri = self::FIELD_LABELDIVISION;
+        /////////////////////////////////////////
+        // On va chercher les éléments à afficher
         $objItems = $this->objAdulteDivisionServices->getAdulteDivisionsWithFilters($attributes, $sensTri);
         /////////////////////////////////////////
-        return $this->getDefaultListContent($objItems, $blnHasEditorRights);
+        return $this->getDefaultListContent($objItems);
     }
     
-    
-    public function getTrFiltres($blnHasEditorRights)
+    /**
+     * Retourne le filtre spécifique à l'écran.
+     * TODO : A implémenter plus proprement
+     * @return string
+     * @param v2.22.12.18
+     * @since v2.22.12.18
+     */
+    public function getTrFiltres()
     {
         /////////////////////////////////////////
         // On va mettre en place la ligne de Filtre
         $trContent = '';
-        if ($blnHasEditorRights) {
+        if ($this->curUser->hasEditorRights()) {
             $trContent .= $this->getTh(self::CST_NBSP);
         }
         $trContent .= $this->getTh(self::CST_NBSP);
@@ -220,96 +160,25 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
             $trContent .= 'Tous';
         }
         $trContent .= '</button>';
-        $trContent .= '<ul class="dropdown-menu" style="position: absolute; inset: 0px auto auto 0px; ';
-        $trContent .= 'margin: 0px; transform: translate3d(93.6px, 427.2px, 0px);" ';
+        $trContent .= '<ul class="dropdown-menu" ';
+        $trContent .= 'style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(93.6px, 427.2px, 0px);" ';
         $trContent .= 'data-popper-placement="bottom-start">';
-        $trContent .= '<li><a href="/admin?onglet=parents&subOnglet=parentDelegue&amp;filter-adherent=oui" ';
+        $trContent .= '<li><a href="/admin?onglet=parents&amp;filter-adherent=oui" ';
         $trContent .= 'class="dropdown-item text-white">Oui</a></li>';
-        $trContent .= '<li><a href="/admin?onglet=parents&subOnglet=parentDelegue&amp;filter-adherent=non" ';
+        $trContent .= '<li><a href="/admin?onglet=parents&amp;filter-adherent=non" ';
         $trContent .= 'class="dropdown-item text-white">Non</a></li>';
-        $trContent .= '<li><a href="/admin?onglet=parents&subOnglet=parentDelegue&amp;filter-adherent=all" ';
+        $trContent .= '<li><a href="/admin?onglet=parents&amp;filter-adherent=all" ';
         $trContent .= 'class="dropdown-item text-white">Tous</a></li>';
         $trContent .= '</ul></div></th>';
-
-        if ($blnHasEditorRights) {
+        
+        
+        if ($this->curUser->hasEditorRights()) {
             $trContent .= '<th class="column-actions"><div class="row-actions text-center">';
-            $trContent .= '<a href="/admin?onglet=parents&subOnglet=parentDelegue" class=""';
-            $trContent .= 'title="Nettoyer le filtre"><button type="button" class="btn btn-default btn-sm">';
-            $trContent .= '<i class="fa-solid fa-filter-circle-xmark"></i></button></a>';
+            $trContent .= '<a href="/admin?onglet=parents" class="" title="Nettoyer le filtre">';
+            $trContent .= '<button type="button" class="btn btn-default btn-sm"><i class="fa-solid ';
+            $trContent .= 'fa-filter-circle-xmark"></i></button></a>';
             $trContent .= '</div></th>';
         }
-        $filterRow = $this->getBalise(self::TAG_TR, $trContent);
-
-        /////////////////////////////////////////
-        // On va mettre en place la ligne de Création / Edition
-        $editRow = '';
-        if ($blnHasEditorRights) {
-            $trContent = '<form method="post" action="/admin/?onglet=parents&subOnglet=parentDelegue">';
-            
-            /////////////////////////////////////////
-            // La case vide de la case à cocher
-            $trContent .= $this->getTh(self::CST_NBSP);
-            
-            /////////////////////////////////////////
-            // La liste des parents inscrits
-            $strOptions = $this->getBalise(self::TAG_OPTION, '');
-            $objsAdulte = $this->objAdulteServices->getAdultesWithFilters();
-            while (!empty($objsAdulte)) {
-                $objAdulte = array_shift($objsAdulte);
-                $attr = array(
-                    self::ATTR_VALUE => $objAdulte->getField(self::FIELD_ID),
-                );
-                if ($objAdulte->getField(self::FIELD_ID)==$this->objAdulteDivision->getField(self::FIELD_ADULTEID)) {
-                    $attr = array(self::ATTR_SELECTED=>self::ATTR_SELECTED);
-                }
-                $strOptions .= $this->getBalise(self::TAG_OPTION, $objAdulte->getName(), $attr);
-            }
-            $selAttributes = array(
-                self::ATTR_NAME => self::FIELD_ADULTEID,
-                self::ATTR_CLASS => 'form-control',
-            );
-            $strSelect = $this->getBalise(self::TAG_SELECT, $strOptions, $selAttributes);
-            $trContent .= $this->getTh($strSelect);
-
-            /////////////////////////////////////////
-            // La liste des divisions
-            $strOptions = $this->getBalise(self::TAG_OPTION, '');
-            $objsDivision = $this->objDivisionServices->getDivisionsWithFilters();
-            while (!empty($objsDivision)) {
-                $objDivision = array_shift($objsDivision);
-                $attr = array(
-                    self::ATTR_VALUE => $objDivision->getField(self::FIELD_ID),
-                );
-                $divisionId = $this->objAdulteDivision->getField(self::FIELD_DIVISIONID);
-                if ($objDivision->getField(self::FIELD_ID)==$divisionId) {
-                    $attr = array(self::ATTR_SELECTED=>self::ATTR_SELECTED);
-                }
-                $label = $objDivision->getField(self::FIELD_LABELDIVISION);
-                $strOptions .= $this->getBalise(self::TAG_OPTION, $label, $attr);
-            }
-            $selAttributes = array(
-                self::ATTR_NAME => self::FIELD_DIVISIONID,
-                self::ATTR_CLASS => 'form-control',
-            );
-            $strSelect = $this->getBalise(self::TAG_SELECT, $strOptions, $selAttributes);
-            $trContent .= $this->getTh($strSelect);
-            
-            /////////////////////////////////////////
-            // La case vide de l'email
-            $trContent .= $this->getTh(self::CST_NBSP);
-            // La case vide de adhérent
-            $trContent .= $this->getTh(self::CST_NBSP);
-            // Le bouton de validation
-            $trContent .= '<th class="column-actions"><div class="row-actions text-center">';
-            $trContent .= '<input type="hidden" name="postAction" value="edit"/>';
-            $trContent .= '<input type="hidden" name="id" value="';
-            $trContent .= ''.$this->objAdulteDivision->getField(self::FIELD_ID).'"/>';
-            $trContent .= '<button type="submit" class="btn btn-default btn-sm btn-primary">';
-            $trContent .= '<i class="fa-solid fa-pen-to-square"></i></button>';
-            $trContent .= '</div></th></form>';
-            $editRow = $this->getBalise(self::TAG_TR, $trContent);
-        }
-        
-        return $filterRow.$editRow;
+        return $this->getBalise(self::TAG_TR, $trContent);
     }
 }

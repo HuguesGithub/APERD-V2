@@ -19,6 +19,9 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
         $this->slugOnglet = self::ONGLET_ADMINISTRATIFS;
         $this->titreOnglet = self::LABEL_ADMINISTRATIFS;
 
+        // Initialisation des templates
+        $this->urlOngletContentTemplate = self::WEB_PPFC_PRES_ADM;
+        
         $strNotification = '';
         $strMessage = '';
         
@@ -28,7 +31,7 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
         /////////////////////////////////////////
         // Vérification de la soumission d'un formulaire
         $postAction = $this->initVar(self::CST_POST_ACTION);
-        if ($postAction!='') {
+        if ($this->curUser->hasEditorRights() && $postAction!='') {
             // Un formulaire est soumis.
             // On récupère les données qu'on affecte à l'objet
             $this->objAdministratif->setField(self::FIELD_GENRE, $this->initVar(self::FIELD_GENRE));
@@ -60,66 +63,54 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
     }
-
+    
+    /**
+     * Construction d'une liste d'éléments dont les identifiants sont passés en paramètre.
+     * Si $blnDelete est à true, on en profite pour effacer l'élément.
+     * @param int|string $ids
+     * @param boolean $blnDelete
+     * @return string
+     * @since v2.22.12.18
+     * @version v2.22.12.18
+     */
+    public function getListElements($ids, $blnDelete=false)
+    {
+        $strElements = '';
+        // On peut avoir une liste d'id en cas de suppression multiple.
+        foreach (explode(',', $ids) as $id) {
+            $objAdministratif = $this->objAdministrationServices->getAdministrationById($id);
+            $strElements .= $this->getBalise(self::TAG_LI, $objAdministratif->getFullInfo());
+            if ($blnDelete) {
+                $objAdministratif->delete();
+            }
+        }
+        return $strElements;
+    }
+    
+    /**
+     * @return string
+     * @since 2.22.12.18
+     * @version 2.22.12.18
+     */
+    public function getSpecificHeaderRow()
+    {
+        $trContent  = $this->getTh(self::LABEL_NOMTITULAIRE);
+        return $trContent.$this->getTh(self::LABEL_LABELPOSTE);
+    }
+    
     /**
      * @return string
      * @since 2.22.12.07
      * @version 2.22.12.07
      */
-    public function getOngletContent()
+    public function getListContent()
     {
-        $this->urlOngletContentTemplate = self::WEB_PPFC_PRES_ADM;
-        return $this->getCommonOngletContent();
-    }
-    
-    public function getDeleteContent()
-    {
-        $strElements = '';
-        
-        // On peut avoir une liste d'id en cas de suppression multiple.
-        $ids = $this->initVar(self::ATTR_ID);
-        foreach (explode(',', $ids) as $id) {
-            $objAdministratif = $this->objAdministrationServices->getAdministrationById($id);
-            $strElements .= $this->getBalise(self::TAG_LI, $objAdministratif->getFullInfo());
-        }
-        
-        $urlElements = array(
-            self::ATTR_ID => $ids,
-            self::CST_CONFIRM => 1,
-            self::CST_ACTION=>self::CST_DELETE,
-        );
-        $urlTemplate = self::WEB_PPFC_DEL_ADM;
-        $attributes = array(
-            // Liste des éléments supprimés
-            $strElements,
-            // Url de confirmation
-            $this->getUrl($urlElements),
-            // URl d'annulation
-            $this->getUrl(),
-        );
-        return $this->getRender($urlTemplate, $attributes);
-    }
-    
-    public function getDeletedContent()
-    {
-        $strElements = '';
-        
-        // On peut avoir une liste d'id en cas de suppression multiple.
-        $ids = $this->initVar(self::ATTR_ID);
-        foreach (explode(',', $ids) as $id) {
-            $objAdministratif = $this->objAdministrationServices->getAdministrationById($id);
-            $strElements .= $this->getBalise(self::TAG_LI, $objAdministratif->getFullInfo());
-            $objAdministratif->delete();
-        }
-        
-        $urlTemplate = self::WEB_PPFC_CONF_DEL;
-        $attributes = array(
-            // Liste des éléments supprimés
-            $strElements,
-            // URl d'annulation
-            $this->getUrl(),
-        );
-        return $this->getRender($urlTemplate, $attributes);
+        $this->attrDescribeList = self::LABEL_LIST_ADMINISTRATIFS;
+        /////////////////////////////////////////
+        // On va chercher les éléments à afficher
+        $objItems = $this->objAdministrationServices->getAdministrationsWithFilters();
+        /////////////////////////////////////////
+        return $this->getDefaultListContent($objItems);
     }
     
     /**
@@ -131,46 +122,5 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
     {
         $baseUrl = $this->getUrl(array(self::CST_SUBONGLET=>''));
         return $this->objAdministratif->getBean()->getForm($baseUrl);
-    }
-    
-    /**
-     * @param boolean $blnHasEditorRights
-     * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.07
-     */
-    public function getListHeaderRow($blnHasEditorRights=false)
-    {
-        // Selon qu'on a les droit d'administration ou non, on n'aura pas autant de colonnes à afficher.
-        // On veut afficher les éléments suivants (* si les droits d'édition) :
-        // * une case à cocher
-        // - un nom
-        // - un poste
-        // * des actions à effectuer
-        $trContent = '';
-        if ($blnHasEditorRights) {
-            $trContent .= $this->getTh(self::CST_NBSP);
-        }
-        $trContent .= $this->getTh(self::LABEL_NOMTITULAIRE);
-        $trContent .= $this->getTh(self::LABEL_LABELPOSTE);
-        if ($blnHasEditorRights) {
-            $trContent .= $this->getTh(self::LABEL_ACTIONS, array(self::ATTR_CLASS=>'text-center'));
-        }
-        return $this->getBalise(self::TAG_TR, $trContent);
-    }
-    
-    /**
-     * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.07
-     */
-    public function getListContent($blnHasEditorRights=false)
-    {
-        $this->attrDescribeList = self::LABEL_LIST_ADMINISTRATIFS;
-        /////////////////////////////////////////
-        // On va chercher les éléments à afficher
-        $objItems = $this->objAdministrationServices->getAdministrationsWithFilters();
-        /////////////////////////////////////////
-        return $this->getDefaultListContent($objItems, $blnHasEditorRights);
     }
 }

@@ -57,6 +57,8 @@ class AdulteClass extends LocalDomainClass
             self::FIELD_ADHERENT => self::LABEL_ADHERENT,
             self::FIELD_PHONEADULTE => self::LABEL_PHONE,
         );
+        // TODO : A supprimer, une fois le champ créé et renseigné.
+        $this->roleAdulte = 9;
     }
 
     /**
@@ -70,6 +72,9 @@ class AdulteClass extends LocalDomainClass
     //////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////
+    
+    public function hasEditorRights()
+    { return ($this->roleAdulte>=self::ROLE_EDITEUR); }
     
     /**
      * @param string &$notif

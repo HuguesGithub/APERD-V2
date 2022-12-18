@@ -12,6 +12,10 @@ if (!defined('ABSPATH')) {
  */
 class LocalBean extends UtilitiesBean
 {
+    public function __construct()
+    {
+        $this->hasEdit = true;
+    }
     
     /**
      * @return string
@@ -20,13 +24,16 @@ class LocalBean extends UtilitiesBean
      */
     protected function getCellActions()
     {
-        // Bouton Edition
-        $urlEdition = $this->baseUrl.self::CST_AMP.self::CST_ACTION.'='.self::CST_WRITE;
-        $strIcon = $this->getIcon(self::I_EDIT);
-        $strButton = $this->getButton($strIcon, array(self::ATTR_CLASS=>'btn btn-sm btn-primary'));
-        $divContent  = $this->getLink($strButton, $urlEdition, '', array(self::ATTR_TITLE=>self::LABEL_MODIFIER));
-        
-        $divContent .= self::CST_NBSP;
+        if ($this->hasEdit) {
+            // Bouton Edition
+            $urlEdition = $this->baseUrl.self::CST_AMP.self::CST_ACTION.'='.self::CST_WRITE;
+            $strIcon = $this->getIcon(self::I_EDIT);
+            $strButton = $this->getButton($strIcon, array(self::ATTR_CLASS=>'btn btn-sm btn-primary'));
+            $divContent  = $this->getLink($strButton, $urlEdition, '', array(self::ATTR_TITLE=>self::LABEL_MODIFIER));
+            $divContent .= self::CST_NBSP;
+        } else {
+            $divContent = '';
+        }
         
         // Bouton Suppression
         $urlSuppression = $this->baseUrl.self::CST_AMP.self::CST_ACTION.'='.self::CST_DELETE;

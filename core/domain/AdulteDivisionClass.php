@@ -32,6 +32,9 @@ class AdulteDivisionClass extends LocalDomainClass
     public function getDivision()
     { return $this->objDivisionServices->getDivisionById($this->divisionId); }
     
+    public function getLibelle()
+    { return $this->getAdulte()->getName().', '.$this->getDivision()->getField(self::FIELD_LABELDIVISION); }
+
     //////////////////////////////////////////////////
     // CONSTRUCT - CLASSVARS - CONVERT - BEAN
     //////////////////////////////////////////////////

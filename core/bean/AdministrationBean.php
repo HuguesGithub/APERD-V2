@@ -40,6 +40,7 @@ class AdministrationBean extends LocalBean
     public function getRow($blnHasEditorRights, $blnChecked=false)
     {
         $attributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE);
+        $trContent = '';
         
         ///////////////////////////////////////////////
         // Les cases à cocher

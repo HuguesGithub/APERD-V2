@@ -24,6 +24,7 @@ class AdulteDivisionBean extends LocalBean
     {
         parent::__construct();
         $this->obj = ($objAdulteDivision=='' ? new AdulteDivisionClass() : $objAdulteDivision);
+        $this->hasEdit = false;
     }
     
     //////////////////////////////////////////////////
@@ -40,7 +41,7 @@ class AdulteDivisionBean extends LocalBean
     public function getRow($blnHasEditorRights, $blnChecked=false)
     {
         $attributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE);
-        
+        $trContent  = '';
         ///////////////////////////////////////////////
         // Les cases à cocher
         if ($blnHasEditorRights) {
@@ -48,6 +49,7 @@ class AdulteDivisionBean extends LocalBean
             
             $this->baseUrl  = '/'.self::PAGE_ADMIN;
             $this->baseUrl .= '?'.self::CST_ONGLET.'='.self::ONGLET_PARENTS;
+            $this->baseUrl .= self::CST_AMP.self::CST_SUBONGLET.'='.self::SUBONGLET_PARENTS_DELEGUES;
             $this->baseUrl .= self::CST_AMP.self::FIELD_ID.'='.$id;
             
             // Case à cocher

@@ -33,32 +33,39 @@ class WpPageAdminBean extends WpPageBean
         $this->slugOnglet = $this->initVar(self::CST_ONGLET);
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
         $this->slugAction = $this->initVar(self::CST_ACTION);
+        $this->filtreAdherent = $this->initVar('filter-adherent');
         $this->blnBoutonCreation = true;
-
+        
+        // Initialisation des templates
+        $this->urlOngletContentTemplate = '';
+        $this->urlDeleteTemplate = self::WEB_PPFC_DELETE;
+        $this->urlDeleteConfirmTemplate = self::WEB_PPFC_CONF_DEL;
+        
+        ////////////////////////////////////////////////////////
+        // Gestion de l'identification via le formulaire
         if (isset($_POST['mail'])) {
-            // TODO : Mettre en place les contrôles
-            
             // On cherche a priori à se logguer
             $userMail = $this->initVar('mail');
             $userPassword = $this->initVar('password');
             // On s'identifie avec un user Wordpress.
             $wpUser = wp_authenticate_email_password(null, $userMail, $userPassword);
-            
             // Si on a un wpUser qui correspond au mail et au mot de passe.
             if ($wpUser==null || get_class($wpUser)=='WP_Error') {
                 // On a raté l'identification, on va essayé d'afficher la popup d'erreur.
                 $_SESSION[self::SESSION_APERD_ID] = self::CST_ERR_LOGIN;
             } else {
-                // TODO : On va récupérer le parent qui correspond au mail saisi
-                // TODO : Initialiser l'utilisateur courant.
                 $_SESSION[self::SESSION_APERD_ID] = $_POST['mail'];
             }
         } elseif (isset($_GET['logout'])) {
             // On cherche a priori à se déconnecter
             unset($_SESSION[self::SESSION_APERD_ID]);
-        } elseif (isset($_SESSION[self::SESSION_APERD_ID])) {
+        }
+        ////////////////////////////////////////////////////////
+        
+        ////////////////////////////////////////////////////////
+        // On va enrichir le profil Wordpress des infos dédiées APERD
+        if (isset($_SESSION[self::SESSION_APERD_ID])) {
             // On navigue sur le site en étant identifié.
-            // TODO : Initialiser l'utilisateur courant.
             $sqlAttributes = array(self::FIELD_MAILADULTE=>$_SESSION[self::SESSION_APERD_ID]);
             $objsAdulte = $this->objAdulteServices->getAdultesWithFilters($sqlAttributes);
             if (count($objsAdulte)==1) {
@@ -69,10 +76,13 @@ class WpPageAdminBean extends WpPageBean
         } else {
             $this->curUser = new AdulteClass();
         }
+        ////////////////////////////////////////////////////////
         
         // TODO : Récupération des paramètres plus vaste que des initVar multiples ?
         // $this->analyzeUri();
         
+        ////////////////////////////////////////////////////////
+        // Définition de la sidebar
         $this->arrSidebarContent = array(
             self::ONGLET_DESK => array(
                 self::CST_ICON  => self::I_DESKTOP,
@@ -94,7 +104,10 @@ class WpPageAdminBean extends WpPageBean
                 ),
             ),
         );
+        ////////////////////////////////////////////////////////
         
+        ////////////////////////////////////////////////////////
+        // Définition du premier élément du Breadcrumbs
         // Le lien vers la Home
         $aContent = $this->getIcon(self::I_DESKTOP);
         $buttonContent = $this->getLink($aContent, $this->getPageUrl(), self::CST_TEXT_WHITE);
@@ -115,40 +128,6 @@ class WpPageAdminBean extends WpPageBean
      public function getPageUrl()
      { return '/'.$this->slugPage; }
      
-    // TODO : On arrive à s'en passer ? Ou j'initialise individuellement pour le moment ?
-    /**
-     * @return string
-     * @since 1.22.10.18
-     * @version 1.22.10.18
-     *
-    public function analyzeUri()
-    {
-        $uri = $_SERVER['REQUEST_URI'];
-        $pos = strpos($uri, '?');
-        if ($pos!==false) {
-            $arrParams = explode('&', substr($uri, $pos+1, strlen($uri)));
-            if (!empty($arrParams)) {
-                foreach ($arrParams as $param) {
-                    if (strpos($param, '=')!==false) {
-                        list($key, $value) = explode('=', $param);
-                        $this->urlParams[$key] = $value;
-                    }
-                }
-            }
-            $uri = substr($uri, 0, $pos-1);
-        }
-        $pos = strpos($uri, '#');
-        if ($pos!==false) {
-            $this->anchor = substr($uri, $pos+1, strlen($uri));
-        }
-        if (isset($_POST)) {
-            foreach ($_POST as $key => $value) {
-                $this->urlParams[$key] = $value;
-            }
-        }
-        return $uri;
-    }
-
     /**
      * @return string
      * @since 2.22.12.05
@@ -300,7 +279,6 @@ class WpPageAdminBean extends WpPageBean
         return $this->getRender($urlTemplate, $attributes);
     }
      
-     
     /**
      * @return string
      * @since 2.22.12.07
@@ -414,142 +392,90 @@ class WpPageAdminBean extends WpPageBean
      
         return $url;
      }
-     
+
+    
+    
+    
     /**
      * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.07
+     * @since 2.22.12.08
+     * @version 2.22.12.08
      */
     public function getOngletContent()
-    { return 'A définir : Bureau'; }
-    
-    /**
-     * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.07
-     */
-    public function getBulkDeleteButton()
     {
-        ///////////////////////////////////////////
-        // On groupe un bouton de download
-        $btnContent = $this->getIcon(self::I_DELETE);
-        $btnAttributes = array(
-            self::ATTR_CLASS => 'btn-light ajaxAction',
-            self::ATTR_TITLE => 'Supprimer la liste',
-        );
-        $btnBulkDelete = $this->getButton($btnContent, $btnAttributes);
-
-        // Avec un dropdown Sélection / Tous, avec Tous par défaut.
-        $btnAttributes = array(
-            self::ATTR_ID => 'dropdownTrash',
-            self::ATTR_CLASS => 'btn-light dropdown-toggle',
-            'data-bs-toggle' => 'dropdown',
-            'aria-expanded' => 'false',
-            'data-filter' => $this->getActiveFilters(),
-        );
-        $btnDropdown = $this->getButton('Tous', $btnAttributes);
+        // Définition des droits de l'utilisateur
+        $blnHasEditorRights = self::isAdmin();
+        $blnIsEditorPage    = ($this->slugAction==self::CST_WRITE);
+        $blnIsDeletePage    = ($this->slugAction==self::CST_DELETE);
+        $blnConfirm         = $this->initVar(self::CST_CONFIRM, false);
+        $strBlocImport = '';
         
-        // Les choix possibles
-        $ulContent  = $this->getLiDropdown('Sélection', 'dropdownTrash');
-        $ulContent .= $this->getLiDropdown('Filtre', 'dropdownTrash');
-        $ulContent .= $this->getLiDropdown('Tous', 'dropdownTrash');
-        $strStyle  = 'position: absolute; inset: 0px auto auto 0px; margin: 0px; ';
-        $strStyle .= 'transform: translate3d(93.6px, 427.2px, 0px);';
-        $ulAttributes = array(
-            self::ATTR_CLASS => 'dropdown-menu',
-            self::ATTR_STYLE => $strStyle,
-            'data-popper-placement' => 'bottom-start',
-        );
-        $ulDropdown = $this->getBalise(self::TAG_UL, $ulContent, $ulAttributes);
-        
-        $divGroup = $this->getDiv($btnDropdown.$ulDropdown, array('role'=>'group', self::ATTR_CLASS=>'btn-group'));
-        
-        $attributes = array('role'=>'group', self::ATTR_CLASS=>'btn-group', 'aria-label'=>'Choix suppression');
-        return $this->getDiv($btnBulkDelete.$divGroup, $attributes);
-    }
-    
-    public function getLiDropdown($label, $tag)
-    {
-        $strClasse  = 'dropdown-item text-white ajaxAction';
-        $attributes = array(
-            self::ATTR_DATA_TRIGGER => 'click',
-            self::ATTR_DATA_AJAX => 'dropdown',
-            self::ATTR_DATA_TARGET => '#'.$tag
-        );
-        return $this->getBalise(self::TAG_LI, $this->getLink($label, '#', $strClasse, $attributes));
-    }
-    
-    /**
-     * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.07
-     */
-    public function getDownloadButton()
-    {
-        ///////////////////////////////////////////
-        // On groupe un bouton de download
-        $btnContent = $this->getIcon(self::I_DOWNLOAD);
-        $btnAttributes = array(
-            self::ATTR_CLASS => 'btn-light ajaxAction',
-            self::ATTR_TITLE => self::LABEL_EXPORTER_LISTE,
-            self::ATTR_DATA_TRIGGER => 'click',
-            self::ATTR_DATA_AJAX => self::CST_CSV_EXPORT,
-            'data-filter' => $this->getActiveFilters(),
-        );
-        if ($this->slugSubOnglet=='') {
-            $btnAttributes[self::ATTR_DATA_TYPE] = $this->slugOnglet;
+        // Définition éventuelle du bouton Création / Annulaiton
+        // Définition du contenu de la page.
+        $strBtnCreationAnnulation = '';
+        $strMainContent = '';
+        // Si on a les droits et on est sur une page d'édition
+        if ($blnHasEditorRights) {
+            if ($blnIsEditorPage) {
+                // Bouton Annuler
+                $strBtnCreationAnnulation = $this->getCancelButton();
+                // Interface d'édition
+                $strMainContent = $this->getEditContent();
+            } elseif ($blnIsDeletePage) {
+                if ($blnConfirm) {
+                    // Bouton Retour
+                    $strBtnCreationAnnulation = $this->getReturnButton();
+                    // Interface de suppression
+                    $strMainContent = $this->getDeletedContent();
+                } else {
+                    // Bouton Annuler
+                    $strBtnCreationAnnulation = $this->getCancelButton();
+                    // Interface de suppression
+                    $strMainContent = $this->getDeleteContent();
+                }
+            } else {
+                // Bouton Créer
+                $strBtnCreationAnnulation = $this->getCreateButton();
+                // Interface de liste
+                $strMainContent = $this->getListContent($blnHasEditorRights);
+                
+                $url = self::WEB_PPFC_UPLOAD;
+                if ($this->slugSubOnglet=='') {
+                    $impAttributes = array($this->slugOnglet);
+                } else {
+                    $impAttributes = array($this->slugSubOnglet);
+                }
+                $strBlocImport  = $this->getRender($url, $impAttributes);
+                $strBlocImport .= $this->getDiv('', array(self::ATTR_ID=>'alertBlock'));
+            }
         } else {
-            $btnAttributes[self::ATTR_DATA_TYPE] = $this->slugSubOnglet;
+            // Interface de liste
+            $strMainContent = $this->getListContent($blnHasEditorRights);
+        }
+        if (!$this->blnBoutonCreation) {
+            $strBtnCreationAnnulation = '';
         }
         
-        
-        $btnDownload = $this->getButton($btnContent, $btnAttributes);
-
-        // Avec un dropdown Sélection / Tous, avec Tous par défaut.
-        $btnAttributes = array(
-            self::ATTR_ID => 'dropdownSelection',
-            self::ATTR_CLASS => 'btn-light dropdown-toggle',
-            'data-bs-toggle' => 'dropdown',
-            'aria-expanded' => 'false',
+        $urlTemplate = self::WEB_PPFS_CONTENT_ONE_4TH;
+        $attributes = array(
+            // Identifiant de la page
+            $this->slugOnglet,
+            // Un éventuel bouton de Création / Annulation si on a les droits
+            $strBtnCreationAnnulation,
+            // Un bloc de présentation + un éventuel bloc d'import
+            $this->getRender($this->urlOngletContentTemplate).$strBlocImport,
+            // Une liste d'administratifs ou un formulaire d'édition.
+            $strMainContent,
         );
-        $btnDropdown = $this->getButton('Tous', $btnAttributes);
-        
-        // Les choix possibles
-        $ulContent  = $this->getLiDropdown('Sélection', 'dropdownSelection');
-        $ulContent .= $this->getLiDropdown('Filtre', 'dropdownSelection');
-        $ulContent .= $this->getLiDropdown('Tous', 'dropdownSelection');
-        $strStyle  = 'position: absolute; inset: 0px auto auto 0px; margin: 0px; ';
-        $strStyle .= 'transform: translate3d(93.6px, 427.2px, 0px);';
-        $ulAttributes = array(
-            self::ATTR_CLASS => 'dropdown-menu',
-            self::ATTR_STYLE => $strStyle,
-            'data-popper-placement' => 'bottom-start',
-        );
-        $ulDropdown = $this->getBalise(self::TAG_UL, $ulContent, $ulAttributes);
-        
-        $divGroup = $this->getDiv($btnDropdown.$ulDropdown, array('role'=>'group', self::ATTR_CLASS=>'btn-group'));
-        
-        $attributes = array('role'=>'group', self::ATTR_CLASS=>'btn-group', 'aria-label'=>'Choix export');
-        return $this->getDiv($btnDownload.$divGroup, $attributes);
+        return $this->getRender($urlTemplate, $attributes);
     }
     
-    public function getActiveFilters()
-    { return ''; }
-    
-    public function getCancelButton()
-    {
-        $label = $this->getIcon(self::I_ANGLES_LEFT).self::CST_NBSP.self::LABEL_ANNULER;
-        $href = $this->getUrl();
-        return $this->getLinkedButton($label, $href);
-    }
-    
-    public function getReturnButton()
-    {
-        $label = $this->getIcon(self::I_ANGLES_LEFT).self::CST_NBSP.self::LABEL_RETOUR;
-        $href = $this->getUrl();
-        return $this->getLinkedButton($label, $href);
-    }
-    
+    /**
+     * Permet d'accéder à l'écran de création d'un élément
+     * @return string
+     * @since 2.22.12.18
+     * @version 2.22.12.18
+     */
     public function getCreateButton()
     {
         $label = $this->getIcon(self::I_EDIT).self::CST_NBSP.self::LABEL_CREER_ENTREE;
@@ -557,18 +483,168 @@ class WpPageAdminBean extends WpPageBean
         return $this->getLinkedButton($label, $href);
     }
     
-    public function getRefreshButton()
+    /**
+     * Permet de retourner à l'écran par défaut
+     * @return string
+     * @since 2.22.12.18
+     * @version 2.22.12.18
+     */
+    public function getReturnButton()
     {
-        $aContent = $this->getIcon(self::I_REFRESH);
-        $btnContent = $this->getLink($aContent, $this->getUrl(), 'text-dark');
-        return $this->getButton($btnContent, array(self::ATTR_CLASS=>'btn btn-default btn-sm btn-light'));
+        $label = $this->getIcon(self::I_ANGLES_LEFT).self::CST_NBSP.self::LABEL_RETOUR;
+        return $this->getLinkedButton($label, $this->getUrl());
     }
     
+    /**
+     * Permet d'annuler l'action en cours et de retourner à l'écran par défaut
+     * @return string
+     * @since 2.22.12.18
+     * @version 2.22.12.18
+     */
+    public function getCancelButton()
+    {
+        $label = $this->getIcon(self::I_ANGLES_LEFT).self::CST_NBSP.self::LABEL_ANNULER;
+        return $this->getLinkedButton($label, $this->getUrl());
+    }
+    
+    /**
+     * Retourne un bouton avec un lien
+     * @return string
+     * @since 2.22.12.18
+     * @version 2.22.12.18
+     */
     public function getLinkedButton($label, $href)
     {
         $btnAttributes = array(self::ATTR_CLASS=>'btn btn-primary mb-3 btn-block');
         $strButton = $this->getButton($label, $btnAttributes);
         return $this->getLink($strButton, $href, '');
+    }
+    
+    /**
+     * Affiche la liste des éléments à supprimer et demande confirmation.
+     * @return string
+     * @since 2.22.12.18
+     * @version 2.22.12.18
+     */
+    public function getDeleteContent()
+    {
+        // Récupération des ids à supprimer
+        $ids = $this->initVar(self::ATTR_ID);
+        // Url de confirmation
+        $urlElements = array(
+            self::ATTR_ID => $ids,
+            self::CST_CONFIRM => 1,
+            self::CST_ACTION=>self::CST_DELETE,
+        );
+        // Construction du tableau d'attributs pour le template
+        $attributes = array(
+            // Liste des éléments à supprimer
+            $this->getListElements($ids),
+            // Url de confirmation
+            $this->getUrl($urlElements),
+            // URl d'annulation
+            $this->getUrl(),
+        );
+        return $this->getRender($this->urlDeleteTemplate, $attributes);
+    }
+    
+    /**
+     * Affiche la liste des éléments supprimés.
+     * @return string
+     * @since 2.22.12.18
+     * @version 2.22.12.18
+     */
+    public function getDeletedContent()
+    {
+        // Récupération des ids à supprimer
+        $ids = $this->initVar(self::ATTR_ID);
+        // Construction du tableau d'attributs pour le template
+        $attributes = array(
+            // Liste des éléments supprimés
+            $this->getListElements($ids, true),
+            // URl d'annulation
+            $this->getUrl(),
+        );
+        return $this->getRender($this->urlDeleteConfirmTemplate, $attributes);
+    }
+    
+    /**
+     * @return string
+     * @since 2.22.12.12
+     * @version 2.22.12.12
+     */
+    public function getListHeaderRow()
+    {
+        $cellCenter = array(self::ATTR_CLASS=>'text-center');
+        // Selon qu'on a les droit d'administration ou non, on n'aura pas autant de colonnes à afficher.
+        $trContent = '';
+        if ($this->curUser->hasEditorRights()) {
+            $trContent .= $this->getTh(self::CST_NBSP);
+        }
+        $trContent .= $this->getSpecificHeaderRow();
+        if ($this->curUser->hasEditorRights()) {
+            $trContent .= $this->getTh(self::LABEL_ACTIONS, $cellCenter);
+        }
+        return $this->getBalise(self::TAG_TR, $trContent);
+    }
+    
+    /**
+     * @return string
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function getDefaultListContent($objItems)
+    {
+        /////////////////////////////////////////
+        // Pagination
+        $this->blnHasPagination = false;
+        $this->strPagination = $this->buildPagination($objItems);
+        /////////////////////////////////////////
+        $strContent = $this->getTrFiltres();
+        while (!empty($objItems)) {
+            $objItem = array_shift($objItems);
+            $strContent .= $objItem->getBean()->getRow($this->curUser->hasEditorRights());
+        }
+        /////////////////////////////////////////
+        
+        $attributes = array(
+            // On défini le titre
+            $this->titreOnglet,
+            // On défini un éventuel entête/footer de boutons d'actions
+            $this->getListControlTools(),
+            // On défini le tag de la liste
+            $this->slugOnglet,
+            // On défini la description de la liste
+            $this->attrDescribeList,
+            // On défini le header de la liste
+            $this->getListHeaderRow(),
+            // On défini le contenu de la liste
+            $strContent,
+        );
+        return $this->getRender(self::WEB_PPFC_LIST_DEFAULT, $attributes);
+    }
+    
+    /**
+     * @return string
+     * @since 2.22.12.07
+     * @version 2.22.12.08
+     */
+    public function getListControlTools()
+    {
+        $divContent = '';
+        
+        // Si on a les droits, on ajoute le bouton de download
+        if ($this->curUser->hasEditorRights()) {
+            $divContent .= $this->getDownloadButton();
+        }
+        
+        // On ajoute le div de pagination, s'il y a lieu
+        if ($this->blnHasPagination) {
+            $divContent .= $this->getDiv($this->strPagination, array(self::ATTR_CLASS=>'float-right'));
+        }
+        
+        $divAttributes = array(self::ATTR_CLASS=>$this->slugOnglet.'-controls toolbox-controls');
+        return $this->getDiv($divContent, $divAttributes);
     }
     
     /**
@@ -625,132 +701,86 @@ class WpPageAdminBean extends WpPageBean
      * @since 2.22.12.07
      * @version 2.22.12.07
      */
-    public function getDefaultListContent($objItems, $blnHasEditorRights=false)
+    public function getDownloadButton()
     {
-        /////////////////////////////////////////
-        // Pagination
-        $this->blnHasPagination = false;
-        $this->strPagination = $this->buildPagination($objItems);
-        /////////////////////////////////////////
-        $strContent = $this->getTrFiltres($blnHasEditorRights);
-        while (!empty($objItems)) {
-            $objItem = array_shift($objItems);
-            $strContent .= $objItem->getBean()->getRow($blnHasEditorRights);
-        }
-        /////////////////////////////////////////
-        
-        $attributes = array(
-            // On défini le titre
-            $this->titreOnglet,
-            // On défini un éventuel entête/footer de boutons d'actions
-            $this->getListControlTools($blnHasEditorRights),
-            // On défini le tag de la liste
-            $this->slugOnglet,
-            // On défini la description de la liste
-            $this->attrDescribeList,
-            // On défini le header de la liste
-            $this->getListHeaderRow($blnHasEditorRights),
-            // On défini le contenu de la liste
-            $strContent,
+        ///////////////////////////////////////////
+        // On groupe un bouton de download
+        $btnContent = $this->getIcon(self::I_DOWNLOAD);
+        $btnAttributes = array(
+            self::ATTR_CLASS => 'btn-light ajaxAction',
+            self::ATTR_TITLE => self::LABEL_EXPORTER_LISTE,
+            self::ATTR_DATA_TRIGGER => 'click',
+            self::ATTR_DATA_AJAX => self::CST_CSV_EXPORT,
+            'data-filter' => $this->getActiveFilters(),
         );
-        return $this->getRender(self::WEB_PPFC_LIST_DEFAULT, $attributes);
-    }
-    
-    /**
-     * @return string
-     * @since 2.22.12.08
-     * @version 2.22.12.08
-     */
-    public function getCommonOngletContent()
-    {
-        // Définition des droits de l'utilisateur
-        $blnHasEditorRights = self::isAdmin();
-        $blnIsEditorPage    = ($this->slugAction==self::CST_WRITE);
-        $blnIsDeletePage    = ($this->slugAction==self::CST_DELETE);
-        $blnConfirm         = $this->initVar(self::CST_CONFIRM, false);
-        $strBlocImport = '';
-        
-        // Définition éventuelle du bouton Création / Annulaiton
-        // Définition du contenu de la page.
-        $strBtnCreationAnnulation = '';
-        $strMainContent = '';
-        // Si on a les droits et on est sur une page d'édition
-        if ($blnHasEditorRights) {
-            if ($blnIsEditorPage) {
-                // Bouton Annuler
-                $strBtnCreationAnnulation = $this->getCancelButton();
-                // Interface d'édition
-                $strMainContent = $this->getEditContent();
-            } elseif ($blnIsDeletePage) {
-                if ($blnConfirm) {
-                    // Bouton Retour
-                    $strBtnCreationAnnulation = $this->getReturnButton();
-                    // Interface de suppression
-                    $strMainContent = $this->getDeletedContent();
-                } else {
-                    // Bouton Annuler
-                    $strBtnCreationAnnulation = $this->getCancelButton();
-                    // Interface de suppression
-                    $strMainContent = $this->getDeleteContent();
-                }
-            } else {
-                // Bouton Créer
-                $strBtnCreationAnnulation = $this->getCreateButton();
-                // Interface de liste
-                $strMainContent = $this->getListContent($blnHasEditorRights);
-                
-                $url = self::WEB_PPFC_UPLOAD;
-                if ($this->slugSubOnglet=='') {
-                    $impAttributes = array($this->slugOnglet);
-                } else {
-                    $impAttributes = array($this->slugSubOnglet);
-                }
-                $strBlocImport  = $this->getRender($url, $impAttributes);
-                $strBlocImport .= $this->getDiv('', array(self::ATTR_ID=>'alertBlock'));
-            }
+        if ($this->slugSubOnglet=='') {
+            $btnAttributes[self::ATTR_DATA_TYPE] = $this->slugOnglet;
         } else {
-            // Interface de liste
-            $strMainContent = $this->getListContent($blnHasEditorRights);
+            $btnAttributes[self::ATTR_DATA_TYPE] = $this->slugSubOnglet;
         }
-        if (!$this->blnBoutonCreation) {
-            $strBtnCreationAnnulation = '';
-        }
-
-        $urlTemplate = self::WEB_PPFS_CONTENT_ONE_4TH;
-        $attributes = array(
-            // Identifiant de la page
-            $this->slugOnglet,
-            // Un éventuel bouton de Création / Annulation si on a les droits
-            $strBtnCreationAnnulation,
-            // Un bloc de présentation + un éventuel bloc d'import
-            $this->getRender($this->urlOngletContentTemplate).$strBlocImport,
-            // Une liste d'administratifs ou un formulaire d'édition.
-            $strMainContent,
+        $btnDownload = $this->getButton($btnContent, $btnAttributes);
+        
+        // Avec un dropdown
+        $btnAttributes = array(
+            self::ATTR_ID => 'dropdownDownloas',
+            self::ATTR_CLASS => 'btn-light dropdown-toggle',
+            'data-bs-toggle' => 'dropdown',
+            'aria-expanded' => 'false',
         );
-        return $this->getRender($urlTemplate, $attributes);
+        $btnDropdown = $this->getButton('Tous', $btnAttributes);
+        
+        // Les choix possibles
+        $ulContent  = $this->getDownloadUls();
+        $strStyle  = 'position: absolute; inset: 0px auto auto 0px; margin: 0px; ';
+        $strStyle .= 'transform: translate3d(93.6px, 427.2px, 0px);';
+        $ulAttributes = array(
+            self::ATTR_CLASS => 'dropdown-menu',
+            self::ATTR_STYLE => $strStyle,
+            'data-popper-placement' => 'bottom-start',
+        );
+        $ulDropdown = $this->getBalise(self::TAG_UL, $ulContent, $ulAttributes);
+        
+        $divGroup = $this->getDiv($btnDropdown.$ulDropdown, array('role'=>'group', self::ATTR_CLASS=>'btn-group'));
+        
+        $attributes = array('role'=>'group', self::ATTR_CLASS=>'btn-group', 'aria-label'=>'Choix export');
+        return $this->getDiv($btnDownload.$divGroup, $attributes);
     }
     
-    /**
-     * @param boolean $blnHasEditorRights
-     * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.08
-     */
-    public function getListControlTools($blnHasEditorRights=false)
+    public function getLiDropdown($label, $tag)
     {
-        $divContent = '';
-        
-        // Si on a les droits, on ajoute le bouton de download
-        if ($blnHasEditorRights) {
-            $divContent .= $this->getDownloadButton();
-        }
-        
-        // On ajoute le div de pagination, s'il y a lieu
-        if ($this->blnHasPagination) {
-            $divContent .= $this->getDiv($this->strPagination, array(self::ATTR_CLASS=>'float-right'));
-        }
-        
-        $divAttributes = array(self::ATTR_CLASS=>$this->slugOnglet.'-controls toolbox-controls');
-        return $this->getDiv($divContent, $divAttributes);
+        $strClasse  = 'dropdown-item text-white ajaxAction';
+        $attributes = array(
+            self::ATTR_DATA_TRIGGER => 'click',
+            self::ATTR_DATA_AJAX => 'dropdown',
+            self::ATTR_DATA_TARGET => '#'.$tag
+        );
+        return $this->getBalise(self::TAG_LI, $this->getLink($label, '#', $strClasse, $attributes));
     }
+    
+    public function getActiveFilters()
+    {
+        $arrActiveFilters = array();
+        if ($this->filtreAdherent!='') {
+            $arrActiveFilters[] = 'filter-adherent='.$this->filtreAdherent;
+        }
+        return implode(',', $arrActiveFilters);
+    }
+
+    /**
+     * Retourne les éléments visibles dans la dropdown de Download
+     * @return string
+     * @since v2.22.12.18
+     * @version v2.22.12.18
+     */
+    public function getDownloadUls()
+    {
+        $ulContent  = $this->getLiDropdown('Sélection', 'dropdownDownload');
+        return $ulContent.$this->getLiDropdown('Tous', 'dropdownDownload');
+    }
+    
+    public function getTrFiltres()
+    { return ''; }
+    
+    public function getListContent()
+    { return ''; }
 }

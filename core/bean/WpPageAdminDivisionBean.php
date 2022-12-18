@@ -19,6 +19,9 @@ class WpPageAdminDivisionBean extends WpPageAdminBean
         $this->slugOnglet = self::ONGLET_DIVISIONS;
         $this->titreOnglet = self::LABEL_DIVISIONS;
         
+        // Initialisation des templates
+        $this->urlOngletContentTemplate = self::WEB_PPFC_PRES_DIVISION;
+        
         $strNotification = '';
         $strMessage = '';
         
@@ -59,120 +62,50 @@ class WpPageAdminDivisionBean extends WpPageAdminBean
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
     }
-
+    
     /**
+     * Construction d'une liste d'éléments dont les identifiants sont passés en paramètre.
+     * Si $blnDelete est à true, on en profite pour effacer l'élément.
+     * @param int|string $ids
+     * @param boolean $blnDelete
      * @return string
-     * @since 2.22.12.11
-     * @version 2.22.12.11
+     * @since v2.22.12.18
+     * @version v2.22.12.18
      */
-    public function getOngletContent()
-    {
-        $this->urlOngletContentTemplate = self::WEB_PPFC_PRES_DIVISION;
-        return $this->getCommonOngletContent();
-    }
-
-    /**
-     * @return string
-     * @since 2.22.12.11
-     * @version 2.22.12.11
-     */
-    public function getDeleteContent()
+    public function getListElements($ids, $blnDelete=false)
     {
         $strElements = '';
-        
         // On peut avoir une liste d'id en cas de suppression multiple.
-        $ids = $this->initVar(self::ATTR_ID);
         foreach (explode(',', $ids) as $id) {
             $objDivision = $this->objDivisionServices->getDivisionById($id);
             $strElements .= $this->getBalise(self::TAG_LI, $objDivision->getField(self::FIELD_LABELDIVISION));
+            if ($blnDelete) {
+                $objDivision->delete();
+            }
         }
-        
-        $urlElements = array(
-            self::ATTR_ID => $ids,
-            self::CST_CONFIRM => 1,
-        );
-        $urlTemplate = self::WEB_PPFC_DEL_DIV;
-        $attributes = array(
-            // Liste des éléments supprimés
-            $strElements,
-            // Url de confirmation
-            $this->getUrl($urlElements),
-            // URl d'annulation
-            $this->getUrl(array(self::CST_SUBONGLET=>'')),
-        );
-        return $this->getRender($urlTemplate, $attributes);
+        return $strElements;
     }
+    
+    /**
+     * @return string
+     * @since 2.22.12.11
+     * @version 2.22.12.18
+     */
+    public function getSpecificHeaderRow()
+    { return $this->getTh(self::LABEL_LABELDIVISION); }
     
     /**
      * @return string
      * @since 2.22.12.11
      * @version 2.22.12.11
      */
-    public function getDeletedContent()
-    {
-        $strElements = '';
-        
-        // On peut avoir une liste d'id en cas de suppression multiple.
-        $ids = $this->initVar(self::ATTR_ID);
-        foreach (explode(',', $ids) as $id) {
-            $objDivision = $this->objDivisionServices->getDivisionById($id);
-            $strElements .= $this->getBalise(self::TAG_LI, $objDivision->getField(self::FIELD_LABELDIVISION));
-            $objDivision->delete();
-        }
-        
-        $urlTemplate = self::WEB_PPFC_CONF_DEL;
-        $attributes = array(
-            // Liste des éléments supprimés
-            $strElements,
-            // URl d'annulation
-            $this->getUrl(array(self::CST_SUBONGLET=>'')),
-        );
-        return $this->getRender($urlTemplate, $attributes);
-    }
-    
-    /**
-     * @return string
-     * @since 2.22.12.11
-     * @version 2.22.12.11
-     */
-    public function getEditContent()
-    {
-        $baseUrl = $this->getUrl(array(self::CST_SUBONGLET=>''));
-        return $this->objDivision->getBean()->getForm($baseUrl);
-    }
-    
-    /**
-     * @param boolean $blnHasEditorRights
-     * @return string
-     * @since 2.22.12.11
-     * @version 2.22.12.11
-     */
-    public function getListHeaderRow($blnHasEditorRights=false)
-    {
-        // Selon qu'on a les droit d'administration ou non, on n'aura pas autant de colonnes à afficher.
-        $trContent = '';
-        if ($blnHasEditorRights) {
-            $trContent .= $this->getTh(self::CST_NBSP);
-        }
-        $trContent .= $this->getTh(self::LABEL_LABELDIVISION);
-        if ($blnHasEditorRights) {
-            $trContent .= $this->getTh(self::LABEL_ACTIONS, array(self::ATTR_CLASS=>'text-center'));
-        }
-        return $this->getBalise(self::TAG_TR, $trContent);
-    }
-    
-    /**
-     * @return string
-     * @since 2.22.12.11
-     * @version 2.22.12.11
-     */
-    public function getListContent($blnHasEditorRights=false)
+    public function getListContent()
     {
         $this->attrDescribeList = self::LABEL_LIST_DIVISIONS;
         /////////////////////////////////////////
         // On va chercher les éléments à afficher
         $objItems = $this->objDivisionServices->getDivisionsWithFilters();
         /////////////////////////////////////////
-        return $this->getDefaultListContent($objItems, $blnHasEditorRights);
+        return $this->getDefaultListContent($objItems);
     }
 }

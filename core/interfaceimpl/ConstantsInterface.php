@@ -64,7 +64,7 @@ interface ConstantsInterface
     const CST_NBSP               = '&nbsp;';
     const CST_ONGLET             = 'onglet';
     const CST_PARENTS_DELEGUES   = 'parentDelegue';
-    const CST_PARENTS_DIVISIONS   = 'parentDelegue';
+    const CST_PARENTS_DIVISIONS  = 'parentDelegue';
     const CST_POST_ACTION        = 'postAction';
     const CST_RIGHT              = 'right';
     const CSV_SEP                = ';';
@@ -86,9 +86,9 @@ interface ConstantsInterface
     const FIELD_ADHERENT         = 'adherent';
     const FIELD_PHONEADULTE      = 'phoneAdulte';
     // Table AdulteDivision
-    const FIELD_ADULTEID = 'adulteId';
-    const FIELD_DIVISIONID = 'divisionId';
-    const FIELD_DELEGUE = 'delegue';
+    const FIELD_ADULTEID         = 'adulteId';
+    const FIELD_DIVISIONID       = 'divisionId';
+    const FIELD_DELEGUE          = 'delegue';
     // Table Division
     const FIELD_LABELDIVISION    = 'labelDivision';
     
@@ -126,6 +126,13 @@ interface ConstantsInterface
     /////////////////////////////////////////////////
     // Pages
     const PAGE_ADMIN              = 'admin';
+
+    /////////////////////////////////////////////////
+    // Rôles
+    const ROLE_ADMIN              = 9;
+    const ROLE_ADHERENT           = 2;
+    const ROLE_EDITEUR            = 5;
+    const ROLE_CONTACT            = 1;
     
     /////////////////////////////////////////////////
     // Variable de Session

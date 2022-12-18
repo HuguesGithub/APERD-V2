@@ -19,6 +19,9 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         $this->slugOnglet = self::ONGLET_PARENTS;
         $this->titreOnglet = self::LABEL_PARENTS;
         
+        // Initialisation des templates
+        $this->urlOngletContentTemplate = self::WEB_PPFC_PRES_ADULTE;
+        
         $strNotification = '';
         $strMessage = '';
         
@@ -72,75 +75,79 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
     }
-
+    
     /**
-     * @return string
-     * @since 2.22.12.08
-     * @version 2.22.12.08
+     * @since v2.22.12.12
+     * @version v2.22.12.12
      */
-    public function getOngletContent()
+    public static function getStaticWpPageBean($slugSubContent)
     {
-        $this->urlOngletContentTemplate = self::WEB_PPFC_PRES_ADULTE;
-        return $this->getCommonOngletContent();
+        if ($slugSubContent == self::CST_PARENTS_DELEGUES) {
+            $objBean = new WpPageAdminAdulteDivisionBean();
+        } else {
+            $objBean = new WpPageAdminAdulteBean();
+        }
+        return $objBean;
     }
-
+      
     /**
+     * Construction d'une liste d'éléments dont les identifiants sont passés en paramètre.
+     * Si $blnDelete est à true, on en profite pour effacer l'élément.
+     * @param int|string $ids
+     * @param boolean $blnDelete
      * @return string
-     * @since 2.22.12.08
-     * @version 2.22.12.08
+     * @since v2.22.12.18
+     * @version v2.22.12.18
      */
-    public function getDeleteContent()
+    public function getListElements($ids, $blnDelete=false)
     {
         $strElements = '';
-        
         // On peut avoir une liste d'id en cas de suppression multiple.
-        $ids = $this->initVar(self::ATTR_ID);
         foreach (explode(',', $ids) as $id) {
             $objAdulte = $this->objAdulteServices->getAdulteById($id);
             $strElements .= $this->getBalise(self::TAG_LI, $objAdulte->getName());
+            if ($blnDelete) {
+                $objAdulte->delete();
+            }
         }
-        
-        $urlElements = array(
-            self::ATTR_ID => $ids,
-            self::CST_CONFIRM => 1,
-        );
-        $urlTemplate = self::WEB_PPFC_DEL_ADM;
-        $attributes = array(
-            // Liste des éléments supprimés
-            $strElements,
-            // Url de confirmation
-            $this->getUrl($urlElements),
-            // URl d'annulation
-            $this->getUrl(array(self::CST_SUBONGLET=>'')),
-        );
-        return $this->getRender($urlTemplate, $attributes);
+        return $strElements;
     }
     
     /**
      * @return string
-     * @since 2.22.12.08
-     * @version 2.22.12.08
+     * @since 2.22.12.07
+     * @version 2.22.12.18
      */
-    public function getDeletedContent()
+    public function getSpecificHeaderRow()
     {
-        $strElements = '';
-        
-        // On peut avoir une liste d'id en cas de suppression multiple.
-        $ids = $this->initVar(self::ATTR_ID);
-        foreach (explode(',', $ids) as $id) {
-            $objAdulte = $this->objAdulteServices->getAdulteById($id);
-            $strElements .= $this->getBalise(self::TAG_LI, $objAdulte->getName());
-            $objAdulte->delete();
+        $cellCenter = array(self::ATTR_CLASS=>'text-center');
+        $trContent  = $this->getTh(self::LABEL_NOMPRENOM);
+        $trContent .= $this->getTh(self::LABEL_MAIL);
+        return $trContent.$this->getTh(self::LABEL_ADHERENT, $cellCenter);
+    }
+      
+    /**
+     * @return string
+     * @since 2.22.12.07
+     * @version 2.22.12.07
+     */
+    public function getListContent()
+    {
+        $this->attrDescribeList = self::LABEL_LIST_PARENTS;
+        /////////////////////////////////////////
+        // On va prendre en compte les éventuels filtres
+        $attributes = array();
+          
+        if ($this->filtreAdherent=='oui') {
+            $attributes[self::FIELD_ADHERENT] = 1;
+        } elseif ($this->filtreAdherent=='non') {
+            $attributes[self::FIELD_ADHERENT] = 0;
         }
-        
-        $urlTemplate = self::WEB_PPFC_CONF_DEL;
-        $attributes = array(
-            // Liste des éléments supprimés
-            $strElements,
-            // URl d'annulation
-            $this->getUrl(array(self::CST_SUBONGLET=>'')),
-        );
-        return $this->getRender($urlTemplate, $attributes);
+        /////////////////////////////////////////
+        // On va chercher les éléments à afficher
+        $objItems = $this->objAdulteServices->getAdultesWithFilters($attributes);
+        /////////////////////////////////////////
+        return $this->getDefaultListContent($objItems);
     }
     
     /**
@@ -155,37 +162,31 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
     }
     
     /**
-     * @param boolean $blnHasEditorRights
+     * Retourne les éléments visibles dans la dropdown de Download
      * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.07
+     * @since v2.22.12.18
+     * @version v2.22.12.18
      */
-    public function getListHeaderRow($blnHasEditorRights=false)
+    public function getDownloadUls()
     {
-        // Selon qu'on a les droit d'administration ou non, on n'aura pas autant de colonnes à afficher.
-        $trContent = '';
-        if ($blnHasEditorRights) {
-            $trContent .= $this->getTh(self::CST_NBSP);
-        }
-        $trContent .= $this->getTh(self::LABEL_NOMPRENOM);
-        $trContent .= $this->getTh(self::LABEL_MAIL);
-        $trContent .= $this->getTh(self::LABEL_ADHERENT, array(self::ATTR_CLASS=>'text-center'));
-        if ($blnHasEditorRights) {
-            $trContent .= $this->getTh(self::LABEL_ACTIONS, array(self::ATTR_CLASS=>'text-center'));
-        }
-        return $this->getBalise(self::TAG_TR, $trContent);
+        $ulContent  = $this->getLiDropdown('Sélection', 'dropdownDownload');
+        $ulContent .= $this->getLiDropdown('Filtre', 'dropdownDownload');
+        return $ulContent.$this->getLiDropdown('Tous', 'dropdownDownload');
     }
     
-    public function getActiveFilters()
-    { return 'filter-adherent='.$this->filtreAdherent; }
-    
-    
-    public function getTrFiltres($blnHasEditorRights)
+    /**
+     * Retourne le filtre spécifique à l'écran.
+     * TODO : A implémenter plus proprement
+     * @return string
+     * @param v2.22.12.18
+     * @since v2.22.12.18
+     */
+    public function getTrFiltres()
     {
         /////////////////////////////////////////
         // On va mettre en place la ligne de Filtre
         $trContent = '';
-        if ($blnHasEditorRights) {
+        if ($this->curUser->hasEditorRights()) {
             $trContent .= $this->getTh(self::CST_NBSP);
         }
         $trContent .= $this->getTh(self::CST_NBSP);
@@ -202,8 +203,8 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
             $trContent .= 'Tous';
         }
         $trContent .= '</button>';
-        $trContent .= '<ul class="dropdown-menu" style="position: absolute; inset: ';
-        $trContent .= '0px auto auto 0px; margin: 0px; transform: translate3d(93.6px, 427.2px, 0px);" ';
+        $trContent .= '<ul class="dropdown-menu" ';
+        $trContent .= 'style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(93.6px, 427.2px, 0px);" ';
         $trContent .= 'data-popper-placement="bottom-start">';
         $trContent .= '<li><a href="/admin?onglet=parents&amp;filter-adherent=oui" ';
         $trContent .= 'class="dropdown-item text-white">Oui</a></li>';
@@ -213,8 +214,8 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         $trContent .= 'class="dropdown-item text-white">Tous</a></li>';
         $trContent .= '</ul></div></th>';
         
-
-        if ($blnHasEditorRights) {
+        
+        if ($this->curUser->hasEditorRights()) {
             $trContent .= '<th class="column-actions"><div class="row-actions text-center">';
             $trContent .= '<a href="/admin?onglet=parents" class="" title="Nettoyer le filtre">';
             $trContent .= '<button type="button" class="btn btn-default btn-sm"><i class="fa-solid ';
@@ -223,43 +224,4 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         }
         return $this->getBalise(self::TAG_TR, $trContent);
     }
-    
-    /**
-     * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.07
-     */
-    public function getListContent($blnHasEditorRights=false)
-    {
-        $this->attrDescribeList = self::LABEL_LIST_PARENTS;
-        /////////////////////////////////////////
-        // On va prendre en compte les éventuels filters
-        $arrFilters = array();
-        if ($this->filtreAdherent=='oui') {
-            $arrFilters[self::FIELD_ADHERENT] = 1;
-        } elseif ($this->filtreAdherent=='non') {
-            $arrFilters[self::FIELD_ADHERENT] = 0;
-        }
-        
-        /////////////////////////////////////////
-        // On va chercher les éléments à afficher
-        $objItems = $this->objAdulteServices->getAdultesWithFilters($arrFilters);
-        /////////////////////////////////////////
-        return $this->getDefaultListContent($objItems, $blnHasEditorRights);
-    }
-    
-  /**
-   * @since v2.22.12.12
-   * @version v2.22.12.12
-   */
-  public static function getStaticWpPageBean($slugSubContent)
-  {
-      if ($slugSubContent == self::CST_PARENTS_DELEGUES) {
-          $objBean = new WpPageAdminAdulteDivisionBean();
-      } else {
-          $objBean = new WpPageAdminAdulteBean();
-      }
-      return $objBean;
-  }
-    
 }
