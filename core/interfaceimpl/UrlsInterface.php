@@ -47,4 +47,5 @@ interface UrlsInterface
     const WEB_PPFS_ONGLET           = self::WEB_PPF_SECTION.'publique-fragments-section-onglet.php';
     const WEB_PPFS_ONGLET_LIST      = self::WEB_PPF_SECTION.'publique-fragments-section-onglet-list.php';
     const WEB_PPFS_CONTENT_ONE_4TH  = self::WEB_PPF_SECTION.'section-onglet-content-one-fourth.tpl';
+    const WEB_PPF_FILTRE            = self::WEB_PP_FRAGMENTS.'publique-fragments-filtre.tpl';
 }

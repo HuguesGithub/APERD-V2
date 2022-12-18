@@ -103,6 +103,7 @@ interface ConstantsInterface
     const I_DESKTOP              = 'desktop';
     const I_DOWNLOAD             = 'download';
     const I_EDIT                 = 'pen-to-square';
+    const I_FILTER_CIRCLE_XMARK  = 'filter-circle-xmark';
     const I_REFRESH              = 'arrows-rotate';
     const I_SCHOOL               = 'school';
     const I_SQUARE_CHECK         = 'square-check';

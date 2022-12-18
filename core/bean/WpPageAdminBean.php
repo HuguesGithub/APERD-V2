@@ -34,6 +34,7 @@ class WpPageAdminBean extends WpPageBean
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
         $this->slugAction = $this->initVar(self::CST_ACTION);
         $this->filtreAdherent = $this->initVar('filter-adherent');
+        $this->filtreDivision = $this->initVar('filter-division');
         $this->blnBoutonCreation = true;
         
         // Initialisation des templates

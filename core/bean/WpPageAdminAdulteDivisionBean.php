@@ -116,12 +116,17 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
         $attributes = array(
             self::FIELD_DELEGUE => 1,
         );
-        
+        // Filtre sur Division
+        if ($this->filtreDivision!='' && $this->filtreDivision!='all') {
+            $attributes[self::FIELD_DIVISIONID] = $this->filtreDivision;
+        }
+        // Filtre sur Adherent
         if ($this->filtreAdherent=='oui') {
             $attributes[self::FIELD_ADHERENT] = 1;
         } elseif ($this->filtreAdherent=='non') {
             $attributes[self::FIELD_ADHERENT] = 0;
         }
+        // Sens d'affichage
         $sensTri = self::FIELD_LABELDIVISION;
         /////////////////////////////////////////
         // On va chercher les éléments à afficher
@@ -146,39 +151,51 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
             $trContent .= $this->getTh(self::CST_NBSP);
         }
         $trContent .= $this->getTh(self::CST_NBSP);
+        $trContent .= $this->getFiltreDivision();
         $trContent .= $this->getTh(self::CST_NBSP);
-        $trContent .= $this->getTh(self::CST_NBSP);
-        // Filtre Adhérent
-        $trContent .= '<th class="text-center"><div role="group" class="btn-group">';
-        $trContent .= '<button type="button" class="btn btn-default btn-sm btn-light dropdown-toggle" ';
-        $trContent .= 'data-bs-toggle="dropdown" aria-expanded="false">';
-        if ($this->filtreAdherent=='oui') {
-            $trContent .= 'Oui';
-        } elseif ($this->filtreAdherent=='non') {
-            $trContent .= 'Non';
-        } else {
-            $trContent .= 'Tous';
-        }
-        $trContent .= '</button>';
-        $trContent .= '<ul class="dropdown-menu" ';
-        $trContent .= 'style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(93.6px, 427.2px, 0px);" ';
-        $trContent .= 'data-popper-placement="bottom-start">';
-        $trContent .= '<li><a href="/admin?onglet=parents&amp;filter-adherent=oui" ';
-        $trContent .= 'class="dropdown-item text-white">Oui</a></li>';
-        $trContent .= '<li><a href="/admin?onglet=parents&amp;filter-adherent=non" ';
-        $trContent .= 'class="dropdown-item text-white">Non</a></li>';
-        $trContent .= '<li><a href="/admin?onglet=parents&amp;filter-adherent=all" ';
-        $trContent .= 'class="dropdown-item text-white">Tous</a></li>';
-        $trContent .= '</ul></div></th>';
         
+        // Filtre Adhérent
+        $trContent .= $this->getFiltreAdherent();
         
         if ($this->curUser->hasEditorRights()) {
-            $trContent .= '<th class="column-actions"><div class="row-actions text-center">';
-            $trContent .= '<a href="/admin?onglet=parents" class="" title="Nettoyer le filtre">';
-            $trContent .= '<button type="button" class="btn btn-default btn-sm"><i class="fa-solid ';
-            $trContent .= 'fa-filter-circle-xmark"></i></button></a>';
-            $trContent .= '</div></th>';
+            $strIcon = $this->getIcon(self::I_FILTER_CIRCLE_XMARK);
+            $strButton = $this->getButton($strIcon);
+            $extraAttributes = array(self::ATTR_TITLE=>self::LABEL_CLEAR_FILTER);
+            $strLink = $this->getLink($strButton, $this->getUrl(), '', $extraAttributes);
+            $strDiv = $this->getDiv($strLink, array(self::ATTR_CLASS=>'row-actions text-center'));
+            $trContent .= $this->getTh($strDiv, array(self::ATTR_CLASS=>'column-actions'));
         }
         return $this->getBalise(self::TAG_TR, $trContent);
+    }
+    
+    public function getFiltreDivision()
+    {
+        $urlTemplate = self::WEB_PPF_FILTRE;
+        $label = 'Tous';
+        $strOptions = '';
+        $baseUrl = $this->getUrl().self::CST_AMP.'filter-division=';
+        $strClass = 'dropdown-item text-white';
+        
+        $objsDivision = $this->objDivisionServices->getDivisionsWithFilters();
+        while (!empty($objsDivision)) {
+            $objDivision = array_shift($objsDivision);
+            $strDiv = $objDivision->getField(self::FIELD_ID);
+            // Définition du label en fonction d'un éventuel filtre courant.
+            if ($this->filtreDivision==$strDiv) {
+                $label = $objDivision->getField(self::FIELD_LABELDIVISION);
+            }
+            // Construction de la liste des options.
+            $liContent = $this->getLink($objDivision->getField(self::FIELD_LABELDIVISION), $baseUrl.$strDiv, $strClass);
+            $strOptions .= $this->getBalise(self::TAG_LI, $liContent);
+        }
+        $strOptions .= $this->getBalise(self::TAG_LI, $this->getLink('Tous', $baseUrl.'all', $strClass));
+        
+        // Définition des attributs pour le template
+        $attributes = array(
+            $label,
+            $strOptions,
+        );
+        
+        return $this->getRender($urlTemplate, $attributes);
     }
 }

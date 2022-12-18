@@ -176,7 +176,6 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
     
     /**
      * Retourne le filtre spécifique à l'écran.
-     * TODO : A implémenter plus proprement
      * @return string
      * @param v2.22.12.18
      * @since v2.22.12.18
@@ -191,37 +190,54 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         }
         $trContent .= $this->getTh(self::CST_NBSP);
         $trContent .= $this->getTh(self::CST_NBSP);
-        // Filtre Adhérent
-        $trContent .= '<th class="text-center"><div role="group" class="btn-group">';
-        $trContent .= '<button type="button" class="btn btn-default btn-sm btn-light dropdown-toggle" ';
-        $trContent .= 'data-bs-toggle="dropdown" aria-expanded="false">';
-        if ($this->filtreAdherent=='oui') {
-            $trContent .= 'Oui';
-        } elseif ($this->filtreAdherent=='non') {
-            $trContent .= 'Non';
-        } else {
-            $trContent .= 'Tous';
-        }
-        $trContent .= '</button>';
-        $trContent .= '<ul class="dropdown-menu" ';
-        $trContent .= 'style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(93.6px, 427.2px, 0px);" ';
-        $trContent .= 'data-popper-placement="bottom-start">';
-        $trContent .= '<li><a href="/admin?onglet=parents&amp;filter-adherent=oui" ';
-        $trContent .= 'class="dropdown-item text-white">Oui</a></li>';
-        $trContent .= '<li><a href="/admin?onglet=parents&amp;filter-adherent=non" ';
-        $trContent .= 'class="dropdown-item text-white">Non</a></li>';
-        $trContent .= '<li><a href="/admin?onglet=parents&amp;filter-adherent=all" ';
-        $trContent .= 'class="dropdown-item text-white">Tous</a></li>';
-        $trContent .= '</ul></div></th>';
         
+        // Filtre Adhérent
+        $trContent .= $this->getFiltreAdherent();
         
         if ($this->curUser->hasEditorRights()) {
-            $trContent .= '<th class="column-actions"><div class="row-actions text-center">';
-            $trContent .= '<a href="/admin?onglet=parents" class="" title="Nettoyer le filtre">';
-            $trContent .= '<button type="button" class="btn btn-default btn-sm"><i class="fa-solid ';
-            $trContent .= 'fa-filter-circle-xmark"></i></button></a>';
-            $trContent .= '</div></th>';
+            $strIcon = $this->getIcon(self::I_FILTER_CIRCLE_XMARK);
+            $strButton = $this->getButton($strIcon);
+            $extraAttributes = array(self::ATTR_TITLE=>self::LABEL_CLEAR_FILTER);
+            $strLink = $this->getLink($strButton, $this->getUrl(), '', $extraAttributes);
+            $strDiv = $this->getDiv($strLink, array(self::ATTR_CLASS=>'row-actions text-center'));
+            $trContent .= $this->getTh($strDiv, array(self::ATTR_CLASS=>'column-actions'));
         }
         return $this->getBalise(self::TAG_TR, $trContent);
+    }
+    
+    /**
+     * Construction du Filtre Adherent
+     * @return string
+     * @since v2.22.12.18
+     * @version v2.22.12.18
+     */
+    public function getFiltreAdherent()
+    {
+        $urlTemplate = self::WEB_PPF_FILTRE;
+        
+        // Définition du label en fonction d'un éventuel filtre courant.
+        if ($this->filtreAdherent=='oui') {
+            $label = 'Oui';
+        } elseif ($this->filtreAdherent=='non') {
+            $label = 'Non';
+        } else {
+            $label = 'Tous';
+        }
+        
+        // Construction de la liste des options.
+        $strOptions = '';
+        $strClass = 'dropdown-item text-white';
+        $baseUrl = $this->getUrl().self::CST_AMP.'filter-adherent=';
+        $strOptions .= $this->getBalise(self::TAG_LI, $this->getLink('Oui', $baseUrl.'oui', $strClass));
+        $strOptions .= $this->getBalise(self::TAG_LI, $this->getLink('Non', $baseUrl.'non', $strClass));
+        $strOptions .= $this->getBalise(self::TAG_LI, $this->getLink('Tous', $baseUrl.'all', $strClass));
+        
+        // Définition des attributs pour le template
+        $attributes = array(
+            $label,
+            $strOptions,
+        );
+        
+        return $this->getRender($urlTemplate, $attributes);
     }
 }

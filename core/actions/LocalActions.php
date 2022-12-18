@@ -87,7 +87,7 @@ class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
         
         $fileContent = file_get_contents($srcFile);
         $arrContent  = explode(self::CST_EOL, $fileContent);
-        $blnOk = $this->controlerDonneesImport($arrContent,  $notif, $msg, $msgError);
+        $blnOk = $this->controlerDonneesImport($arrContent, $notif, $msg, $msgError);
         
         if ($blnOk) {
             $notif = self::NOTIF_SUCCESS;
