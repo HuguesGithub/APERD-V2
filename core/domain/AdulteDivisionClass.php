@@ -95,6 +95,17 @@ class AdulteDivisionClass extends LocalDomainClass
         $blnOk = true;
 
         /////////////////////////////////////////////
+        // On doit contrôler adulteId qui doit exister
+        // Vu qu'il est renseigné à partir des données importées, soit il est correct, soit il est nul.
+        $blnOk = ($this->getField(self::FIELD_ADULTEID)!='');
+        
+        // On doit contrôler divisionId qui doit exister
+        // Vu qu'il est renseigné à partir des données importées, soit il est correct, soit il est nul.
+        if ($blnOk) {
+            $blnOk = ($this->getField(self::FIELD_DIVISIONID)!='');
+        }
+        
+        /////////////////////////////////////////////
         // Fin des contrôles
         return $blnOk;
     }
@@ -109,7 +120,26 @@ class AdulteDivisionClass extends LocalDomainClass
      */
     public function controlerImportRow($rowContent, &$notif, &$msg)
     {
-        list($id, $adulteId, $divisionId, $delegue) = explode(self::CSV_SEP, $rowContent);
+        list($id, $nomAdulte, $labelDivision, $delegue) = explode(self::CSV_SEP, $rowContent);
+        // TODO : rowContent ne contient pas les id, mais le Nom+Prénom pour l'Adulte
+        // et le label de la Division. Il faut donc les rechercher pour définir l'id
+        // qui correspond.
+        
+        // Recherche de la Division
+        $attributes = array(self::FIELD_LABELDIVISION=>$labelDivision);
+        $objsDivision = $this->objDivisionServices->getDivisionsWithFilters($attributes);
+        if (count($objsDivision)==1) {
+            $objDivision = array_shift($objsDivision);
+            $divisionId = $objDivision->getField(self::FIELD_ID);
+        } else {
+            $divisionId = '';
+        }
+        
+        // Recherche de l'Adulte
+        $objAdulte = $this->objAdulteServices->getAdulteByNomPrenom($nomAdulte);
+        $adulteId = $objAdulte->getField(self::FIELD_ID);
+        
+        // On renseigne l'objet AdulteDivision à partir des données importées.
         $this->setField(self::FIELD_ID, $id);
         $this->setField(self::FIELD_ADULTEID, $adulteId);
         $this->setField(self::FIELD_DIVISIONID, $divisionId);

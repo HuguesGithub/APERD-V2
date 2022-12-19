@@ -26,6 +26,7 @@ class AdulteDaoImpl extends LocalDaoImpl
     public function __construct()
     {
         $this->dbTable = self::DB_PREFIX.'adulte';
+        $this->select = "SELECT id, nomAdulte, prenomAdulte, mailAdulte, adherent, phoneAdulte ";
         parent::__construct();
     }
     
@@ -55,7 +56,7 @@ class AdulteDaoImpl extends LocalDaoImpl
     {
         //////////////////////////////
         // Construction de la requête
-        $request  = "SELECT id, nomAdulte, prenomAdulte, mailAdulte, adherent, phoneAdulte FROM ".$this->dbTable." ";
+        $request  = $this->select." FROM ".$this->dbTable." ";
         $request .= "WHERE 1=1 AND nomAdulte LIKE '%s' AND mailAdulte LIKE '%s' AND adherent LIKE '%s' ";
         return $this->getRequestWithFilters($request, $attributes);
     }
@@ -70,9 +71,31 @@ class AdulteDaoImpl extends LocalDaoImpl
     {
         //////////////////////////////
         // Construction de la requête
-        $request  = "SELECT id, nomAdulte, prenomAdulte, mailAdulte, adherent, phoneAdulte FROM ".$this->dbTable." ";
+        $request  = $this->select." FROM ".$this->dbTable." ";
         $request .= "WHERE id='%s' ";
         $prepRequest = vsprintf($request, array($id));
+        
+        //////////////////////////////
+        // Exécution de la requête
+        $row = MySQLClass::wpdbSelect($prepRequest);
+        return (empty($row) ? new AdulteClass() : new AdulteClass($row[0]));
+        //////////////////////////////
+    }
+    
+    /**
+     * On recherche un Adulte dont le nom + prenom correspond au paramètre
+     * @param string $nomPrenomAdulte
+     * @return \core\domain\AdulteClass
+     * @since v2.22.12.19
+     * @version v2.22.12.19
+     */
+    public function getAdulteByNomPrenom($nomPrenomAdulte)
+    {
+        //////////////////////////////
+        // Construction de la requête
+        $request  = $this->select." FROM ".$this->dbTable." ";
+        $request .= "WHERE CONCAT_WS(' ', nomAdulte, prenomAdulte)='%s' ";
+        $prepRequest = vsprintf($request, array($nomPrenomAdulte));
         
         //////////////////////////////
         // Exécution de la requête

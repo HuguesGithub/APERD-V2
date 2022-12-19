@@ -80,6 +80,16 @@ class AdulteServices extends LocalServices
     }
     
     /**
+     * On recherche un Adulte dont le nom + prenom correspond au paramètre
+     * @param string $nomPrenomAdulte
+     * @return \core\domain\AdulteClass
+     * @since v2.22.12.19
+     * @version v2.22.12.19
+     */
+    public function getAdulteByNomPrenom($nomPrenomAdulte)
+    { return $this->objDao->getAdulteByNomPrenom($nomPrenomAdulte); }
+    
+    /**
      * @param AdulteClass $obj
      * @since 2.22.12.08
      * @version 2.22.12.08
