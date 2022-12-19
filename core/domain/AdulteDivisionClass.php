@@ -121,7 +121,9 @@ class AdulteDivisionClass extends LocalDomainClass
     public function controlerImportRow($rowContent, &$notif, &$msg)
     {
         list($id, $nomAdulte, $labelDivision, $delegue) = explode(self::CSV_SEP, $rowContent);
-        // TODO : rowContent ne contient pas les id, mais le Nom+Prénom pour l'Adulte
+        
+        //////////////////////////////////////////////////////////////////////////////////
+        // rowContent ne contient pas les id, mais le Nom+Prénom pour l'Adulte
         // et le label de la Division. Il faut donc les rechercher pour définir l'id
         // qui correspond.
         
@@ -138,6 +140,7 @@ class AdulteDivisionClass extends LocalDomainClass
         // Recherche de l'Adulte
         $objAdulte = $this->objAdulteServices->getAdulteByNomPrenom($nomAdulte);
         $adulteId = $objAdulte->getField(self::FIELD_ID);
+        //////////////////////////////////////////////////////////////////////////////////
         
         // On renseigne l'objet AdulteDivision à partir des données importées.
         $this->setField(self::FIELD_ID, $id);

@@ -44,6 +44,7 @@ interface LabelsInterface
     const LABEL_PARENTS             = 'Parents';
     const LABEL_PARENTS_DELEGUES    = 'Parents Délégués';
     const LABEL_RETOUR              = 'Retour';
+    const LABEL_ROLE                  = 'Rôle';
     const LABEL_ROLE_ADMIN            = 'Administrateur';
     const LABEL_ROLE_ADHERENT         = 'Adhérent';
     const LABEL_ROLE_EDITEUR          = 'Editeur';

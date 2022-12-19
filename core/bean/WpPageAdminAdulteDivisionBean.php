@@ -137,7 +137,6 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
     
     /**
      * Retourne le filtre spécifique à l'écran.
-     * TODO : A implémenter plus proprement
      * @return string
      * @param v2.22.12.18
      * @since v2.22.12.18
@@ -168,6 +167,12 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
         return $this->getBalise(self::TAG_TR, $trContent);
     }
     
+    /**
+     * Retourne le filtre spécifique à la Division.
+     * @return string
+     * @param v2.22.12.18
+     * @since v2.22.12.18
+     */
     public function getFiltreDivision()
     {
         $urlTemplate = self::WEB_PPF_FILTRE;

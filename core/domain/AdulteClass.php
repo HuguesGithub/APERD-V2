@@ -23,6 +23,7 @@ class AdulteClass extends LocalDomainClass
     protected $mailAdulte;
     protected $adherent;
     protected $phoneAdulte;
+    protected $roleAdulte;
 
     //////////////////////////////////////////////////
     // GETTERS & SETTERS
@@ -56,9 +57,8 @@ class AdulteClass extends LocalDomainClass
             self::FIELD_MAILADULTE => self::LABEL_MAIL,
             self::FIELD_ADHERENT => self::LABEL_ADHERENT,
             self::FIELD_PHONEADULTE => self::LABEL_PHONE,
+            self::FIELD_ROLEADULTE => self::LABEL_ROLE,
         );
-        // TODO : A supprimer, une fois le champ créé et renseigné.
-        $this->roleAdulte = 9;
     }
 
     /**
@@ -112,13 +112,14 @@ class AdulteClass extends LocalDomainClass
      */
     public function controlerImportRow($rowContent, &$notif, &$msg)
     {
-        list($id, $nom, $prenom, $mail, $adherent, $phone) = explode(self::CSV_SEP, $rowContent);
+        list($id, $nom, $prenom, $mail, $adherent, $phone, $role) = explode(self::CSV_SEP, $rowContent);
         $this->setField(self::FIELD_ID, $id);
         $this->setField(self::FIELD_NOMADULTE, ucfirst(strtolower(trim($nom))));
         $this->setField(self::FIELD_PRENOMADULTE, ucfirst(strtolower(trim($prenom))));
         $this->setField(self::FIELD_MAILADULTE, ucfirst(strtolower(trim($mail))));
         $this->setField(self::FIELD_ADHERENT, $adherent);
         $this->setField(self::FIELD_PHONEADULTE, trim($phone));
+        $this->setField(self::FIELD_ROLEADULTE, trim($role));
         
         return $this->controlerDonneesAndAct($notif, $msg);
     }

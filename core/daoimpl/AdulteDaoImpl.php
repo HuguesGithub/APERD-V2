@@ -26,7 +26,7 @@ class AdulteDaoImpl extends LocalDaoImpl
     public function __construct()
     {
         $this->dbTable = self::DB_PREFIX.'adulte';
-        $this->select = "SELECT id, nomAdulte, prenomAdulte, mailAdulte, adherent, phoneAdulte ";
+        $this->select = "SELECT id, nomAdulte, prenomAdulte, mailAdulte, adherent, phoneAdulte, roleAdulte FROM ";
         parent::__construct();
     }
     
@@ -56,8 +56,8 @@ class AdulteDaoImpl extends LocalDaoImpl
     {
         //////////////////////////////
         // Construction de la requête
-        $request  = $this->select." FROM ".$this->dbTable." ";
-        $request .= "WHERE 1=1 AND nomAdulte LIKE '%s' AND mailAdulte LIKE '%s' AND adherent LIKE '%s' ";
+        $request  = $this->select.$this->dbTable;
+        $request .= " WHERE 1=1 AND nomAdulte LIKE '%s' AND mailAdulte LIKE '%s' AND adherent LIKE '%s' ";
         return $this->getRequestWithFilters($request, $attributes);
     }
     
@@ -71,8 +71,8 @@ class AdulteDaoImpl extends LocalDaoImpl
     {
         //////////////////////////////
         // Construction de la requête
-        $request  = $this->select." FROM ".$this->dbTable." ";
-        $request .= "WHERE id='%s' ";
+        $request  = $this->select.$this->dbTable;
+        $request .= " WHERE id='%s' ";
         $prepRequest = vsprintf($request, array($id));
         
         //////////////////////////////
@@ -93,8 +93,8 @@ class AdulteDaoImpl extends LocalDaoImpl
     {
         //////////////////////////////
         // Construction de la requête
-        $request  = $this->select." FROM ".$this->dbTable." ";
-        $request .= "WHERE CONCAT_WS(' ', nomAdulte, prenomAdulte)='%s' ";
+        $request  = $this->select.$this->dbTable;
+        $request .= " WHERE CONCAT_WS(' ', nomAdulte, prenomAdulte)='%s' ";
         $prepRequest = vsprintf($request, array($nomPrenomAdulte));
         
         //////////////////////////////
@@ -114,8 +114,9 @@ class AdulteDaoImpl extends LocalDaoImpl
     {
         //////////////////////////////
         // Construction de la requête
-        $request  = "INSERT INTO ".$this->dbTable." (nomAdulte, prenomAdulte, mailAdulte, adherent, phoneAdulte) ";
-        $request .= "VALUES ('%s', '%s', '%s', '%s', '%s');";
+        $request  = "INSERT INTO ".$this->dbTable." (nomAdulte, prenomAdulte, mailAdulte, adherent,";
+        $request .= " phoneAdulte, roleAdulte) ";
+        $request .= "VALUES ('%s', '%s', '%s', '%s', '%s', '%s');";
         return parent::insert($request, $attributes);
     }
     
@@ -134,6 +135,7 @@ class AdulteDaoImpl extends LocalDaoImpl
         $request .= "mailAdulte = '%s', ";
         $request .= "adherent = '%s', ";
         $request .= "phoneAdulte = '%s' ";
+        $request .= "roleAdulte = '%s' ";
         $request .= "WHERE id = '%s';";
         parent::update($request, $attributes);
     }

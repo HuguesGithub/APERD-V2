@@ -85,6 +85,7 @@ interface ConstantsInterface
     const FIELD_MAILADULTE       = 'mailAdulte';
     const FIELD_ADHERENT         = 'adherent';
     const FIELD_PHONEADULTE      = 'phoneAdulte';
+    const FIELD_ROLEADULTE       = 'roleAdulte';
     // Table AdulteDivision
     const FIELD_ADULTEID         = 'adulteId';
     const FIELD_DIVISIONID       = 'divisionId';
