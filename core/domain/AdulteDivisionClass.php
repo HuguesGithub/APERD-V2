@@ -1,8 +1,6 @@
 <?php
 namespace core\domain;
-
 use core\bean\AdulteDivisionBean;
-
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -21,7 +19,6 @@ class AdulteDivisionClass extends LocalDomainClass
     protected $adulteId;
     protected $divisionId;
     protected $delegue;
-
     //////////////////////////////////////////////////
     // GETTERS & SETTERS
     //////////////////////////////////////////////////
@@ -34,7 +31,6 @@ class AdulteDivisionClass extends LocalDomainClass
     
     public function getLibelle()
     { return $this->getAdulte()->getName().', '.$this->getDivision()->getField(self::FIELD_LABELDIVISION); }
-
     //////////////////////////////////////////////////
     // CONSTRUCT - CLASSVARS - CONVERT - BEAN
     //////////////////////////////////////////////////
@@ -55,7 +51,6 @@ class AdulteDivisionClass extends LocalDomainClass
             self::FIELD_DELEGUE => self::LABEL_DELEGUE,
         );
     }
-
     /**
      * @return AdulteDivisionBean
      * @since 2.22.12.12
@@ -63,7 +58,6 @@ class AdulteDivisionClass extends LocalDomainClass
      */
     public function getBean()
     { return new AdulteDivisionBean($this); }
-
     //////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////
@@ -93,16 +87,15 @@ class AdulteDivisionClass extends LocalDomainClass
     public function controlerDonnees(&$notif, &$msg)
     {
         $blnOk = true;
-
         /////////////////////////////////////////////
         // On doit contrôler adulteId qui doit exister
         // Vu qu'il est renseigné à partir des données importées, soit il est correct, soit il est nul.
-        $blnOk = ($this->getField(self::FIELD_ADULTEID)!='');
+        $blnOk = $this->controlerSaisie(self::FIELD_ADULTEID, $notif, $msg);
         
         // On doit contrôler divisionId qui doit exister
         // Vu qu'il est renseigné à partir des données importées, soit il est correct, soit il est nul.
         if ($blnOk) {
-            $blnOk = ($this->getField(self::FIELD_DIVISIONID)!='');
+            $blnOk = $this->controlerSaisie(self::FIELD_DIVISIONID, $notif, $msg);
         }
         
         /////////////////////////////////////////////

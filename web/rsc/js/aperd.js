@@ -10,20 +10,25 @@ $(document).ready(function(){
         e.preventDefault();
         addTreeviewAction($(this));
     });
+    
+    // On ajoute un event pour replier/déplier le menu
+    $('a[data-widget="pushmenu"]').unbind().on('click', function(e){
+        e.stopPropagation();
+        e.preventDefault();
+		$('body').toggleClass('sidebar-collapse');
+    });
 	
 	// S'il y a une interface d'upload de fichier
 	if ($('#draganddrophandler')) {
 		addDragAndDropHandler($(this));
 	}
 });
-
 //////////////////////////////////////////////////////////
 // L'objet cliqué
 function addTreeviewAction(obj) {
     console.log(obj);
     obj.parent().parent().parent().toggleClass('menu-open');
 }
-
 //////////////////////////////////////////////////////////
 // L'objet cliqué, différentes actions sont possibles
 function ajaxActionClick(obj) {
@@ -43,7 +48,6 @@ function ajaxActionClick(obj) {
     }
 }
 //////////////////////////////////////////////////////////
-
 //////////////////////////////////////////////////////////
 // Modification du libellé d'un dropdown, en fonction de la valeur sélectionnée
 function dropdownElement(obj) {
@@ -52,7 +56,6 @@ function dropdownElement(obj) {
     $(target).html(value);
 }
 //////////////////////////////////////////////////////////
-
 //////////////////////////////////////////////////////////
 // Export des données sélectionnées ou de toutes, selon la valeur de la dropdown box
 function csvExport(obj) {
@@ -70,7 +73,6 @@ function csvExport(obj) {
         });
     }
     let data = {'action': 'dealWithAjax', 'ajaxAction': 'csvExport', 'type': obj.data('type'), 'ids': ids, 'filter': filter};
-
     // On a un appel ajax pour rechercher les équivalences au numéro
     $.post(
         ajaxurl,
@@ -105,7 +107,6 @@ function displayToast(value) {
   $('#toastPlacement').append(value);
   $('#toastPlacement .toast:last-child').delay(5000).hide(0);
 }
-
 function addDragAndDropHandler(obj) {
     obj.on('dragenter', function (e) {
         e.stopPropagation();
@@ -139,23 +140,18 @@ function addDragAndDropHandler(obj) {
         e.preventDefault();
     });
 }
-
  function handleFileUpload(files, obj) {
-	//for (let i = 0; i < files.length; i++) {
-    for (let file of files ) {
+    for (let file of files) {
 		let fd = new FormData();
         fd.append('action', 'dealWithAjax');
         fd.append('ajaxAction', 'importFile');
         fd.append('importType', $('#post-import-drag-drop input[name="importType"]').val());
-//        fd.append('fileToImport', files[i]);
         fd.append('fileToImport', file);
-
         let status = new createStatusbar(obj);
         status.setFileNameSize(file.name, file.size);
         sendFileToServer(fd, status);
    }
 }
-
 let rowCount=0;
 function createStatusbar(obj) {
 	rowCount++;
@@ -166,7 +162,6 @@ function createStatusbar(obj) {
     this.progressBar = $("<div class='progressBar'><div></div></div>").appendTo(this.statusbar);
     this.abort = $("<div class='abort'>Abort</div>").appendTo(this.statusbar);
     obj.after(this.statusbar);
-
     this.setFileNameSize = function(name, size) {
 		let sizeStr = "";
         let sizeKB = size/1024;
@@ -194,8 +189,6 @@ function createStatusbar(obj) {
         });
     }
 }
-
-
 function sendFileToServer(formData, status) {
     let jqXHR=$.ajax({
 		xhr: function() {
@@ -222,7 +215,6 @@ function sendFileToServer(formData, status) {
         data: formData,
         success: function(data){
             status.setProgress(100);
-
             let obj = JSON.parse(data);
             if (obj['the-list'] != '') {
 				$('#the-list').html(obj['the-list']);
@@ -237,6 +229,5 @@ function sendFileToServer(formData, status) {
             }
         }
     });
-
     status.setAbort(jqXHR);
 }

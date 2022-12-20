@@ -1,9 +1,7 @@
 <?php
 namespace core\daoimpl;
-
 use core\domain\AdministrationClass;
 use core\domain\MySQLClass;
-
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -72,7 +70,7 @@ class AdministrationDaoImpl extends LocalDaoImpl
         // Construction de la requête
         $request  = "SELECT id, genre, nomTitulaire, labelPoste FROM ".$this->dbTable." ";
         $request .= "WHERE id='%s' ";
-        $prepRequest = vsprintf($request, array($id));
+        $prepRequest = MySQLClass::wpdbPrepare($request, array($id));
         
         //////////////////////////////
         // Exécution de la requête

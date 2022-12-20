@@ -1,8 +1,6 @@
 <?php
 namespace core\bean;
-
 use core\domain\AdulteClass;
-
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -19,7 +17,6 @@ class WpPageAdminBean extends WpPageBean
     public $slugSubOnglet;
     
     public $arrSubOnglets = array();
-
     /**
      * Class Constructor
      * @since 2.22.12.05
@@ -36,6 +33,10 @@ class WpPageAdminBean extends WpPageBean
         $this->filtreAdherent = $this->initVar('filter-adherent');
         $this->filtreDivision = $this->initVar('filter-division');
         $this->blnBoutonCreation = true;
+		$this->hasPresentation = false;
+		$this->strPresentationTitle = '';
+		$this->strPresentationContent = '';
+		$this->hasBlocImport = false;
         
         // Initialisation des templates
         $this->urlOngletContentTemplate = '';
@@ -178,7 +179,6 @@ class WpPageAdminBean extends WpPageBean
         }
         return $returned;
     }
-
     /**
      * Retourne le contenu de l'interface
      * @return string
@@ -288,7 +288,6 @@ class WpPageAdminBean extends WpPageBean
     public function getSideBar()
     {
         $urlTemplate = self::WEB_PPFN_NAV_SIDEBAR;
-
         $sidebarContent = '';
         foreach ($this->arrSidebarContent as $strOnglet => $arrOnglet) {
             // Le lien a-t-il des enfants ?
@@ -303,7 +302,6 @@ class WpPageAdminBean extends WpPageBean
             // Construction du label
             $pContent  = $arrOnglet[self::CST_LABEL];
             $pContent .= ($hasChildren ? $this->getIcon(self::I_ANGLE_LEFT, self::CST_RIGHT) : '');
-
             // Construction du lien
             $urlElements = array(
                 self::CST_ONGLET => $strOnglet,
@@ -393,7 +391,6 @@ class WpPageAdminBean extends WpPageBean
      
         return $url;
      }
-
     
     
     
@@ -411,51 +408,63 @@ class WpPageAdminBean extends WpPageBean
         $blnConfirm         = $this->initVar(self::CST_CONFIRM, false);
         $strBlocImport = '';
         
-        // Définition éventuelle du bouton Création / Annulaiton
+        // Définition éventuelle du bouton Création / Annulation
         // Définition du contenu de la page.
         $strBtnCreationAnnulation = '';
         $strMainContent = '';
-        // Si on a les droits et on est sur une page d'édition
-        if ($blnHasEditorRights) {
-            if ($blnIsEditorPage) {
-                // Bouton Annuler
-                $strBtnCreationAnnulation = $this->getCancelButton();
-                // Interface d'édition
-                $strMainContent = $this->getEditContent();
-            } elseif ($blnIsDeletePage) {
-                if ($blnConfirm) {
-                    // Bouton Retour
-                    $strBtnCreationAnnulation = $this->getReturnButton();
-                    // Interface de suppression
-                    $strMainContent = $this->getDeletedContent();
-                } else {
-                    // Bouton Annuler
-                    $strBtnCreationAnnulation = $this->getCancelButton();
-                    // Interface de suppression
-                    $strMainContent = $this->getDeleteContent();
-                }
-            } else {
-                // Bouton Créer
-                $strBtnCreationAnnulation = $this->getCreateButton();
-                // Interface de liste
-                $strMainContent = $this->getListContent($blnHasEditorRights);
-                
-                $url = self::WEB_PPFC_UPLOAD;
-                if ($this->slugSubOnglet=='') {
-                    $impAttributes = array($this->slugOnglet);
-                } else {
-                    $impAttributes = array($this->slugSubOnglet);
-                }
-                $strBlocImport  = $this->getRender($url, $impAttributes);
-                $strBlocImport .= $this->getDiv('', array(self::ATTR_ID=>'alertBlock'));
-            }
-        } else {
-            // Interface de liste
-            $strMainContent = $this->getListContent($blnHasEditorRights);
-        }
+		if ($this->slugOnglet!='' && $this->slugOnglet!=self::ONGLET_DESK) {
+			// Si on a les droits et on est sur une page d'édition
+			if ($blnHasEditorRights) {
+				if ($blnIsEditorPage) {
+					// Bouton Annuler
+					$strBtnCreationAnnulation = $this->getCancelButton();
+					// Interface d'édition
+					$strMainContent = $this->getEditContent();
+				} elseif ($blnIsDeletePage) {
+					if ($blnConfirm) {
+						// Bouton Retour
+						$strBtnCreationAnnulation = $this->getReturnButton();
+						// Interface de suppression
+						$strMainContent = $this->getDeletedContent();
+					} else {
+						// Bouton Annuler
+						$strBtnCreationAnnulation = $this->getCancelButton();
+						// Interface de suppression
+						$strMainContent = $this->getDeleteContent();
+					}
+				} else {
+					// Bouton Créer
+					$strBtnCreationAnnulation = $this->getCreateButton();
+					// Interface de liste
+					$strMainContent = $this->getListContent($blnHasEditorRights);
+					
+					$url = self::WEB_PPFC_UPLOAD;
+					if ($this->slugSubOnglet=='') {
+						$impAttributes = array($this->slugOnglet);
+					} else {
+						$impAttributes = array($this->slugSubOnglet);
+					}
+					$strBlocImport  = $this->getRender($url, $impAttributes);
+					$strBlocImport .= $this->getDiv('', array(self::ATTR_ID=>'alertBlock'));
+				}
+			} else {
+				// Interface de liste
+				$strMainContent = $this->getListContent($blnHasEditorRights);
+			}
+		}
         if (!$this->blnBoutonCreation) {
             $strBtnCreationAnnulation = '';
         }
+		
+		$strPresentation = '';
+		if ($this->hasPresentation) {
+			$urlCardTemplate = self::WEB_PPFC_CARD;
+			$attributes = array(
+				$this->strPresentationTitle,
+				$this->strPresentationContent,
+			);
+			$strPresentation = $this->getRender($urlCardTemplate, $attributes);
+		}
         
         $urlTemplate = self::WEB_PPFS_CONTENT_ONE_4TH;
         $attributes = array(
@@ -463,8 +472,8 @@ class WpPageAdminBean extends WpPageBean
             $this->slugOnglet,
             // Un éventuel bouton de Création / Annulation si on a les droits
             $strBtnCreationAnnulation,
-            // Un bloc de présentation + un éventuel bloc d'import
-            $this->getRender($this->urlOngletContentTemplate).$strBlocImport,
+            // Un éventuel bloc de présentation + un éventuel bloc d'import
+            $strPresentation.($this->hasBlocImport ? $strBlocImport : ''),
             // Une liste d'administratifs ou un formulaire d'édition.
             $strMainContent,
         );
@@ -766,7 +775,6 @@ class WpPageAdminBean extends WpPageBean
         }
         return implode(',', $arrActiveFilters);
     }
-
     /**
      * Retourne les éléments visibles dans la dropdown de Download
      * @return string
@@ -784,4 +792,12 @@ class WpPageAdminBean extends WpPageBean
     
     public function getListContent()
     { return ''; }
+	
+	public function buildBreadCrumbs()
+	{
+        $urlElements = array(self::CST_ONGLET=>$this->slugOnglet);
+        $buttonContent = $this->getLink($this->titreOnglet, $this->getUrl($urlElements), self::CST_TEXT_WHITE);
+        $buttonAttributes = array(self::ATTR_CLASS=>self::CSS_BTN_DARK.' '.self::CSS_DISABLED);
+        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+	}
 }

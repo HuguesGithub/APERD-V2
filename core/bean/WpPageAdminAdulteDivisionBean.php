@@ -1,6 +1,5 @@
 <?php
 namespace core\bean;
-
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -15,54 +14,31 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
     public function __construct()
     {
         parent::__construct();
+		
+        /////////////////////////////////////////
         // Initialisation des variables
         $this->slugOnglet = self::ONGLET_PARENTS;
         $this->slugSubOnglet = self::SUBONGLET_PARENTS_DELEGUES;
         $this->titreOnglet = self::LABEL_PARENTS_DELEGUES;
         $this->blnBoutonCreation = false;
-        
-        // Initialisation des templates
-        $this->urlOngletContentTemplate = '';
-        
-        $strNotification = '';
-        $strMessage = '';
-        
+        // Initialisation des données du bloc de présentation
+		// Initialisation de la présence d'un bloc import
+		$this->hasBlocImport = true;
+		// Initialisation d'un éventuel objet dédié.
         $id = $this->initVar(self::ATTR_ID);
         $this->objAdulteDivision = $this->objAdulteDivisionServices->getAdulteDivisionById($id);
+		// Initialisation de la pagination
         $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
+		// Initialisation des filtres
         $this->filtreAdherent = $this->initVar('filter-adherent', 'all');
-        
-        /////////////////////////////////////////
-        // Vérification de la soumission d'un formulaire
+        $this->filtreDivision = $this->initVar('filter-division', 'all');
+		// Initialisation de la variable de formulaire
         $postAction = $this->initVar(self::CST_POST_ACTION);
-        if ($postAction!='') {
-            // Un formulaire est soumis.
-            // On récupère les données qu'on affecte à l'objet
-            $this->objAdulteDivision->setField(self::FIELD_ADULTEID, $this->initVar(self::FIELD_ADULTEID));
-            $this->objAdulteDivision->setField(self::FIELD_DIVISIONID, $this->initVar(self::FIELD_DIVISIONID));
-            $this->objAdulteDivision->setField(self::FIELD_DELEGUE, 1);
-            // Si le contrôle des données est ok
-            if ($this->objAdulteDivision->controlerDonnees($strNotification, $strMessage)) {
-                // Si l'id n'est pas défini
-                if ($id=='') {
-                    // On insère l'objet
-                    $this->objAdulteDivision->insert();
-                } else {
-                    // On met à jour l'objet
-                    $this->objAdulteDivision->update();
-                }
-            } else {
-                // TODO : Le contrôle de données n'est pas bon. Afficher l'erreur.
-            }
-            // TODO : de manière générale, ce serait bien d'afficher le résultat de l'opération.
-        }
         /////////////////////////////////////////
         
         /////////////////////////////////////////
         // Construction du Breadcrumbs
-        $buttonContent = $this->getLink($this->titreOnglet, '#', self::CST_TEXT_WHITE);
-        $buttonAttributes = array(self::ATTR_CLASS=>self::CSS_BTN_DARK.' '.self::CSS_DISABLED);
-        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+		$this->buildBreadCrumbs();
         /////////////////////////////////////////
     }
     
@@ -157,12 +133,7 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
         $trContent .= $this->getFiltreAdherent();
         
         if ($this->curUser->hasEditorRights()) {
-            $strIcon = $this->getIcon(self::I_FILTER_CIRCLE_XMARK);
-            $strButton = $this->getButton($strIcon);
-            $extraAttributes = array(self::ATTR_TITLE=>self::LABEL_CLEAR_FILTER);
-            $strLink = $this->getLink($strButton, $this->getUrl(), '', $extraAttributes);
-            $strDiv = $this->getDiv($strLink, array(self::ATTR_CLASS=>'row-actions text-center'));
-            $trContent .= $this->getTh($strDiv, array(self::ATTR_CLASS=>'column-actions'));
+			$trContent .= $this->getButtonFiltre();
         }
         return $this->getBalise(self::TAG_TR, $trContent);
     }
