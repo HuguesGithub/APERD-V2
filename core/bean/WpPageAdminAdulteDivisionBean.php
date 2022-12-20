@@ -1,5 +1,6 @@
 <?php
 namespace core\bean;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -14,7 +15,7 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
     public function __construct()
     {
         parent::__construct();
-		
+        
         /////////////////////////////////////////
         // Initialisation des variables
         $this->slugOnglet = self::ONGLET_PARENTS;
@@ -22,23 +23,22 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
         $this->titreOnglet = self::LABEL_PARENTS_DELEGUES;
         $this->blnBoutonCreation = false;
         // Initialisation des données du bloc de présentation
-		// Initialisation de la présence d'un bloc import
-		$this->hasBlocImport = true;
-		// Initialisation d'un éventuel objet dédié.
+        // Initialisation de la présence d'un bloc import
+        $this->hasBlocImport = true;
+        // Initialisation d'un éventuel objet dédié.
         $id = $this->initVar(self::ATTR_ID);
         $this->objAdulteDivision = $this->objAdulteDivisionServices->getAdulteDivisionById($id);
-		// Initialisation de la pagination
+        // Initialisation de la pagination
         $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
-		// Initialisation des filtres
+        // Initialisation des filtres
         $this->filtreAdherent = $this->initVar('filter-adherent', 'all');
         $this->filtreDivision = $this->initVar('filter-division', 'all');
-		// Initialisation de la variable de formulaire
-        $postAction = $this->initVar(self::CST_POST_ACTION);
+        // Initialisation de la variable de formulaire
         /////////////////////////////////////////
         
         /////////////////////////////////////////
         // Construction du Breadcrumbs
-		$this->buildBreadCrumbs();
+        $this->buildBreadCrumbs();
         /////////////////////////////////////////
     }
     
@@ -133,7 +133,7 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
         $trContent .= $this->getFiltreAdherent();
         
         if ($this->curUser->hasEditorRights()) {
-			$trContent .= $this->getButtonFiltre();
+            $trContent .= $this->getButtonFiltre();
         }
         return $this->getBalise(self::TAG_TR, $trContent);
     }

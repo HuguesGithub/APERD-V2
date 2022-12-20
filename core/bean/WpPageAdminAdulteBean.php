@@ -1,5 +1,6 @@
 <?php
 namespace core\bean;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -14,26 +15,26 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
     public function __construct()
     {
         parent::__construct();
-		
+        
         /////////////////////////////////////////
         // Initialisation des variables
         $this->slugOnglet = self::ONGLET_PARENTS;
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
         $this->titreOnglet = self::LABEL_PARENTS;
         // Initialisation des données du bloc de présentation
-		$this->hasPresentation = true;
-		$this->strPresentationTitle = self::LABEL_PARENTS_ELEVES;
-		$this->strPresentationContent = self::LABEL_INTERFACE_PARENTS_PRES;
-		// Initialisation de la présence d'un bloc import
-		$this->hasBlocImport = true;
-		// Initialisation d'un éventuel objet dédié.
+        $this->hasPresentation = true;
+        $this->strPresentationTitle = self::LABEL_PARENTS_ELEVES;
+        $this->strPresentationContent = self::LABEL_INTERFACE_PARENTS_PRES;
+        // Initialisation de la présence d'un bloc import
+        $this->hasBlocImport = true;
+        // Initialisation d'un éventuel objet dédié.
         $id = $this->initVar(self::ATTR_ID);
         $this->objAdulte = $this->objAdulteServices->getAdulteById($id);
-		// Initialisation de la pagination
+        // Initialisation de la pagination
         $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
-		// Initialisation des filtres
+        // Initialisation des filtres
         $this->filtreAdherent = $this->initVar('filter-adherent', 'all');
-		// Initialisation de la variable de formulaire
+        // Initialisation de la variable de formulaire
         $postAction = $this->initVar(self::CST_POST_ACTION);
         /////////////////////////////////////////
         
@@ -202,26 +203,26 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         $trContent .= $this->getFiltreAdherent();
         
         if ($this->curUser->hasEditorRights()) {
-			$trContent .= $this->getButtonFiltre();
+            $trContent .= $this->getButtonFiltre();
         }
         return $this->getBalise(self::TAG_TR, $trContent);
     }
-	
+    
     /**
      * Construction du Bouton Réinitialisation du filtre
      * @return string
      * @since v2.22.12.19
      * @version v2.22.12.19
      */
-	public function getButtonFiltre()
-	{
+    public function getButtonFiltre()
+    {
         $strIcon = $this->getIcon(self::I_FILTER_CIRCLE_XMARK);
         $strButton = $this->getButton($strIcon);
         $extraAttributes = array(self::ATTR_TITLE=>self::LABEL_CLEAR_FILTER);
         $strLink = $this->getLink($strButton, $this->getUrl(), '', $extraAttributes);
         $strDiv = $this->getDiv($strLink, array(self::ATTR_CLASS=>'row-actions text-center'));
         return $this->getTh($strDiv, array(self::ATTR_CLASS=>'column-actions'));
-	}
+    }
     
     /**
      * Construction du Filtre Adherent

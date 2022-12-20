@@ -1,7 +1,9 @@
 <?php
 namespace core\daoimpl;
+
 use core\domain\AdministrationClass;
 use core\domain\MySQLClass;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }

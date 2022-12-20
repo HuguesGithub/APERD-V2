@@ -42,7 +42,7 @@ interface LabelsInterface
     const LABEL_MODIFIER            = 'Modifier';
     const LABEL_CLEAR_FILTER          = 'Nettoyer le filtre';
     const LABEL_PARENTS             = 'Parents';
-    const LABEL_PARENTS_ELEVES 	    = 'Parents d\'élèves';
+    const LABEL_PARENTS_ELEVES         = 'Parents d\'élèves';
     const LABEL_PARENTS_DELEGUES    = 'Parents Délégués';
     const LABEL_RETOUR              = 'Retour';
     const LABEL_ROLE                  = 'Rôle';
@@ -55,10 +55,10 @@ interface LabelsInterface
     
     /////////////////////////////////////////////////
     // Libellés longs
-	const LABEL_INTERFACE_DIVISIONS_PRES = 'La liste des divisions du collège.';
-	const LABEL_INTERFACE_PARENTS_PRES = 'La liste des parents ayant simplement souhaité être en relation avec l\'association, ceux ayant adhéré, les parents délégués et ceux investis dans les instances du collège.';
-	const LABEL_INTERFACE_ADMINISTRATIFS_PRES = 'Le personnel administratif présenté ici regroupe les personnes de l\'administration susceptibles d\'intervenir au sein notamment du conseil d\'administraion, mais aussi des conseils de classe.';
-	
+    const LABEL_INTERFACE_DIVISIONS_PRES = 'La liste des divisions du collège.';
+    const LABEL_INTERFACE_PARENTS_PRES = 'La liste des parents ayant simplement souhaité être en relation avec l\'association, ceux ayant adhéré, les parents délégués et ceux investis dans les instances du collège.';
+    const LABEL_INTERFACE_ADMINISTRATIFS_PRES = 'Le personnel administratif présenté ici regroupe les personnes de l\'administration susceptibles d\'intervenir au sein notamment du conseil d\'administraion, mais aussi des conseils de classe.';
+    
     /////////////////////////////////////////////////
     // Messages d'erreurs
     const MSG_ERREUR_CONTROL_ENTETE           = 'La première ligne ne correspond pas aux champs attendus : <strong>%s</strong>.';

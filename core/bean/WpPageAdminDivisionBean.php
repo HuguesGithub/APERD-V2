@@ -1,5 +1,6 @@
 <?php
 namespace core\bean;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -14,24 +15,24 @@ class WpPageAdminDivisionBean extends WpPageAdminBean
     public function __construct()
     {
         parent::__construct();
-		
+        
         /////////////////////////////////////////
         // Initialisation des variables
         $this->slugOnglet = self::ONGLET_DIVISIONS;
         $this->titreOnglet = self::LABEL_DIVISIONS;
         // Initialisation des données du bloc de présentation
-		$this->hasPresentation = true;
-		$this->strPresentationTitle = self::LABEL_DIVISIONS;
-		$this->strPresentationContent = self::LABEL_INTERFACE_DIVISIONS_PRES;
-		// Initialisation de la présence d'un bloc import
-		$this->hasBlocImport = true;
-		// Initialisation d'un éventuel objet dédié.
+        $this->hasPresentation = true;
+        $this->strPresentationTitle = self::LABEL_DIVISIONS;
+        $this->strPresentationContent = self::LABEL_INTERFACE_DIVISIONS_PRES;
+        // Initialisation de la présence d'un bloc import
+        $this->hasBlocImport = true;
+        // Initialisation d'un éventuel objet dédié.
         $id = $this->initVar(self::ATTR_ID);
         $this->objDivision = $this->objDivisionServices->getDivisionById($id);
-		// Initialisation de la pagination
+        // Initialisation de la pagination
         $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
-		// Initialisation des filtres
-		// Initialisation de la variable de formulaire
+        // Initialisation des filtres
+        // Initialisation de la variable de formulaire
         $postAction = $this->initVar(self::CST_POST_ACTION);
         /////////////////////////////////////////
         
@@ -63,7 +64,7 @@ class WpPageAdminDivisionBean extends WpPageAdminBean
         
         /////////////////////////////////////////
         // Construction du Breadcrumbs
-		$this->buildBreadCrumbs();
+        $this->buildBreadCrumbs();
         /////////////////////////////////////////
     }
     

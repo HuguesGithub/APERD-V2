@@ -1,6 +1,8 @@
 <?php
 namespace core\bean;
+
 use core\domain\AdulteClass;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -33,10 +35,10 @@ class WpPageAdminBean extends WpPageBean
         $this->filtreAdherent = $this->initVar('filter-adherent');
         $this->filtreDivision = $this->initVar('filter-division');
         $this->blnBoutonCreation = true;
-		$this->hasPresentation = false;
-		$this->strPresentationTitle = '';
-		$this->strPresentationContent = '';
-		$this->hasBlocImport = false;
+        $this->hasPresentation = false;
+        $this->strPresentationTitle = '';
+        $this->strPresentationContent = '';
+        $this->hasBlocImport = false;
         
         // Initialisation des templates
         $this->urlOngletContentTemplate = '';
@@ -412,59 +414,59 @@ class WpPageAdminBean extends WpPageBean
         // Définition du contenu de la page.
         $strBtnCreationAnnulation = '';
         $strMainContent = '';
-		if ($this->slugOnglet!='' && $this->slugOnglet!=self::ONGLET_DESK) {
-			// Si on a les droits et on est sur une page d'édition
-			if ($blnHasEditorRights) {
-				if ($blnIsEditorPage) {
-					// Bouton Annuler
-					$strBtnCreationAnnulation = $this->getCancelButton();
-					// Interface d'édition
-					$strMainContent = $this->getEditContent();
-				} elseif ($blnIsDeletePage) {
-					if ($blnConfirm) {
-						// Bouton Retour
-						$strBtnCreationAnnulation = $this->getReturnButton();
-						// Interface de suppression
-						$strMainContent = $this->getDeletedContent();
-					} else {
-						// Bouton Annuler
-						$strBtnCreationAnnulation = $this->getCancelButton();
-						// Interface de suppression
-						$strMainContent = $this->getDeleteContent();
-					}
-				} else {
-					// Bouton Créer
-					$strBtnCreationAnnulation = $this->getCreateButton();
-					// Interface de liste
-					$strMainContent = $this->getListContent($blnHasEditorRights);
-					
-					$url = self::WEB_PPFC_UPLOAD;
-					if ($this->slugSubOnglet=='') {
-						$impAttributes = array($this->slugOnglet);
-					} else {
-						$impAttributes = array($this->slugSubOnglet);
-					}
-					$strBlocImport  = $this->getRender($url, $impAttributes);
-					$strBlocImport .= $this->getDiv('', array(self::ATTR_ID=>'alertBlock'));
-				}
-			} else {
-				// Interface de liste
-				$strMainContent = $this->getListContent($blnHasEditorRights);
-			}
-		}
+        if ($this->slugOnglet!='' && $this->slugOnglet!=self::ONGLET_DESK) {
+            // Si on a les droits et on est sur une page d'édition
+            if ($blnHasEditorRights) {
+                if ($blnIsEditorPage) {
+                    // Bouton Annuler
+                    $strBtnCreationAnnulation = $this->getCancelButton();
+                    // Interface d'édition
+                    $strMainContent = $this->getEditContent();
+                } elseif ($blnIsDeletePage) {
+                    if ($blnConfirm) {
+                        // Bouton Retour
+                        $strBtnCreationAnnulation = $this->getReturnButton();
+                        // Interface de suppression
+                        $strMainContent = $this->getDeletedContent();
+                    } else {
+                        // Bouton Annuler
+                        $strBtnCreationAnnulation = $this->getCancelButton();
+                        // Interface de suppression
+                        $strMainContent = $this->getDeleteContent();
+                    }
+                } else {
+                    // Bouton Créer
+                    $strBtnCreationAnnulation = $this->getCreateButton();
+                    // Interface de liste
+                    $strMainContent = $this->getListContent($blnHasEditorRights);
+                    
+                    $url = self::WEB_PPFC_UPLOAD;
+                    if ($this->slugSubOnglet=='') {
+                        $impAttributes = array($this->slugOnglet);
+                    } else {
+                        $impAttributes = array($this->slugSubOnglet);
+                    }
+                    $strBlocImport  = $this->getRender($url, $impAttributes);
+                    $strBlocImport .= $this->getDiv('', array(self::ATTR_ID=>'alertBlock'));
+                }
+            } else {
+                // Interface de liste
+                $strMainContent = $this->getListContent($blnHasEditorRights);
+            }
+        }
         if (!$this->blnBoutonCreation) {
             $strBtnCreationAnnulation = '';
         }
-		
-		$strPresentation = '';
-		if ($this->hasPresentation) {
-			$urlCardTemplate = self::WEB_PPFC_CARD;
-			$attributes = array(
-				$this->strPresentationTitle,
-				$this->strPresentationContent,
-			);
-			$strPresentation = $this->getRender($urlCardTemplate, $attributes);
-		}
+        
+        $strPresentation = '';
+        if ($this->hasPresentation) {
+            $urlCardTemplate = self::WEB_PPFC_CARD;
+            $attributes = array(
+                $this->strPresentationTitle,
+                $this->strPresentationContent,
+            );
+            $strPresentation = $this->getRender($urlCardTemplate, $attributes);
+        }
         
         $urlTemplate = self::WEB_PPFS_CONTENT_ONE_4TH;
         $attributes = array(
@@ -792,12 +794,12 @@ class WpPageAdminBean extends WpPageBean
     
     public function getListContent()
     { return ''; }
-	
-	public function buildBreadCrumbs()
-	{
+    
+    public function buildBreadCrumbs()
+    {
         $urlElements = array(self::CST_ONGLET=>$this->slugOnglet);
         $buttonContent = $this->getLink($this->titreOnglet, $this->getUrl($urlElements), self::CST_TEXT_WHITE);
         $buttonAttributes = array(self::ATTR_CLASS=>self::CSS_BTN_DARK.' '.self::CSS_DISABLED);
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
-	}
+    }
 }

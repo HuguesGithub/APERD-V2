@@ -1,6 +1,8 @@
 <?php
 namespace core\domain;
+
 use core\bean\AdulteDivisionBean;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
