@@ -34,45 +34,12 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
         // Initialisation des filtres
         $this->filtreAdherent = $this->initVar('filter-adherent', 'all');
-        // Initialisation de la variable de formulaire
-        $postAction = $this->initVar(self::CST_POST_ACTION);
-        /////////////////////////////////////////
-        
-        $strNotification = '';
-        $strMessage = '';
-        
-        /////////////////////////////////////////
-        // Vérification de la soumission d'un formulaire
-        if ($this->curUser->hasEditorRights() && $postAction!='') {
-            // Un formulaire est soumis.
-            // On récupère les données qu'on affecte à l'objet
-            $this->objAdulte->setField(self::FIELD_NOMADULTE, $this->initVar(self::FIELD_NOMADULTE));
-            $this->objAdulte->setField(self::FIELD_PRENOMADULTE, $this->initVar(self::FIELD_PRENOMADULTE));
-            $this->objAdulte->setField(self::FIELD_MAILADULTE, $this->initVar(self::FIELD_MAILADULTE));
-            $this->objAdulte->setField(self::FIELD_ADHERENT, $this->initVar(self::FIELD_ADHERENT, 0));
-            $strPhoneAdulte = str_replace(' ', '', $this->initVar(self::FIELD_PHONEADULTE));
-            $this->objAdulte->setField(self::FIELD_PHONEADULTE, $strPhoneAdulte);
-            // Si le contrôle des données est ok
-            if ($this->objAdulte->controlerDonnees($strNotification, $strMessage)) {
-                // Si l'id n'est pas défini
-                if ($id=='') {
-                    // On insère l'objet
-                    $this->objAdulte->insert();
-                } else {
-                    // On met à jour l'objet
-                    $this->objAdulte->update();
-                }
-            } else {
-                // TODO : Le contrôle de données n'est pas bon. Afficher l'erreur.
-            }
-            // TODO : de manière générale, ce serait bien d'afficher le résultat de l'opération.
-        }
         /////////////////////////////////////////
         
         /////////////////////////////////////////
         // Construction du Breadcrumbs
         if ($this->slugSubOnglet=='') {
-            $href = '#';
+            $href = $this->getUrl();
             $buttonAttributes = array(self::ATTR_CLASS=>self::CSS_BTN_DARK.' '.self::CSS_DISABLED);
         } else {
             $urlElements = array(self::CST_ONGLET=>$this->slugOnglet, self::CST_SUBONGLET=>'');
@@ -82,6 +49,41 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         $buttonContent = $this->getLink($this->titreOnglet, $href, self::CST_TEXT_WHITE);
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
+    }
+    
+    /**
+     * En cas de formulaire, on le traite. A priori, Création ou édition pour l'heure
+     * @since v2.22.12.21
+     * @version v2.22.12.21
+     */
+    public function dealWithForm()
+    {
+        $strNotification = '';
+        $strMessage = '';
+        
+        // Un formulaire est soumis.
+        // On récupère les données qu'on affecte à l'objet
+        $this->objAdulte->setField(self::FIELD_NOMADULTE, $this->initVar(self::FIELD_NOMADULTE));
+        $this->objAdulte->setField(self::FIELD_PRENOMADULTE, $this->initVar(self::FIELD_PRENOMADULTE));
+        $this->objAdulte->setField(self::FIELD_MAILADULTE, $this->initVar(self::FIELD_MAILADULTE));
+        $this->objAdulte->setField(self::FIELD_ADHERENT, $this->initVar(self::FIELD_ADHERENT, 0));
+        $strPhoneAdulte = str_replace(' ', '', $this->initVar(self::FIELD_PHONEADULTE));
+        $this->objAdulte->setField(self::FIELD_PHONEADULTE, $strPhoneAdulte);
+        
+        // Si le contrôle des données est ok
+        if ($this->objAdulte->controlerDonnees($strNotification, $strMessage)) {
+            // Si l'id n'est pas défini
+            if ($this->objAdulte->getField(self::FIELD_ID)=='') {
+                // On insère l'objet
+                $this->objAdulte->insert();
+            } else {
+                // On met à jour l'objet
+                $this->objAdulte->update();
+            }
+        } else {
+            // TODO : Le contrôle de données n'est pas bon. Afficher l'erreur.
+        }
+        // TODO : de manière générale, ce serait bien d'afficher le résultat de l'opération.
     }
     
     /**

@@ -44,6 +44,8 @@ class WpPageAdminBean extends WpPageBean
         $this->urlOngletContentTemplate = '';
         $this->urlDeleteTemplate = self::WEB_PPFC_DELETE;
         $this->urlDeleteConfirmTemplate = self::WEB_PPFC_CONF_DEL;
+        // Initialisation de la variable de formulaire
+        $postAction = $this->initVar(self::CST_POST_ACTION);
         
         ////////////////////////////////////////////////////////
         // Gestion de l'identification via le formulaire
@@ -84,6 +86,13 @@ class WpPageAdminBean extends WpPageBean
         
         // TODO : Récupération des paramètres plus vaste que des initVar multiples ?
         // $this->analyzeUri();
+        
+        /////////////////////////////////////////
+        // Vérification de la soumission d'un formulaire
+        if ($this->curUser->hasEditorRights() && $postAction!='') {
+            $this->dealWithForm();
+        }
+        /////////////////////////////////////////
         
         ////////////////////////////////////////////////////////
         // Définition de la sidebar

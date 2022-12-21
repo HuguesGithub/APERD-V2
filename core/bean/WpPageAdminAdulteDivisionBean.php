@@ -33,7 +33,6 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
         // Initialisation des filtres
         $this->filtreAdherent = $this->initVar('filter-adherent', 'all');
         $this->filtreDivision = $this->initVar('filter-division', 'all');
-        // Initialisation de la variable de formulaire
         /////////////////////////////////////////
         
         /////////////////////////////////////////

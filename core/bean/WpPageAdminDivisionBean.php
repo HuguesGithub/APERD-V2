@@ -32,40 +32,41 @@ class WpPageAdminDivisionBean extends WpPageAdminBean
         // Initialisation de la pagination
         $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
         // Initialisation des filtres
-        // Initialisation de la variable de formulaire
-        $postAction = $this->initVar(self::CST_POST_ACTION);
-        /////////////////////////////////////////
-        
-        $strNotification = '';
-        $strMessage = '';
-        
-        /////////////////////////////////////////
-        // Vérification de la soumission d'un formulaire
-        if ($this->curUser->hasEditorRights() && $postAction!='') {
-            // Un formulaire est soumis.
-            // On récupère les données qu'on affecte à l'objet
-            $this->objDivision->setField(self::FIELD_LABELDIVISION, $this->initVar(self::FIELD_LABELDIVISION));
-            // Si le contrôle des données est ok
-            if ($this->objDivision->controlerDonnees($strNotification, $strMessage)) {
-                // Si l'id n'est pas défini
-                if ($id=='') {
-                    // On insère l'objet
-                    $this->objDivision->insert();
-                } else {
-                    // On met à jour l'objet
-                    $this->objDivision->update();
-                }
-            } else {
-                // TODO : Le contrôle de données n'est pas bon. Afficher l'erreur.
-            }
-            // TODO : de manière générale, ce serait bien d'afficher le résultat de l'opération.
-        }
         /////////////////////////////////////////
         
         /////////////////////////////////////////
         // Construction du Breadcrumbs
         $this->buildBreadCrumbs();
         /////////////////////////////////////////
+    }
+    
+    /**
+     * En cas de formulaire, on le traite. A priori, Création ou édition pour l'heure
+     * @since v2.22.12.21
+     * @version v2.22.12.21
+     */
+    public function dealWithForm()
+    {
+        $strNotification = '';
+        $strMessage = '';
+        
+        // Un formulaire est soumis.
+        // On récupère les données qu'on affecte à l'objet
+        $this->objDivision->setField(self::FIELD_LABELDIVISION, $this->initVar(self::FIELD_LABELDIVISION));
+        // Si le contrôle des données est ok
+        if ($this->objDivision->controlerDonnees($strNotification, $strMessage)) {
+            // Si l'id n'est pas défini
+            if ($this->objDivision-getField(self::FIELD_ID)=='') {
+                // On insère l'objet
+                $this->objDivision->insert();
+            } else {
+                // On met à jour l'objet
+                $this->objDivision->update();
+            }
+        } else {
+            // TODO : Le contrôle de données n'est pas bon. Afficher l'erreur.
+        }
+        // TODO : de manière générale, ce serait bien d'afficher le résultat de l'opération.
     }
     
     /**
