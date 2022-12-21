@@ -22,6 +22,7 @@ interface LabelsInterface
     const LABEL_MAIL          = 'Email';
     const LABEL_ADHERENT      = 'Adhérent';
     const LABEL_LABELDIVISION = 'Division';
+    const LABEL_LABELMATIERE  = 'Matière';
     
     /////////////////////////////////////////////////
     // Libellés divers
@@ -39,6 +40,8 @@ interface LabelsInterface
     const LABEL_LIST_PARENTS        = 'Liste des Parents d\'élèves';
     const LABEL_LIST_PARENTS_DELEGUES        = 'Liste des Parents d\'élèves délégués';
     const LABEL_LIST_DIVISIONS      = 'Liste des Divisions';
+    const LABEL_LIST_MATIERES       = 'Liste des Matières';
+    const LABEL_MATIERE               = 'Matières';
     const LABEL_MODIFIER            = 'Modifier';
     const LABEL_CLEAR_FILTER          = 'Nettoyer le filtre';
     const LABEL_PARENTS             = 'Parents';
@@ -56,6 +59,7 @@ interface LabelsInterface
     /////////////////////////////////////////////////
     // Libellés longs
     const LABEL_INTERFACE_DIVISIONS_PRES = 'La liste des divisions du collège.';
+    const LABEL_INTERFACE_MATIERES_PRES = 'La liste des matières enseignées au collège.';
     const LABEL_INTERFACE_PARENTS_PRES = 'La liste des parents ayant simplement souhaité être en relation avec l\'association, ceux ayant adhéré, les parents délégués et ceux investis dans les instances du collège.';
     const LABEL_INTERFACE_ADMINISTRATIFS_PRES = 'Le personnel administratif présenté ici regroupe les personnes de l\'administration susceptibles d\'intervenir au sein notamment du conseil d\'administraion, mais aussi des conseils de classe.';
     

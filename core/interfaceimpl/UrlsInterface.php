@@ -29,6 +29,7 @@ interface UrlsInterface
     const WEB_A_ROW_ADMINISTRATION  = self::WEB_PAF_TR.'admin-fragments-row-administration.tpl';
     const WEB_A_FORM_ADMINISTRATION = self::WEB_PAF_FORM.'admin-fragments-form-administration.tpl';
     const WEB_A_FORM_ADULTE         = self::WEB_PAF_FORM.'admin-fragments-form-adulte.tpl';
+    const WEB_A_FORM_MATIERE        = self::WEB_PAF_FORM.'admin-fragments-form-matiere.tpl';
     const WEB_P_ROW_ADMINISTRATION  = self::WEB_PPF_TR.'publique-fragments-row-administration.tpl';
     const WEB_PP_BOARD              = self::WEB_PAGES_PUBLIC.'publique-board.tpl';
     const WEB_PPFC_CARD             = self::WEB_PPF_CARD.'publique-fragments-card.tpl';

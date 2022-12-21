@@ -50,18 +50,7 @@ class WpPageAdminBean extends WpPageBean
         ////////////////////////////////////////////////////////
         // Gestion de l'identification via le formulaire
         if (isset($_POST['mail'])) {
-            // On cherche a priori à se logguer
-            $userMail = $this->initVar('mail');
-            $userPassword = $this->initVar('password');
-            // On s'identifie avec un user Wordpress.
-            $wpUser = wp_authenticate_email_password(null, $userMail, $userPassword);
-            // Si on a un wpUser qui correspond au mail et au mot de passe.
-            if ($wpUser==null || get_class($wpUser)=='WP_Error') {
-                // On a raté l'identification, on va essayé d'afficher la popup d'erreur.
-                $_SESSION[self::SESSION_APERD_ID] = self::CST_ERR_LOGIN;
-            } else {
-                $_SESSION[self::SESSION_APERD_ID] = $_POST['mail'];
-            }
+            $this->dealWithLogin();
         } elseif (isset($_GET['logout'])) {
             // On cherche a priori à se déconnecter
             unset($_SESSION[self::SESSION_APERD_ID]);
@@ -109,6 +98,10 @@ class WpPageAdminBean extends WpPageBean
                 self::CST_ICON  => self::I_SCHOOL,
                 self::CST_LABEL => self::LABEL_DIVISIONS,
             ),
+            self::ONGLET_MATIERES => array(
+                self::CST_ICON  => self::I_SCHOOL,
+                self::CST_LABEL => self::LABEL_MATIERE,
+            ),
             self::ONGLET_PARENTS => array(
                 self::CST_ICON  => self::I_USERS,
                 self::CST_LABEL => self::LABEL_PARENTS,
@@ -131,6 +124,22 @@ class WpPageAdminBean extends WpPageBean
         }
         $this->breadCrumbsContent = $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
+    }
+    
+    public function dealWithLogin()
+    {
+        // On cherche a priori à se logguer
+        $userMail = $this->initVar('mail');
+        $userPassword = $this->initVar('password');
+        // On s'identifie avec un user Wordpress.
+        $wpUser = wp_authenticate_email_password(null, $userMail, $userPassword);
+        // Si on a un wpUser qui correspond au mail et au mot de passe.
+        if ($wpUser==null || get_class($wpUser)=='WP_Error') {
+            // On a raté l'identification, on va essayé d'afficher la popup d'erreur.
+            $_SESSION[self::SESSION_APERD_ID] = self::CST_ERR_LOGIN;
+        } else {
+            $_SESSION[self::SESSION_APERD_ID] = $_POST['mail'];
+        }
     }
     
     /**
@@ -175,6 +184,9 @@ class WpPageAdminBean extends WpPageBean
                     break;
                 case self::ONGLET_DIVISIONS :
                     $objBean = new WpPageAdminDivisionBean();
+                    break;
+                case self::ONGLET_MATIERES :
+                    $objBean = new WpPageAdminMatiereBean();
                     break;
                 case self::ONGLET_PARENTS :
                     $objBean = WpPageAdminAdulteBean::getStaticWpPageBean($this->slugSubOnglet);
@@ -447,7 +459,7 @@ class WpPageAdminBean extends WpPageBean
                     // Bouton Créer
                     $strBtnCreationAnnulation = $this->getCreateButton();
                     // Interface de liste
-                    $strMainContent = $this->getListContent($blnHasEditorRights);
+                    $strMainContent = $this->getListContent();
                     
                     $url = self::WEB_PPFC_UPLOAD;
                     if ($this->slugSubOnglet=='') {
@@ -460,7 +472,7 @@ class WpPageAdminBean extends WpPageBean
                 }
             } else {
                 // Interface de liste
-                $strMainContent = $this->getListContent($blnHasEditorRights);
+                $strMainContent = $this->getListContent();
             }
         }
         if (!$this->blnBoutonCreation) {
@@ -482,9 +494,8 @@ class WpPageAdminBean extends WpPageBean
             // Identifiant de la page
             $this->slugOnglet,
             // Un éventuel bouton de Création / Annulation si on a les droits
-            $strBtnCreationAnnulation,
             // Un éventuel bloc de présentation + un éventuel bloc d'import
-            $strPresentation.($this->hasBlocImport ? $strBlocImport : ''),
+            $strBtnCreationAnnulation.$strPresentation.($this->hasBlocImport ? $strBlocImport : ''),
             // Une liste d'administratifs ou un formulaire d'édition.
             $strMainContent,
         );

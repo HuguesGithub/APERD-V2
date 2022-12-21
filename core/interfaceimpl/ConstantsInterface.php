@@ -92,6 +92,8 @@ interface ConstantsInterface
     const FIELD_DELEGUE          = 'delegue';
     // Table Division
     const FIELD_LABELDIVISION    = 'labelDivision';
+    // Table Matière
+    const FIELD_LABELMATIERE     = 'labelMatiere';
     
     /////////////////////////////////////////////////
     // Icons
@@ -122,6 +124,7 @@ interface ConstantsInterface
     const ONGLET_ADMINISTRATIFS   = 'administratifs';
     const ONGLET_DESK             = 'desk';
     const ONGLET_DIVISIONS        = 'divisions';
+    CONST ONGLET_MATIERES         = 'matieres';
     const ONGLET_PARENTS          = 'parents';
     const SUBONGLET_PARENTS_DELEGUES          = 'parentDelegue';
     
