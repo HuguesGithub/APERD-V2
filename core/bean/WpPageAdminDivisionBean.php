@@ -21,6 +21,7 @@ class WpPageAdminDivisionBean extends WpPageAdminBean
         $this->slugOnglet = self::ONGLET_DIVISIONS;
         $this->titreOnglet = self::LABEL_DIVISIONS;
         // Initialisation des données du bloc de présentation
+        $this->blnBoutonCreation = true;
         $this->hasPresentation = true;
         $this->strPresentationTitle = self::LABEL_DIVISIONS;
         $this->strPresentationContent = self::LABEL_INTERFACE_DIVISIONS_PRES;
@@ -113,5 +114,11 @@ class WpPageAdminDivisionBean extends WpPageAdminBean
         $objItems = $this->objDivisionServices->getDivisionsWithFilters();
         /////////////////////////////////////////
         return $this->getDefaultListContent($objItems);
+    }
+    
+    public function getEditContent()
+    {
+        // TODO : A implémenter
+        return '';
     }
 }

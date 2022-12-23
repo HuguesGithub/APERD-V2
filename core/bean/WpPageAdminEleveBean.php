@@ -21,6 +21,7 @@ class WpPageAdminEleveBean extends WpPageAdminBean
         $this->slugOnglet = self::ONGLET_ELEVES;
         $this->titreOnglet = self::LABEL_ELEVES;
         // Initialisation des données du bloc de présentation
+        $this->blnBoutonCreation = true;
         $this->hasPresentation = true;
         $this->strPresentationTitle = self::LABEL_ELEVES;
         $this->strPresentationContent = self::LABEL_INTERFACE_ELEVES_PRES;

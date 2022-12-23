@@ -21,7 +21,6 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
         $this->slugOnglet = self::ONGLET_PARENTS;
         $this->slugSubOnglet = self::SUBONGLET_PARENTS_DELEGUES;
         $this->titreOnglet = self::LABEL_PARENTS_DELEGUES;
-        $this->blnBoutonCreation = false;
         // Initialisation des données du bloc de présentation
         // Initialisation de la présence d'un bloc import
         $this->hasBlocImport = true;
@@ -135,5 +134,11 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
             $trContent .= $this->getButtonFiltre();
         }
         return $this->getBalise(self::TAG_TR, $trContent);
+    }
+    
+    public function getEditContent()
+    {
+        // TODO : A implémenter
+        return '';
     }
 }

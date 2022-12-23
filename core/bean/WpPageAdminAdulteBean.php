@@ -22,6 +22,7 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
         $this->titreOnglet = self::LABEL_PARENTS;
         // Initialisation des données du bloc de présentation
+        $this->blnBoutonCreation = true;
         $this->hasPresentation = true;
         $this->strPresentationTitle = self::LABEL_PARENTS_ELEVES;
         $this->strPresentationContent = self::LABEL_INTERFACE_PARENTS_PRES;

@@ -21,6 +21,7 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
         $this->slugOnglet = self::ONGLET_ADMINISTRATIFS;
         $this->titreOnglet = self::LABEL_ADMINISTRATIFS;
         // Initialisation des données du bloc de présentation
+        $this->blnBoutonCreation = true;
         $this->hasPresentation = true;
         $this->strPresentationTitle = self::LABEL_ADMINISTRATIFS;
         $this->strPresentationContent = self::LABEL_INTERFACE_ADMINISTRATIFS_PRES;

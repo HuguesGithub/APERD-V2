@@ -88,6 +88,9 @@ class EleveBean extends LocalBean
      */
     public function getForm($baseUrl)
     {
+        // TODO : A implémenter
+        return '';
+        // 
         $urlTemplate = self::WEB_A_FORM_ELEVES;
         $attributes = array(
             // Création - 1

@@ -21,6 +21,7 @@ class WpPageAdminMatiereBean extends WpPageAdminBean
         $this->slugOnglet = self::ONGLET_MATIERES;
         $this->titreOnglet = self::LABEL_MATIERES;
         // Initialisation des données du bloc de présentation
+        $this->blnBoutonCreation = true;
         $this->hasPresentation = true;
         $this->strPresentationTitle = self::LABEL_MATIERES;
         $this->strPresentationContent = self::LABEL_INTERFACE_MATIERES_PRES;
@@ -113,5 +114,11 @@ class WpPageAdminMatiereBean extends WpPageAdminBean
         $objItems = $this->objMatiereServices->getMatieresWithFilters();
         /////////////////////////////////////////
         return $this->getDefaultListContent($objItems);
+    }
+    
+    public function getEditContent()
+    {
+        // TODO : A implémenter
+        return '';
     }
 }
