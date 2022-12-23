@@ -75,6 +75,8 @@ interface ConstantsInterface
     /////////////////////////////////////////////////
     // Fields
     const FIELD_ID               = 'id';
+    const FIELD_DIVISIONID       = 'divisionId';
+    const FIELD_DELEGUE          = 'delegue';
     // Table Administration
     const FIELD_GENRE            = 'genre';
     const FIELD_NOMTITULAIRE     = 'nomTitulaire';
@@ -88,8 +90,9 @@ interface ConstantsInterface
     const FIELD_ROLEADULTE       = 'roleAdulte';
     // Table AdulteDivision
     const FIELD_ADULTEID         = 'adulteId';
-    const FIELD_DIVISIONID       = 'divisionId';
-    const FIELD_DELEGUE          = 'delegue';
+    // Table Eleve
+    const FIELD_NOMELEVE         = 'nomEleve';
+    const FIELD_PRENOMELEVE      = 'prenomEleve';
     // Table Division
     const FIELD_LABELDIVISION    = 'labelDivision';
     // Table Matière
@@ -101,6 +104,7 @@ interface ConstantsInterface
     const I_ANGLES_LEFT          = 'angles-left';
     const I_CARET_LEFT           = 'caret-left';
     const I_CARET_RIGHT          = 'caret-right';
+    const I_CHALKBOARD           = 'chalkboard';
     const I_CIRCLE               = 'circle';
     const I_DELETE               = 'trash-can';
     const I_DESKTOP              = 'desktop';
@@ -111,6 +115,7 @@ interface ConstantsInterface
     const I_SCHOOL               = 'school';
     const I_SQUARE_CHECK         = 'square-check';
     const I_SQUARE_XMARK         = 'square-xmark';
+    const I_USER_GRADUATE        = 'user-graduate';
     const I_USERS                = 'users';
     
     /////////////////////////////////////////////////
@@ -124,7 +129,8 @@ interface ConstantsInterface
     const ONGLET_ADMINISTRATIFS   = 'administratifs';
     const ONGLET_DESK             = 'desk';
     const ONGLET_DIVISIONS        = 'divisions';
-    CONST ONGLET_MATIERES         = 'matieres';
+    const ONGLET_ELEVES           = 'eleves';
+    const ONGLET_MATIERES         = 'matieres';
     const ONGLET_PARENTS          = 'parents';
     const SUBONGLET_PARENTS_DELEGUES          = 'parentDelegue';
     

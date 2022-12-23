@@ -50,6 +50,12 @@ class AjaxActions extends LocalActions
             case self::ONGLET_DIVISIONS :
                 $returned = DivisionActions::getCsvExport();
                 break;
+            case self::ONGLET_ELEVES :
+                $returned = EleveActions::getCsvExport();
+                break;
+            case self::ONGLET_MATIERES :
+                $returned = MatiereActions::getCsvExport();
+                break;
             case self::ONGLET_PARENTS :
                 $returned = AdulteActions::getCsvExport();
                 break;
@@ -79,6 +85,12 @@ class AjaxActions extends LocalActions
                 break;
             case self::ONGLET_DIVISIONS :
                 $returned = DivisionActions::importFile();
+                break;
+            case self::ONGLET_ELEVES :
+                $returned = EleveActions::importFile();
+                break;
+            case self::ONGLET_MATIERES :
+                $returned = MatiereActions::importFile();
                 break;
             case self::ONGLET_PARENTS :
                 $returned = AdulteActions::importFile();

@@ -113,8 +113,8 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
     /**
      * Retourne le filtre spécifique à l'écran.
      * @return string
-     * @param v2.22.12.18
      * @since v2.22.12.18
+     * @param v2.22.12.18
      */
     public function getTrFiltres()
     {
@@ -135,42 +135,5 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
             $trContent .= $this->getButtonFiltre();
         }
         return $this->getBalise(self::TAG_TR, $trContent);
-    }
-    
-    /**
-     * Retourne le filtre spécifique à la Division.
-     * @return string
-     * @param v2.22.12.18
-     * @since v2.22.12.18
-     */
-    public function getFiltreDivision()
-    {
-        $urlTemplate = self::WEB_PPF_FILTRE;
-        $label = 'Tous';
-        $strOptions = '';
-        $baseUrl = $this->getUrl().self::CST_AMP.'filter-division=';
-        $strClass = 'dropdown-item text-white';
-        
-        $objsDivision = $this->objDivisionServices->getDivisionsWithFilters();
-        while (!empty($objsDivision)) {
-            $objDivision = array_shift($objsDivision);
-            $strDiv = $objDivision->getField(self::FIELD_ID);
-            // Définition du label en fonction d'un éventuel filtre courant.
-            if ($this->filtreDivision==$strDiv) {
-                $label = $objDivision->getField(self::FIELD_LABELDIVISION);
-            }
-            // Construction de la liste des options.
-            $liContent = $this->getLink($objDivision->getField(self::FIELD_LABELDIVISION), $baseUrl.$strDiv, $strClass);
-            $strOptions .= $this->getBalise(self::TAG_LI, $liContent);
-        }
-        $strOptions .= $this->getBalise(self::TAG_LI, $this->getLink('Tous', $baseUrl.'all', $strClass));
-        
-        // Définition des attributs pour le template
-        $attributes = array(
-            $label,
-            $strOptions,
-        );
-        
-        return $this->getRender($urlTemplate, $attributes);
     }
 }

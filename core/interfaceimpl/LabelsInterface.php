@@ -23,42 +23,46 @@ interface LabelsInterface
     const LABEL_ADHERENT      = 'Adhérent';
     const LABEL_LABELDIVISION = 'Division';
     const LABEL_LABELMATIERE  = 'Matière';
+    const LABEL_ELEVE         = 'Élève';
     
     /////////////////////////////////////////////////
     // Libellés divers
-    const LABEL_ACTIONS             = 'Actions';
-    const LABEL_ADMINISTRATIFS      = 'Administratifs';
-    const LABEL_ANNULER             = 'Annuler';
-    const LABEL_BUREAU              = 'Bureau';
-    const LABEL_CREATION            = 'Création';
-    const LABEL_CREER               = 'Créer';
-    const LABEL_CREER_ENTREE        = 'Créer une entrée';
-    const LABEL_DELEGUE             = 'Délégué';
-    const LABEL_DIVISIONS           = 'Divisions';
-    const LABEL_EXPORTER_LISTE      = 'Exporter la liste';
-    const LABEL_LIST_ADMINISTRATIFS = 'Liste des Administratifs';
-    const LABEL_LIST_PARENTS        = 'Liste des Parents d\'élèves';
-    const LABEL_LIST_PARENTS_DELEGUES        = 'Liste des Parents d\'élèves délégués';
-    const LABEL_LIST_DIVISIONS      = 'Liste des Divisions';
-    const LABEL_LIST_MATIERES       = 'Liste des Matières';
-    const LABEL_MATIERE               = 'Matières';
-    const LABEL_MODIFIER            = 'Modifier';
+    const LABEL_ACTIONS               = 'Actions';
+    const LABEL_ADMINISTRATIFS        = 'Administratifs';
+    const LABEL_ANNULER               = 'Annuler';
+    const LABEL_BUREAU                = 'Bureau';
+    const LABEL_CREATION              = 'Création';
+    const LABEL_CREER                 = 'Créer';
+    const LABEL_CREER_ENTREE          = 'Créer une entrée';
+    const LABEL_DELEGUE               = 'Délégué';
+    const LABEL_DIVISIONS             = 'Divisions';
+    const LABEL_ELEVES                = 'Élèves';
+    const LABEL_EXPORTER_LISTE        = 'Exporter la liste';
+    const LABEL_LIST_ADMINISTRATIFS   = 'Liste des Administratifs';
+    const LABEL_LIST_PARENTS          = 'Liste des Parents d\'élèves';
+    const LABEL_LIST_PARENTS_DELEGUES = 'Liste des Parents d\'élèves délégués';
+    const LABEL_LIST_DIVISIONS        = 'Liste des Divisions';
+    const LABEL_LIST_ELEVES           = 'Liste des Élèves';
+    const LABEL_LIST_MATIERES         = 'Liste des Matières';
+    const LABEL_MATIERES              = 'Matières';
+    const LABEL_MODIFIER              = 'Modifier';
     const LABEL_CLEAR_FILTER          = 'Nettoyer le filtre';
-    const LABEL_PARENTS             = 'Parents';
-    const LABEL_PARENTS_ELEVES         = 'Parents d\'élèves';
-    const LABEL_PARENTS_DELEGUES    = 'Parents Délégués';
-    const LABEL_RETOUR              = 'Retour';
+    const LABEL_PARENTS               = 'Parents';
+    const LABEL_PARENTS_ELEVES        = 'Parents d\'élèves';
+    const LABEL_PARENTS_DELEGUES      = 'Parents Délégués';
+    const LABEL_RETOUR                = 'Retour';
     const LABEL_ROLE                  = 'Rôle';
     const LABEL_ROLE_ADMIN            = 'Administrateur';
     const LABEL_ROLE_ADHERENT         = 'Adhérent';
-    const LABEL_ROLE_EDITEUR          = 'Editeur';
+    const LABEL_ROLE_EDITEUR          = 'Éditeur';
     const LABEL_ROLE_CONTACT          = 'Contact';
-    const LABEL_SUPPRIMER           = 'Supprimer';
-    const LABEL_PHONE               = 'Téléphone';
+    const LABEL_SUPPRIMER             = 'Supprimer';
+    const LABEL_PHONE                 = 'Téléphone';
     
     /////////////////////////////////////////////////
     // Libellés longs
     const LABEL_INTERFACE_DIVISIONS_PRES = 'La liste des divisions du collège.';
+    const LABEL_INTERFACE_ELEVES_PRES = 'La liste des élèves du collège.';
     const LABEL_INTERFACE_MATIERES_PRES = 'La liste des matières enseignées au collège.';
     const LABEL_INTERFACE_PARENTS_PRES = 'La liste des parents ayant simplement souhaité être en relation avec l\'association, ceux ayant adhéré, les parents délégués et ceux investis dans les instances du collège.';
     const LABEL_INTERFACE_ADMINISTRATIFS_PRES = 'Le personnel administratif présenté ici regroupe les personnes de l\'administration susceptibles d\'intervenir au sein notamment du conseil d\'administraion, mais aussi des conseils de classe.';

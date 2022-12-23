@@ -33,6 +33,7 @@ class WpPageAdminBean extends WpPageBean
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
         $this->slugAction = $this->initVar(self::CST_ACTION);
         $this->filtreAdherent = $this->initVar('filter-adherent');
+        $this->filtreDelegue  = $this->initVar('filter-delegue');
         $this->filtreDivision = $this->initVar('filter-division');
         $this->blnBoutonCreation = true;
         $this->hasPresentation = false;
@@ -73,9 +74,6 @@ class WpPageAdminBean extends WpPageBean
         }
         ////////////////////////////////////////////////////////
         
-        // TODO : Récupération des paramètres plus vaste que des initVar multiples ?
-        // $this->analyzeUri();
-        
         /////////////////////////////////////////
         // Vérification de la soumission d'un formulaire
         if ($this->curUser->hasEditorRights() && $postAction!='') {
@@ -99,14 +97,18 @@ class WpPageAdminBean extends WpPageBean
                 self::CST_LABEL => self::LABEL_DIVISIONS,
             ),
             self::ONGLET_MATIERES => array(
-                self::CST_ICON  => self::I_SCHOOL,
-                self::CST_LABEL => self::LABEL_MATIERE,
+                self::CST_ICON  => self::I_CHALKBOARD,
+                self::CST_LABEL => self::LABEL_MATIERES,
+            ),
+            self::ONGLET_ELEVES => array(
+                self::CST_ICON  => self::I_USER_GRADUATE,
+                self::CST_LABEL => self::LABEL_ELEVES,
             ),
             self::ONGLET_PARENTS => array(
                 self::CST_ICON  => self::I_USERS,
                 self::CST_LABEL => self::LABEL_PARENTS,
                 self::CST_CHILDREN => array(
-                    self::CST_PARENTS_DIVISIONS  => 'Délégués',
+                    self::CST_PARENTS_DIVISIONS  => self::LABEL_PARENTS_DELEGUES,
                 ),
             ),
         );
@@ -184,6 +186,9 @@ class WpPageAdminBean extends WpPageBean
                     break;
                 case self::ONGLET_DIVISIONS :
                     $objBean = new WpPageAdminDivisionBean();
+                    break;
+                case self::ONGLET_ELEVES :
+                    $objBean = new WpPageAdminEleveBean();
                     break;
                 case self::ONGLET_MATIERES :
                     $objBean = new WpPageAdminMatiereBean();
@@ -414,8 +419,6 @@ class WpPageAdminBean extends WpPageBean
      
         return $url;
      }
-    
-    
     
     /**
      * @return string
@@ -754,7 +757,7 @@ class WpPageAdminBean extends WpPageBean
         
         // Avec un dropdown
         $btnAttributes = array(
-            self::ATTR_ID => 'dropdownDownloas',
+            self::ATTR_ID => 'dropdownDownload',
             self::ATTR_CLASS => 'btn-light dropdown-toggle',
             'data-bs-toggle' => 'dropdown',
             'aria-expanded' => 'false',
@@ -821,5 +824,58 @@ class WpPageAdminBean extends WpPageBean
         $buttonContent = $this->getLink($this->titreOnglet, $this->getUrl($urlElements), self::CST_TEXT_WHITE);
         $buttonAttributes = array(self::ATTR_CLASS=>self::CSS_BTN_DARK.' '.self::CSS_DISABLED);
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+    }
+    
+    /**
+     * Retourne le filtre spécifique à la Division.
+     * @return string
+     * @param v2.22.12.18
+     * @since v2.22.12.18
+     */
+    public function getFiltreDivision()
+    {
+        $urlTemplate = self::WEB_PPF_FILTRE;
+        $label = 'Tous';
+        $strOptions = '';
+        $baseUrl = $this->getUrl().self::CST_AMP.'filter-division=';
+        $strClass = 'dropdown-item text-white';
+        
+        $objsDivision = $this->objDivisionServices->getDivisionsWithFilters();
+        while (!empty($objsDivision)) {
+            $objDivision = array_shift($objsDivision);
+            $strDiv = $objDivision->getField(self::FIELD_ID);
+            // Définition du label en fonction d'un éventuel filtre courant.
+            if ($this->filtreDivision==$strDiv) {
+                $label = $objDivision->getField(self::FIELD_LABELDIVISION);
+            }
+            // Construction de la liste des options.
+            $liContent = $this->getLink($objDivision->getField(self::FIELD_LABELDIVISION), $baseUrl.$strDiv, $strClass);
+            $strOptions .= $this->getBalise(self::TAG_LI, $liContent);
+        }
+        $strOptions .= $this->getBalise(self::TAG_LI, $this->getLink('Tous', $baseUrl.'all', $strClass));
+        
+        // Définition des attributs pour le template
+        $attributes = array(
+            $label,
+            $strOptions,
+        );
+        
+        return $this->getRender($urlTemplate, $attributes);
+    }
+    
+    /**
+     * Construction du Bouton Réinitialisation du filtre
+     * @return string
+     * @since v2.22.12.19
+     * @version v2.22.12.19
+     */
+    public function getButtonFiltre()
+    {
+        $strIcon = $this->getIcon(self::I_FILTER_CIRCLE_XMARK);
+        $strButton = $this->getButton($strIcon);
+        $extraAttributes = array(self::ATTR_TITLE=>self::LABEL_CLEAR_FILTER);
+        $strLink = $this->getLink($strButton, $this->getUrl(), '', $extraAttributes);
+        $strDiv = $this->getDiv($strLink, array(self::ATTR_CLASS=>'row-actions text-center'));
+        return $this->getTh($strDiv, array(self::ATTR_CLASS=>'column-actions'));
     }
 }

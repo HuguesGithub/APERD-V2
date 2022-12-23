@@ -5,6 +5,8 @@ use core\services\AdministrationServices;
 use core\services\AdulteServices;
 use core\services\AdulteDivisionServices;
 use core\services\DivisionServices;
+use core\services\EleveServices;
+use core\services\MatiereServices;
 use core\interfaceimpl\ConstantsInterface;
 use core\interfaceimpl\UrlsInterface;
 use core\interfaceimpl\LabelsInterface;
@@ -26,6 +28,8 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
         $this->objAdulteServices         = new AdulteServices();
         $this->objAdulteDivisionServices = new AdulteDivisionServices();
         $this->objDivisionServices       = new DivisionServices();
+        $this->objEleveServices          = new EleveServices();
+        $this->objMatiereServices        = new MatiereServices();
     }
     
     /**

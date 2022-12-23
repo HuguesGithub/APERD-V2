@@ -19,10 +19,10 @@ class WpPageAdminMatiereBean extends WpPageAdminBean
         /////////////////////////////////////////
         // Initialisation des variables
         $this->slugOnglet = self::ONGLET_MATIERES;
-        $this->titreOnglet = self::LABEL_MATIERE;
+        $this->titreOnglet = self::LABEL_MATIERES;
         // Initialisation des données du bloc de présentation
         $this->hasPresentation = true;
-        $this->strPresentationTitle = self::LABEL_MATIERE;
+        $this->strPresentationTitle = self::LABEL_MATIERES;
         $this->strPresentationContent = self::LABEL_INTERFACE_MATIERES_PRES;
         // Initialisation de la présence d'un bloc import
         $this->hasBlocImport = true;
