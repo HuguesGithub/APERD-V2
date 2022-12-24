@@ -118,17 +118,24 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
     public function getTrFiltres()
     {
         /////////////////////////////////////////
+        // Filtre en place
+        $arrFilters = array(
+            'division' => $this->filtreDivision,    
+            'adherent' => $this->filtreAdherent,
+        );
+        
+        /////////////////////////////////////////
         // On va mettre en place la ligne de Filtre
         $trContent = '';
         if ($this->curUser->hasEditorRights()) {
             $trContent .= $this->getTh(self::CST_NBSP);
         }
         $trContent .= $this->getTh(self::CST_NBSP);
-        $trContent .= $this->getFiltreDivision();
+        $trContent .= $this->getFiltreDivision($arrFilters);
         $trContent .= $this->getTh(self::CST_NBSP);
         
         // Filtre Adhérent
-        $trContent .= $this->getFiltreAdherent();
+        $trContent .= $this->getFiltreAdherent($arrFilters);
         
         if ($this->curUser->hasEditorRights()) {
             $trContent .= $this->getButtonFiltre();

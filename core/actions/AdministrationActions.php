@@ -2,7 +2,6 @@
 namespace core\actions;
 
 use core\domain\AdministrationClass;
-use core\services\AdministrationServices;
 
 if (!defined('ABSPATH')) {
     die('Forbidden');
@@ -11,32 +10,39 @@ if (!defined('ABSPATH')) {
  * AdministrationActions
  * @author Hugues
  * @since 1.22.12.07
- * @version 1.22.12.08
+ * @version 1.22.12.24
  */
 class AdministrationActions extends LocalActions
 {
     //////////////////////////////////////////////////
     // CONSTRUCT
     //////////////////////////////////////////////////
+    
+    public function __construct()
+    {
+        parent::__construct();
+        $this->obj = new AdministrationClass();
+        $this->importType = self::ONGLET_ADMINISTRATIFS;
+    }
+    
+    //////////////////////////////////////////////////
+    // METHODES
+    //////////////////////////////////////////////////
     /**
      * @since 1.22.12.07
-     * @version 1.22.12.08
+     * @version 1.22.12.24
      */
-    public static function getCsvExport()
+    public function getCsvExport()
     {
         $arrToExport = array();
-        $objAdministrationServices = new AdministrationServices();
-
-        // On initialise un objet et on récupère l'entête
-        $objAdministration = new AdministrationClass();
         // On récupère l'entête
-        $arrToExport[] = $objAdministration->getCsvEntete();
+        $arrToExport[] = $this->obj->getCsvEntete();
         
         // On vérifie si on veut tous les éléments ou seulement une sélection
         $ids = $_POST[self::CST_IDS];
         if ($ids==self::CST_ALL) {
             // On récupère toutes les données
-            $objsAdministration = $objAdministrationServices->getAdministrationsWithFilters();
+            $objsAdministration = $this->objAdministrationServices->getAdministrationsWithFilters();
             foreach ($objsAdministration as $objAdministration) {
                 $arrToExport[] = $objAdministration->toCsv();
             }
@@ -47,59 +53,12 @@ class AdministrationActions extends LocalActions
                 if (empty($id)) {
                     continue;
                 }
-                $objAdministration = $objAdministrationServices->getAdministrationById($id);
+                $objAdministration = $this->objAdministrationServices->getAdministrationById($id);
                 $arrToExport[] = $objAdministration->toCsv();
             }
         }
         
         // On retourne le message de réussite.
-        return LocalActions::exportFile($arrToExport, ucfirst(self::ONGLET_ADMINISTRATIFS));
-    }
-    
-    /**
-     * @since 1.22.12.09
-     * @version 1.22.12.09
-     */
-    public static function importFile()
-    {
-        $importType = $_POST['importType'];
-        $dirName    = dirname(__FILE__).'/../../web/rsc/csv-files/';
-        $fileName   = $dirName.'import_'.self::ONGLET_ADMINISTRATIFS.'.csv';
-        if ($importType==self::ONGLET_ADMINISTRATIFS &&
-            is_uploaded_file($_FILES['fileToImport']['tmp_name']) &&
-            rename($_FILES['fileToImport']['tmp_name'], $fileName)) {
-            $obj = new AdministrationActions();
-            return $obj->dealWithImport($fileName);
-        }
-    }
-    
-    /**
-     * Vérifie la validité du fichier importé.
-     * @param array $arrContent
-     * @param string $notif
-     * @param string $msg
-     * @param string $msgError
-     * @return boolean
-     * @since v2.22.12.18
-     * @version v2.22.12.18
-     */
-    public function controlerDonneesImport($arrContent, &$notif, &$msg, &$msgError)
-    {
-        $headerRow   = array_shift($arrContent);
-        $objAdministration = new AdministrationClass();
-        $blnOk       = $objAdministration->controlerEntete($headerRow, $notif, $msgError);
-        
-        if ($blnOk) {
-            $rkRow = 2;
-            while (!empty($arrContent) && $blnOk) {
-                $rowContent = array_shift($arrContent);
-                $blnOk  = $objAdministration->controlerImportRow($rowContent, $notif, $msg);
-                if (!$blnOk) {
-                    $msgError = 'Ligne '.$rkRow.' : '.$msg;
-                }
-                $rkRow++;
-            }
-        }
-        return $blnOk;
+        return $this->exportFile($arrToExport, ucfirst(self::ONGLET_ADMINISTRATIFS));
     }
 }

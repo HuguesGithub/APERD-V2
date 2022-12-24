@@ -4,6 +4,12 @@ namespace core\actions;
 use core\interfaceimpl\ConstantsInterface;
 use core\interfaceimpl\LabelsInterface;
 use core\interfaceimpl\UrlsInterface;
+use core\services\AdministrationServices;
+use core\services\AdulteServices;
+use core\services\AdulteDivisionServices;
+use core\services\DivisionServices;
+use core\services\EleveServices;
+use core\services\MatiereServices;
 
 if (!defined('ABSPATH')) {
     die('Forbidden');
@@ -12,7 +18,7 @@ if (!defined('ABSPATH')) {
  * LocalActions
  * @author Hugues
  * @since 1.22.12.07
- * @version 1.22.12.07
+ * @version 1.22.12.24
  */
 class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
 {
@@ -20,7 +26,14 @@ class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
      * Class Constructor
      */
     public function __construct()
-    { }
+    {
+        $this->objAdministrationServices = new AdministrationServices();
+        $this->objAdulteServices         = new AdulteServices();
+        $this->objAdulteDivisionServices = new AdulteDivisionServices();
+        $this->objDivisionServices       = new DivisionServices();
+        $this->objEleveServices          = new EleveServices();
+        $this->objMatiereServices        = new MatiereServices();
+    }
     
     /**
      * @return bool
@@ -34,7 +47,7 @@ class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
      * @since 1.22.12.07
      * @version 1.22.12.07
      */
-    public static function exportFile($data, $prefix)
+    public function exportFile($data, $prefix)
     {
         $dirName = dirname(__FILE__).'/../../web/rsc/csv-files/';
         $fileName = self::CST_EXPORT.'_'.strtolower($prefix).'_'.date('Ymd_His').'.csv';
@@ -43,9 +56,24 @@ class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
         fclose($dst);
         $fileName = '/wp-content/plugins/hj-v2-aperd/web/rsc/csv-files/'.$fileName;
         
-        $objActions = new LocalActions();
         $msg = sprintf(self::MSG_SUCCESS_EXPORT, $fileName);
-        return $objActions->getToastContentJson(self::NOTIF_SUCCESS, 'Succès', $msg);
+        return $this->getToastContentJson(self::NOTIF_SUCCESS, 'Succès', $msg);
+    }
+    
+    /**
+     * @since 1.22.12.09
+     * @version 1.22.12.24
+     */
+    public function importFile()
+    {
+        $importType = $_POST['importType'];
+        $dirName    = dirname(__FILE__).'/../../web/rsc/csv-files/';
+        $fileName   = $dirName.'import_'.$this->importType.'.csv';
+        if ($importType==$this->importType &&
+            is_uploaded_file($_FILES['fileToImport']['tmp_name']) &&
+            rename($_FILES['fileToImport']['tmp_name'], $fileName)) {
+                return $this->dealWithImport($fileName);
+            }
     }
     
     /**
@@ -79,6 +107,12 @@ class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
         return $strContent;
     }
     
+    /**
+     * @param string $srcFile
+     * @return string
+     * @since v2.22.12.24
+     * @version v2.22.12.24
+     */
     public function dealWithImport($srcFile)
     {
         $notif = '';
@@ -98,5 +132,34 @@ class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
         } else {
             return '{"alertBlock": '.json_encode($this->getDismissableButton($notif, $msgError)).'}';
         }
+    }
+    
+    /**
+     * Vérifie la validité du fichier importé.
+     * @param array $arrContent
+     * @param string $notif
+     * @param string $msg
+     * @param string $msgError
+     * @return boolean
+     * @since v2.22.12.18
+     * @version v2.22.12.18
+     */
+    public function controlerDonneesImport($arrContent, &$notif, &$msg, &$msgError)
+    {
+        $headerRow = array_shift($arrContent);
+        $blnOk     = $this->obj->controlerEntete($headerRow, $notif, $msgError);
+        
+        if ($blnOk) {
+            $rkRow = 2;
+            while (!empty($arrContent) && $blnOk) {
+                $rowContent = array_shift($arrContent);
+                $blnOk  = $this->obj->controlerImportRow($rowContent, $notif, $msg);
+                if (!$blnOk) {
+                    $msgError = 'Ligne '.$rkRow.' : '.$msg;
+                }
+                $rkRow++;
+            }
+        }
+        return $blnOk;
     }
 }

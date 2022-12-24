@@ -150,13 +150,19 @@ class WpPageAdminEleveBean extends WpPageAdminBean
     public function getTrFiltres()
     {
         /////////////////////////////////////////
+        // Filtre en place
+        $arrFilters = array(
+            'division' => $this->filtreDivision,
+        );
+        
+        /////////////////////////////////////////
         // On va mettre en place la ligne de Filtre
         $trContent = '';
         if ($this->curUser->hasEditorRights()) {
             $trContent .= $this->getTh(self::CST_NBSP);
         }
         $trContent .= $this->getTh(self::CST_NBSP);
-        $trContent .= $this->getFiltreDivision();
+        $trContent .= $this->getFiltreDivision($arrFilters);
         
         // Filtre Delegue
         $trContent .= $this->getFiltreDelegue();

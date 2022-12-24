@@ -90,7 +90,7 @@ class EleveBean extends LocalBean
     {
         // TODO : A implémenter
         return '';
-        // 
+        //
         $urlTemplate = self::WEB_A_FORM_ELEVES;
         $attributes = array(
             // Création - 1

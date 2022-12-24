@@ -194,6 +194,12 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
     public function getTrFiltres()
     {
         /////////////////////////////////////////
+        // Filtre en place
+        $arrFilters = array(
+            'adherent' => $this->filtreAdherent,
+        );
+        
+        /////////////////////////////////////////
         // On va mettre en place la ligne de Filtre
         $trContent = '';
         if ($this->curUser->hasEditorRights()) {
@@ -203,7 +209,7 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         $trContent .= $this->getTh(self::CST_NBSP);
         
         // Filtre Adhérent
-        $trContent .= $this->getFiltreAdherent();
+        $trContent .= $this->getFiltreAdherent($arrFilters);
         
         if ($this->curUser->hasEditorRights()) {
             $trContent .= $this->getButtonFiltre();
@@ -217,10 +223,11 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
      * @since v2.22.12.18
      * @version v2.22.12.18
      */
-    public function getFiltreAdherent()
+    public function getFiltreAdherent($arrFilters)
     {
+        /////////////////////////////////////////////
+        // Définition de quelques variables
         $urlTemplate = self::WEB_PPF_FILTRE;
-        
         // Définition du label en fonction d'un éventuel filtre courant.
         if ($this->filtreAdherent=='oui') {
             $label = 'Oui';
@@ -229,14 +236,28 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         } else {
             $label = 'Tous';
         }
-        
-        // Construction de la liste des options.
         $strOptions = '';
         $strClass = 'dropdown-item text-white';
-        $baseUrl = $this->getUrl().self::CST_AMP.'filter-adherent=';
+        /////////////////////////////////////////////
+        
+        /////////////////////////////////////////////
+        // Définition de l'url de base pour la redirection
+        $baseUrl  = $this->getUrl();
+        foreach ($arrFilters as $key=>$value) {
+            if ($key=='adherent') {
+                continue;
+            }
+            $baseUrl .= self::CST_AMP.'filter-'.$key.'='.$value;
+        }
+        $baseUrl .= self::CST_AMP.'filter-adherent=';
+        /////////////////////////////////////////////
+        
+        /////////////////////////////////////////////
+        // Construction des options
         $strOptions .= $this->getBalise(self::TAG_LI, $this->getLink('Oui', $baseUrl.'oui', $strClass));
         $strOptions .= $this->getBalise(self::TAG_LI, $this->getLink('Non', $baseUrl.'non', $strClass));
         $strOptions .= $this->getBalise(self::TAG_LI, $this->getLink('Tous', $baseUrl.'all', $strClass));
+        /////////////////////////////////////////////
         
         // Définition des attributs pour le template
         $attributes = array(

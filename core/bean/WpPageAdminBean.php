@@ -756,6 +756,9 @@ class WpPageAdminBean extends WpPageBean
         if ($this->filtreAdherent!='') {
             $arrActiveFilters[] = 'filter-adherent='.$this->filtreAdherent;
         }
+        if ($this->filtreDivision!='') {
+            $arrActiveFilters[] = 'filter-division='.$this->filtreDivision;
+        }
         return implode(',', $arrActiveFilters);
     }
     /**
@@ -790,14 +793,30 @@ class WpPageAdminBean extends WpPageBean
      * @param v2.22.12.18
      * @since v2.22.12.18
      */
-    public function getFiltreDivision()
+    public function getFiltreDivision($arrFilters)
     {
+        /////////////////////////////////////////////
+        // Définition de quelques variables
         $urlTemplate = self::WEB_PPF_FILTRE;
         $label = 'Tous';
         $strOptions = '';
-        $baseUrl = $this->getUrl().self::CST_AMP.'filter-division=';
         $strClass = 'dropdown-item text-white';
+        /////////////////////////////////////////////
         
+        /////////////////////////////////////////////
+        // Définition de l'url de base pour la redirection
+        $baseUrl  = $this->getUrl();
+        foreach ($arrFilters as $key=>$value) {
+            if ($key=='division') {
+                continue;
+            }
+            $baseUrl .= self::CST_AMP.'filter-'.$key.'='.$value;
+        }
+        $baseUrl .= self::CST_AMP.'filter-division=';
+        /////////////////////////////////////////////
+        
+        /////////////////////////////////////////////
+        // Construction des options
         $objsDivision = $this->objDivisionServices->getDivisionsWithFilters();
         while (!empty($objsDivision)) {
             $objDivision = array_shift($objsDivision);
@@ -811,6 +830,7 @@ class WpPageAdminBean extends WpPageBean
             $strOptions .= $this->getBalise(self::TAG_LI, $liContent);
         }
         $strOptions .= $this->getBalise(self::TAG_LI, $this->getLink('Tous', $baseUrl.'all', $strClass));
+        /////////////////////////////////////////////
         
         // Définition des attributs pour le template
         $attributes = array(
