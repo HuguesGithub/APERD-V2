@@ -38,6 +38,13 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         /////////////////////////////////////////
         
         /////////////////////////////////////////
+        // Vérification de la soumission d'un formulaire
+        if ($this->curUser->hasEditorRights() && $this->postAction!='') {
+            $this->dealWithForm();
+        }
+        /////////////////////////////////////////
+        
+        /////////////////////////////////////////
         // Construction du Breadcrumbs
         if ($this->slugSubOnglet=='') {
             $href = $this->getUrl();
@@ -77,14 +84,19 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
             if ($this->objAdulte->getField(self::FIELD_ID)=='') {
                 // On insère l'objet
                 $this->objAdulte->insert();
+                // On renseigne le message d'information.
+                $this->strNotifications = $this->getAlertContent(self::NOTIF_SUCCESS, self::MSG_SUCCESS_CREATE);
             } else {
                 // On met à jour l'objet
                 $this->objAdulte->update();
+                // On renseigne le message d'information.
+                $this->strNotifications = $this->getAlertContent(self::NOTIF_SUCCESS, self::MSG_SUCCESS_EDIT);
             }
         } else {
-            // TODO : Le contrôle de données n'est pas bon. Afficher l'erreur.
+            // Le contrôle de données n'est pas bon. Afficher l'erreur.
+            $this->strNotifications = $this->getAlertContent($strNotification, $strMessage);
         }
-        // TODO : de manière générale, ce serait bien d'afficher le résultat de l'opération.
+        /////////////////////////////////////////
     }
     
     /**
@@ -169,7 +181,7 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
     public function getEditContent()
     {
         $baseUrl = $this->getUrl(array(self::CST_SUBONGLET=>''));
-        return $this->objAdulte->getBean()->getForm($baseUrl);
+        return $this->objAdulte->getBean()->getForm($baseUrl, $this->strNotifications);
     }
     
     /**
@@ -243,7 +255,7 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         /////////////////////////////////////////////
         // Définition de l'url de base pour la redirection
         $baseUrl  = $this->getUrl();
-        foreach ($arrFilters as $key=>$value) {
+        foreach ($arrFilters as $key => $value) {
             if ($key=='adherent') {
                 continue;
             }

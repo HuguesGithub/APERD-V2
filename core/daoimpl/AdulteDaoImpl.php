@@ -134,7 +134,7 @@ class AdulteDaoImpl extends LocalDaoImpl
         $request .= "prenomAdulte = '%s', ";
         $request .= "mailAdulte = '%s', ";
         $request .= "adherent = '%s', ";
-        $request .= "phoneAdulte = '%s' ";
+        $request .= "phoneAdulte = '%s', ";
         $request .= "roleAdulte = '%s' ";
         $request .= "WHERE id = '%s';";
         parent::update($request, $attributes);

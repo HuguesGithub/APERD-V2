@@ -68,7 +68,7 @@ class AdulteDivisionActions extends LocalActions
                         $adh = '%';
                     }
                     $arrActiveFilters[self::FIELD_ADHERENT] = $adh;
-                } else if ($key=='filter-division') {
+                } elseif ($key=='filter-division') {
                     ///////////////////////////////////////////
                     // Filtre sur Division
                     $arrActiveFilters[self::FIELD_DIVISIONID] = $value;

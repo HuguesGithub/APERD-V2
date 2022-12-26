@@ -85,7 +85,7 @@ class AdulteBean extends LocalBean
      * @since 2.22.12.08
      * @version 2.22.12.08
      */
-    public function getForm($baseUrl)
+    public function getForm($baseUrl, $strNotifications='')
     {
         $urlTemplate = self::WEB_A_FORM_ADULTE;
         $attributes = array(
@@ -95,15 +95,17 @@ class AdulteBean extends LocalBean
             $this->obj->getField(self::FIELD_ID),
             // Annuler - 3
             $baseUrl,
-            // Nom du Parent - 4
+            // Alerte - 4
+            $strNotifications,
+            // Nom du Parent - 
             $this->obj->getField(self::FIELD_NOMADULTE),
-            // Prénom du Parent - 5
+            // Prénom du Parent - 
             $this->obj->getField(self::FIELD_PRENOMADULTE),
-            // Mail du Parent - 6
+            // Mail du Parent - 
             $this->obj->getField(self::FIELD_MAILADULTE),
-            // Parent Adhérent ? - 7
+            // Parent Adhérent ? - 
             ($this->obj->getField(self::FIELD_ADHERENT)==1 ? ' '.self::CST_CHECKED : ''),
-            // Téléphone du Parent - 8
+            // Téléphone du Parent - 9
             $this->obj->getField(self::FIELD_PHONEADULTE),
         );
         return $this->getRender($urlTemplate, $attributes);

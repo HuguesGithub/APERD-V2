@@ -93,7 +93,13 @@ class EleveClass extends LocalDomainClass
             $blnOk = false;
         }
         
-        // TODO : checker la division
+        /////////////////////////////////////////////
+        // La division de l'élève doit être renseignée et exister
+        if ($blnOk && $this->getDivision()->getField(self::FIELD_ID)=='') {
+            $notif = self::NOTIF_DANGER;
+            $msg = vsprintf(self::MSG_ERREUR_CONTROL_EXISTENCE, array(self::LABEL_LABELDIVISION));
+            $blnOk = false;
+        }
         
         /////////////////////////////////////////////
         // Fin des contrôles

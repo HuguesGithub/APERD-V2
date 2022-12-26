@@ -800,7 +800,7 @@ class WpPageAdminBean extends WpPageBean
         /////////////////////////////////////////////
         // Définition de l'url de base pour la redirection
         $baseUrl  = $this->getUrl();
-        foreach ($arrFilters as $key=>$value) {
+        foreach ($arrFilters as $key => $value) {
             if ($key=='division') {
                 continue;
             }

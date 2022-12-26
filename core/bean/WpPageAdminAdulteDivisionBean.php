@@ -120,7 +120,7 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
         /////////////////////////////////////////
         // Filtre en place
         $arrFilters = array(
-            'division' => $this->filtreDivision,    
+            'division' => $this->filtreDivision,
             'adherent' => $this->filtreAdherent,
         );
         
