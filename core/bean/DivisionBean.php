@@ -80,7 +80,7 @@ class DivisionBean extends LocalBean
      * @since 2.22.12.14
      * @version 2.22.12.14
      */
-    public function getForm($baseUrl)
+    public function getForm($baseUrl, $strNotifications='')
     {
         $urlTemplate = self::WEB_A_FORM_DIVISION;
         $attributes = array(
@@ -90,7 +90,9 @@ class DivisionBean extends LocalBean
             $this->obj->getField(self::FIELD_ID),
             // Annuler - 3
             $baseUrl,
-            // Libellé de la Division - 4
+            // Message de confirmation ou d'erreur - 4
+            $strNotifications,
+            // Libellé de la Division - 5
             $this->obj->getField(self::FIELD_LABELDIVISION),
         );
         return $this->getRender($urlTemplate, $attributes);

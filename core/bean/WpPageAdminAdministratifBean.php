@@ -36,6 +36,13 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
         /////////////////////////////////////////
         
         /////////////////////////////////////////
+        // Vérification de la soumission d'un formulaire
+        if ($this->curUser->hasEditorRights() && $this->postAction!='') {
+            $this->dealWithForm();
+        }
+        /////////////////////////////////////////
+        
+        /////////////////////////////////////////
         // Construction du Breadcrumbs
         $this->buildBreadCrumbs();
         /////////////////////////////////////////
@@ -64,14 +71,18 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
             if ($this->objAdministratif->getField(self::FIELD_ID)=='') {
                 // On insère l'objet
                 $this->objAdministratif->insert();
+                // On renseigne le message d'information.
+                $this->strNotifications = $this->getAlertContent(self::NOTIF_SUCCESS, self::MSG_SUCCESS_CREATE);
             } else {
                 // On met à jour l'objet
                 $this->objAdministratif->update();
+                // On renseigne le message d'information.
+                $this->strNotifications = $this->getAlertContent(self::NOTIF_SUCCESS, self::MSG_SUCCESS_EDIT);
             }
         } else {
-            // TODO : Le contrôle de données n'est pas bon. Afficher l'erreur.
+            // Le contrôle de données n'est pas bon. Afficher l'erreur.
+            $this->strNotifications = $this->getAlertContent($strNotification, $strMessage);
         }
-        // TODO : de manière générale, ce serait bien d'afficher le résultat de l'opération.
         /////////////////////////////////////////
     }
     

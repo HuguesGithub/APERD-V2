@@ -77,8 +77,10 @@ interface LabelsInterface
     /////////////////////////////////////////////////
     // Messages de succès
     const MSG_SUCCESS_EXPORT = 'Exportation réussie. Le fichier peut être téléchargé <a href="%s" class="text-white">ici</a>.';
-    const MSG_SUCCESS_IMPORT                  = 'L\'importation des données s\'est correctement déroulée.';
-
+    const MSG_SUCCESS_IMPORT = 'L\'importation des données s\'est correctement déroulée.';
+    const MSG_SUCCESS_CREATE = 'La création s\'est correctement déroulée.';
+    const MSG_SUCCESS_EDIT   = 'L\'édition s\'est correctement déroulée.';
+    
     /////////////////////////////////////////////////
     // Messages dynamiques
     const DYN_DISPLAYED_PAGINATION = '%1$s - %2$s sur %3$s';

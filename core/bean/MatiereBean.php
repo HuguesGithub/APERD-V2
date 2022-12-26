@@ -80,7 +80,7 @@ class MatiereBean extends LocalBean
      * @since 2.22.12.21
      * @version 2.22.12.21
      */
-    public function getForm($baseUrl)
+    public function getForm($baseUrl, $strNotifications='')
     {
         $urlTemplate = self::WEB_A_FORM_MATIERE;
         $attributes = array(
@@ -90,7 +90,9 @@ class MatiereBean extends LocalBean
             $this->obj->getField(self::FIELD_ID),
             // Annuler - 3
             $baseUrl,
-            // Libellé de la Matière - 4
+            // Message de confirmation ou d'erreur - 4
+            $strNotifications,
+            // Libellé de la Matière - 5
             $this->obj->getField(self::FIELD_LABELMATIERE),
         );
         return $this->getRender($urlTemplate, $attributes);

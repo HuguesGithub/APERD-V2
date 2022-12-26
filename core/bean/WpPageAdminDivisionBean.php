@@ -36,6 +36,13 @@ class WpPageAdminDivisionBean extends WpPageAdminBean
         /////////////////////////////////////////
         
         /////////////////////////////////////////
+        // Vérification de la soumission d'un formulaire
+        if ($this->curUser->hasEditorRights() && $this->postAction!='') {
+            $this->dealWithForm();
+        }
+        /////////////////////////////////////////
+        
+        /////////////////////////////////////////
         // Construction du Breadcrumbs
         $this->buildBreadCrumbs();
         /////////////////////////////////////////
@@ -51,23 +58,30 @@ class WpPageAdminDivisionBean extends WpPageAdminBean
         $strNotification = '';
         $strMessage = '';
         
+        /////////////////////////////////////////
         // Un formulaire est soumis.
         // On récupère les données qu'on affecte à l'objet
         $this->objDivision->setField(self::FIELD_LABELDIVISION, $this->initVar(self::FIELD_LABELDIVISION));
+        
         // Si le contrôle des données est ok
         if ($this->objDivision->controlerDonnees($strNotification, $strMessage)) {
             // Si l'id n'est pas défini
             if ($this->objDivision->getField(self::FIELD_ID)=='') {
                 // On insère l'objet
                 $this->objDivision->insert();
+                // On renseigne le message d'information.
+                $this->strNotifications = $this->getAlertContent(self::NOTIF_SUCCESS, self::MSG_SUCCESS_CREATE);
             } else {
                 // On met à jour l'objet
                 $this->objDivision->update();
+                // On renseigne le message d'information.
+                $this->strNotifications = $this->getAlertContent(self::NOTIF_SUCCESS, self::MSG_SUCCESS_EDIT);
             }
         } else {
-            // TODO : Le contrôle de données n'est pas bon. Afficher l'erreur.
+            // Le contrôle de données n'est pas bon. Afficher l'erreur.
+            $this->strNotifications = $this->getAlertContent($strNotification, $strMessage);
         }
-        // TODO : de manière générale, ce serait bien d'afficher le résultat de l'opération.
+        /////////////////////////////////////////
     }
     
     /**
@@ -116,9 +130,14 @@ class WpPageAdminDivisionBean extends WpPageAdminBean
         return $this->getDefaultListContent($objItems);
     }
     
+    /**
+     * @return string
+     * @since v2.22.12.26
+     * @version v2.22.12.26
+     */
     public function getEditContent()
     {
-        // TODO : A implémenter
-        return '';
+        $baseUrl = $this->getUrl(array(self::CST_SUBONGLET=>''));
+        return $this->objDivision->getBean()->getForm($baseUrl, $this->strNotifications);
     }
 }

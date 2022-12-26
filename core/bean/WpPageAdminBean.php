@@ -46,7 +46,8 @@ class WpPageAdminBean extends WpPageBean
         $this->urlDeleteTemplate = self::WEB_PPFC_DELETE;
         $this->urlDeleteConfirmTemplate = self::WEB_PPFC_CONF_DEL;
         // Initialisation de la variable de formulaire
-        $postAction = $this->initVar(self::CST_POST_ACTION);
+        $this->postAction = $this->initVar(self::CST_POST_ACTION);
+        $this->strNotifications = '';
         
         ////////////////////////////////////////////////////////
         // Gestion de l'identification via le formulaire
@@ -73,13 +74,6 @@ class WpPageAdminBean extends WpPageBean
             $this->curUser = new AdulteClass();
         }
         ////////////////////////////////////////////////////////
-        
-        /////////////////////////////////////////
-        // Vérification de la soumission d'un formulaire
-        if ($this->curUser->hasEditorRights() && $postAction!='') {
-            $this->dealWithForm();
-        }
-        /////////////////////////////////////////
         
         ////////////////////////////////////////////////////////
         // Définition de la sidebar
@@ -884,5 +878,18 @@ class WpPageAdminBean extends WpPageBean
             $strBtnCreationAnnulation = $this->getCreateButton();
         }
         return $strBtnCreationAnnulation;
+    }
+    
+    /**
+     * @since 1.22.12.26
+     * @version 1.22.12.26
+     */
+    public function getAlertContent($type, $msg)
+    {
+        $strContent  = '<div class="alert alert-'.$type.' d-flex align-items-center" role="alert">';
+        $strContent .= '    <i class="fa-solid fa-exclamation-circle mr-2"></i>';
+        $strContent .= '    <div>'.$msg.'</div>';
+        $strContent .= '</div>';
+        return $strContent;
     }
 }

@@ -36,6 +36,13 @@ class WpPageAdminMatiereBean extends WpPageAdminBean
         /////////////////////////////////////////
         
         /////////////////////////////////////////
+        // Vérification de la soumission d'un formulaire
+        if ($this->curUser->hasEditorRights() && $this->postAction!='') {
+            $this->dealWithForm();
+        }
+        /////////////////////////////////////////
+        
+        /////////////////////////////////////////
         // Construction du Breadcrumbs
         $this->buildBreadCrumbs();
         /////////////////////////////////////////
@@ -60,14 +67,19 @@ class WpPageAdminMatiereBean extends WpPageAdminBean
             if ($this->objMatiere->getField(self::FIELD_ID)=='') {
                 // On insère l'objet
                 $this->objMatiere->insert();
+                // On renseigne le message d'information.
+                $this->strNotifications = $this->getAlertContent(self::NOTIF_SUCCESS, self::MSG_SUCCESS_CREATE);
             } else {
                 // On met à jour l'objet
                 $this->objMatiere->update();
+                // On renseigne le message d'information.
+                $this->strNotifications = $this->getAlertContent(self::NOTIF_SUCCESS, self::MSG_SUCCESS_EDIT);
             }
         } else {
-            // TODO : Le contrôle de données n'est pas bon. Afficher l'erreur.
+            // Le contrôle de données n'est pas bon. Afficher l'erreur.
+            $this->strNotifications = $this->getAlertContent($strNotification, $strMessage);
         }
-        // TODO : de manière générale, ce serait bien d'afficher le résultat de l'opération.
+        /////////////////////////////////////////
     }
     
     /**
@@ -116,9 +128,14 @@ class WpPageAdminMatiereBean extends WpPageAdminBean
         return $this->getDefaultListContent($objItems);
     }
     
+    /**
+     * @return string
+     * @since v2.22.12.26
+     * @version v2.22.12.26
+     */
     public function getEditContent()
     {
-        // TODO : A implémenter
-        return '';
+        $baseUrl = $this->getUrl(array(self::CST_SUBONGLET=>''));
+        return $this->objMatiere->getBean()->getForm($baseUrl, $this->strNotifications);
     }
 }
