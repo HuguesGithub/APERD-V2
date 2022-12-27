@@ -7,14 +7,14 @@
             <div class="row">
               <div class="col-md">
                 <div class="form-floating mb-3">
-                  <input id="nomAdulte" type="text" class="form-control form-control-sm required" placeholder="Nom Parent" value="%5$s" name="nomAdulte" required>
-                  <label for="nomAdulte">Nom Parent</label>
+                  <input id="nomEleve" type="text" class="form-control form-control-sm required" placeholder="Nom Élève" value="%5$s" name="nomEleve" required>
+                  <label for="nomEleve">Nom Élève</label>
                 </div>
               </div>
               <div class="col-md">
                 <div class="form-floating mb-3">
-                  <input id="prenomAdulte" type="text" class="form-control form-control-sm" placeholder="Prénom Parent" value="%6$s" name="prenomAdulte">
-                  <label for="prenomAdulte">Prénom Parent</label>
+                  <input id="prenomEleve" type="text" class="form-control form-control-sm" placeholder="Prénom Élève" value="%6$s" name="prenomEleve">
+                  <label for="prenomEleve">Prénom Élève</label>
                 </div>
               </div>
             </div>
@@ -22,31 +22,20 @@
             <div class="row">
               <div class="col-md">
                 <div class="form-floating mb-3">
-                  <input id="mailAdulte" type="text" class="form-control required" placeholder="Mail Parent" value="%7$s" name="mailAdulte" required>
-                  <label for="mailAdulte">Mail Parent</label>
+                	<select class="form-select" id="divisionId" name="divisionId" aria-label="Liste des divisions" required>%7$s</select>
+               		<label for="divisionId">Division</label>
                 </div>
               </div>
 				<div class="col-md">
 					<div class="form-control pt-0 pb-0 mb-3" style="height: inherit;">
 						<div style="padding-top: 16px;padding-bottom: 8px;" class="input-group input-group-lg">
-                  			<label for="adherent" class="label-checkbox">Adhérent ?</label>
+                  			<label for="delegue" class="label-checkbox">Délégué ?</label>
                   			<div style="border: 0 none; margin-left: 50px;">
-                    			<input id="adherent" type="checkbox" class="form-check-input" value="1" name="adherent" style="position: initial;"%8$s>
+                    			<input id="delegue" type="checkbox" class="form-check-input" value="1" name="delegue" style="position: initial;"%8$s>
                   			</div>
                 		</div>
                 	</div>
                 </div>
-            </div>
-            
-            <div class="row">
-              <div class="col-md">
-                <div class="form-floating mb-3">
-                  <input id="phoneAdulte" type="text" class="form-control" placeholder="01 23 45 67 89" value="%9$s" name="phoneAdulte">
-                  <label for="phoneAdulte">Téléphone Parent</label>
-                </div>
-              </div>
-              <div class="col-md">
-              </div>
             </div>
             
         </div>

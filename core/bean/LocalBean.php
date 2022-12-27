@@ -14,6 +14,7 @@ class LocalBean extends UtilitiesBean
 {
     public function __construct()
     {
+        parent::__construct();
         $this->hasEdit = true;
     }
     

@@ -86,12 +86,26 @@ class EleveBean extends LocalBean
      * @since 2.22.12.22
      * @version 2.22.12.22
      */
-    public function getForm($baseUrl)
+    public function getForm($baseUrl, $strNotifications='')
     {
-        // TODO : A implémenter
-        return '';
-        //
-        $urlTemplate = self::WEB_A_FORM_ELEVES;
+        ///////////////////////////////////////////////
+        // Construction de la liste des divisions
+        $strOptions = $this->getBalise(self::TAG_OPTION);
+        $objsDivision = $this->objDivisionServices->getDivisionsWithFilters();
+        while (!empty($objsDivision)) {
+            $objDivision = array_shift($objsDivision);
+            $divId = $objDivision->getField(self::FIELD_ID);
+            $divLabel = $objDivision->getField(self::FIELD_LABELDIVISION);
+            // Construction de la liste des options.
+            $attributes = array(self::ATTR_VALUE=>$divId);
+            if ($divId==$this->obj->getField(self::FIELD_DIVISIONID)) {
+                $attributes[self::ATTR_SELECTED] = ' '.self::ATTR_SELECTED;
+            }
+            $strOptions .= $this->getBalise(self::TAG_OPTION, $divLabel, $attributes);
+        }
+        ///////////////////////////////////////////////
+        
+        $urlTemplate = self::WEB_A_FORM_ELEVE;
         $attributes = array(
             // Création - 1
             ($this->obj->getField(self::FIELD_ID)=='' ? self::LABEL_CREER : self::LABEL_MODIFIER),
@@ -99,15 +113,16 @@ class EleveBean extends LocalBean
             $this->obj->getField(self::FIELD_ID),
             // Annuler - 3
             $baseUrl,
-            // TODO
-            /*
-            // Genre de l'Administration - 4
-            $this->obj->getField(self::FIELD_GENRE),
-            // Nom de l'Administration - 5
-            $this->obj->getField(self::FIELD_NOMTITULAIRE),
-            // Poste de l'Administration - 6
-            $this->obj->getField(self::FIELD_LABELPOSTE),
-            */
+            // Message de confirmation ou d'erreur - 4
+            $strNotifications,
+            // Nom de l'Elève- 5
+            $this->obj->getField(self::FIELD_NOMELEVE),
+            // Prénom de l'Elève- 5
+            $this->obj->getField(self::FIELD_PRENOMELEVE),
+            // Division - 6
+            $strOptions,
+            // Délégué - 7
+            ($this->obj->getField(self::FIELD_DELEGUE)==1 ? ' '.self::CST_CHECKED : ''),
         );
         return $this->getRender($urlTemplate, $attributes);
     }

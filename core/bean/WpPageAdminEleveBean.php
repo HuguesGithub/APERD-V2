@@ -1,6 +1,8 @@
 <?php
 namespace core\bean;
 
+use core\domain\MySQLClass;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -38,6 +40,13 @@ class WpPageAdminEleveBean extends WpPageAdminBean
         /////////////////////////////////////////
         
         /////////////////////////////////////////
+        // Vérification de la soumission d'un formulaire
+        if ($this->curUser->hasEditorRights() && $this->postAction!='') {
+            $this->dealWithForm();
+        }
+        /////////////////////////////////////////
+        
+        /////////////////////////////////////////
         // Construction du Breadcrumbs
         $this->buildBreadCrumbs();
         /////////////////////////////////////////
@@ -56,8 +65,10 @@ class WpPageAdminEleveBean extends WpPageAdminBean
         /////////////////////////////////////////
         // Un formulaire est soumis.
         // On récupère les données qu'on affecte à l'objet
-        // TODO
-        $this->objAdministratif->setField(self::FIELD_LABELMATIERE, $this->initVar(self::FIELD_LABELMATIERE));
+        $this->objEleve->setField(self::FIELD_NOMELEVE, $this->initVar(self::FIELD_NOMELEVE));
+        $this->objEleve->setField(self::FIELD_PRENOMELEVE, $this->initVar(self::FIELD_PRENOMELEVE));
+        $this->objEleve->setField(self::FIELD_DIVISIONID, $this->initVar(self::FIELD_DIVISIONID));
+        $this->objEleve->setField(self::FIELD_DELEGUE, $this->initVar(self::FIELD_DELEGUE));
         
         // Si le contrôle des données est ok
         if ($this->objEleve->controlerDonnees($strNotification, $strMessage)) {
@@ -65,14 +76,18 @@ class WpPageAdminEleveBean extends WpPageAdminBean
             if ($this->objEleve->getField(self::FIELD_ID)=='') {
                 // On insère l'objet
                 $this->objEleve->insert();
+                // On renseigne le message d'information.
+                $this->strNotifications = $this->getAlertContent(self::NOTIF_SUCCESS, self::MSG_SUCCESS_CREATE);
             } else {
                 // On met à jour l'objet
                 $this->objEleve->update();
+                // On renseigne le message d'information.
+                $this->strNotifications = $this->getAlertContent(self::NOTIF_SUCCESS, self::MSG_SUCCESS_EDIT);
             }
         } else {
-            // TODO : Le contrôle de données n'est pas bon. Afficher l'erreur.
+            // Le contrôle de données n'est pas bon. Afficher l'erreur.
+            $this->strNotifications = $this->getAlertContent($strNotification, $strMessage);
         }
-        // TODO : de manière générale, ce serait bien d'afficher le résultat de l'opération.
         /////////////////////////////////////////
     }
     
@@ -217,7 +232,7 @@ class WpPageAdminEleveBean extends WpPageAdminBean
     public function getEditContent()
     {
         $baseUrl = $this->getUrl(array(self::CST_SUBONGLET=>''));
-        return $this->objEleve->getBean()->getForm($baseUrl);
+        return $this->objEleve->getBean()->getForm($baseUrl, $this->strNotifications);
     }
     
     /**

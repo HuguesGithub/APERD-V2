@@ -110,7 +110,7 @@ class EleveDaoImpl extends LocalDaoImpl
         $request .= "nomEleve = '%s', ";
         $request .= "prenomEleve = '%s', ";
         $request .= "divisionId = '%s', ";
-        $request .= "delegue = '%s', ";
+        $request .= "delegue = '%s' ";
         $request .= "WHERE id = '%s';";
         parent::update($request, $attributes);
     }

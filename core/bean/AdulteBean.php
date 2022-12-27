@@ -97,13 +97,13 @@ class AdulteBean extends LocalBean
             $baseUrl,
             // Alerte - 4
             $strNotifications,
-            // Nom du Parent - 
+            // Nom du Parent - 5
             $this->obj->getField(self::FIELD_NOMADULTE),
-            // Prénom du Parent - 
+            // Prénom du Parent -6 
             $this->obj->getField(self::FIELD_PRENOMADULTE),
-            // Mail du Parent - 
+            // Mail du Parent - 7
             $this->obj->getField(self::FIELD_MAILADULTE),
-            // Parent Adhérent ? - 
+            // Parent Adhérent ? - 8
             ($this->obj->getField(self::FIELD_ADHERENT)==1 ? ' '.self::CST_CHECKED : ''),
             // Téléphone du Parent - 9
             $this->obj->getField(self::FIELD_PHONEADULTE),
