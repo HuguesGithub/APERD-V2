@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
  * Classe WpPageAdminBean
  * @author Hugues
  * @since 2.22.12.05
- * @version 2.22.12.08
+ * @version 2.22.12.28
  */
 class WpPageAdminBean extends WpPageBean
 {
@@ -278,7 +278,7 @@ class WpPageAdminBean extends WpPageBean
     /**
      * @return string
      * @since 2.22.12.07
-     * @version 2.22.12.07
+     * @version 2.22.12.28
      */
     public function getSideBar()
     {
@@ -312,23 +312,7 @@ class WpPageAdminBean extends WpPageBean
             
             // S'il a des enfants, on enrichit
             if ($hasChildren) {
-                $ulContent = '';
-                foreach ($arrOnglet[self::CST_CHILDREN] as $strSubOnglet => $label) {
-                    $aContent  = $this->getIcon(self::I_CIRCLE, 'nav-icon').$this->getBalise(self::TAG_P, $label);
-                    $urlElements = array(
-                        self::CST_ONGLET => $strOnglet,
-                        self::CST_SUBONGLET => $strSubOnglet,
-                    );
-                    $strIsActive = ($strSubOnglet==$this->slugSubOnglet ? ' '.self::CST_ACTIVE : '');
-                    $aAttributes = array(
-                        self::ATTR_HREF  => $this->getUrl($urlElements),
-                        self::ATTR_CLASS => 'nav-link'.$strIsActive,
-                    );
-                    $liContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
-                    $ulContent .= $this->getBalise(self::TAG_LI, $liContent, array(self::ATTR_CLASS=>'nav-item'));
-                }
-                $liAttributes = array(self::ATTR_CLASS=>'nav nav-treeview');
-                $superLiContent .= $this->getBalise(self::TAG_UL, $ulContent, $liAttributes);
+                $superLiContent .= $this->getSidebarChildren($arrOnglet, $strOnglet);
             }
             
             // Construction de l'élément de la liste
@@ -340,6 +324,34 @@ class WpPageAdminBean extends WpPageBean
             $sidebarContent,
         );
         return $this->getRender($urlTemplate, $attributes);
+    }
+    
+    /**
+     * @param array $arrOnglet
+     * @param string $strOnglet
+     * @return string
+     * @since v2.22.12.28
+     * @version v2.22.12.28
+     */
+    public function getSidebarChildren($arrOnglet, $strOnglet)
+    {
+        $ulContent = '';
+        foreach ($arrOnglet[self::CST_CHILDREN] as $strSubOnglet => $label) {
+            $aContent  = $this->getIcon(self::I_CIRCLE, 'nav-icon').$this->getBalise(self::TAG_P, $label);
+            $urlElements = array(
+                self::CST_ONGLET => $strOnglet,
+                self::CST_SUBONGLET => $strSubOnglet,
+            );
+            $strIsActive = ($strSubOnglet==$this->slugSubOnglet ? ' '.self::CST_ACTIVE : '');
+            $aAttributes = array(
+                self::ATTR_HREF  => $this->getUrl($urlElements),
+                self::ATTR_CLASS => 'nav-link'.$strIsActive,
+            );
+            $liContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
+            $ulContent .= $this->getBalise(self::TAG_LI, $liContent, array(self::ATTR_CLASS=>'nav-item'));
+        }
+        $liAttributes = array(self::ATTR_CLASS=>'nav nav-treeview');
+        return $this->getBalise(self::TAG_UL, $ulContent, $liAttributes);
     }
     
     /**
