@@ -89,10 +89,16 @@ class WpPageAdminBean extends WpPageBean
             self::ONGLET_DIVISIONS => array(
                 self::CST_ICON  => self::I_SCHOOL,
                 self::CST_LABEL => self::LABEL_DIVISIONS,
+                self::CST_CHILDREN => array(
+                    self::CST_COMPOSITION_DIVISIONS => self::LABEL_COMPOSITION,
+                ),
             ),
             self::ONGLET_MATIERES => array(
                 self::CST_ICON  => self::I_CHALKBOARD,
                 self::CST_LABEL => self::LABEL_MATIERES,
+                self::CST_CHILDREN => array(
+                    self::CST_MATIERES_ENSEIGNANTS => self::LABEL_MATIERES_ENSEIGNANTS,
+                ),
             ),
             self::ONGLET_ELEVES => array(
                 self::CST_ICON  => self::I_USER_GRADUATE,
@@ -102,7 +108,14 @@ class WpPageAdminBean extends WpPageBean
                 self::CST_ICON  => self::I_USERS,
                 self::CST_LABEL => self::LABEL_PARENTS,
                 self::CST_CHILDREN => array(
-                    self::CST_PARENTS_DIVISIONS  => self::LABEL_PARENTS_DELEGUES,
+                    self::CST_PARENTS_DIVISIONS => self::LABEL_PARENTS_DELEGUES,
+                ),
+            ),
+            self::ONGLET_ENSEIGNANTS => array(
+                self::CST_ICON  => self::I_USERS,
+                self::CST_LABEL => self::LABEL_ENSEIGNANTS,
+                self::CST_CHILDREN => array(
+                    self::CST_ENSEIGNANTS_PRINCIPAUX => self::LABEL_ENSEIGNANTS_PRINCIPAUX,
                 ),
             ),
         );

@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
  * EleveActions
  * @author Hugues
  * @since 1.22.12.23
- * @version 1.22.12.23
+ * @version 1.22.12.28
  */
 class EleveActions extends LocalActions
 {
@@ -30,7 +30,7 @@ class EleveActions extends LocalActions
     //////////////////////////////////////////////////
     /**
      * @since 1.22.12.23
-     * @version 1.22.12.23
+     * @version 1.22.12.28
      */
     public function getCsvExport()
     {
@@ -48,21 +48,10 @@ class EleveActions extends LocalActions
                 $arrToExport[] = $objEleve->toCsv();
             }
         } elseif ($ids=='filter') {
-            // TODO : gérer les filtres multiples
-            list(, $value) = explode('=', $filters);
-            if ($value=='oui') {
-                $adh = 1;
-            } elseif ($value=='non') {
-                $adh = 0;
-            } else {
-                $adh = '%';
-            }
-
-            $arrFilters = array(
-                    self::FIELD_ADHERENT => $adh,
-            );
+            $arrActiveFilters = $this->getActiveFilters($filters);
+            
             // On récupère toutes les données spécifiques au filtre
-            $objsEleve = $this->objEleveServices->getElevesWithFilters($arrFilters);
+            $objsEleve = $this->objEleveServices->getElevesWithFilters($arrActiveFilters);
             foreach ($objsEleve as $objEleve) {
                 $arrToExport[] = $objEleve->toCsv();
             }

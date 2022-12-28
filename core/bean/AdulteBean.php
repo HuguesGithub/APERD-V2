@@ -99,7 +99,7 @@ class AdulteBean extends LocalBean
             $strNotifications,
             // Nom du Parent - 5
             $this->obj->getField(self::FIELD_NOMADULTE),
-            // Prénom du Parent -6 
+            // Prénom du Parent - 6
             $this->obj->getField(self::FIELD_PRENOMADULTE),
             // Mail du Parent - 7
             $this->obj->getField(self::FIELD_MAILADULTE),

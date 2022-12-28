@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
  * AdulteActions
  * @author Hugues
  * @since 1.22.12.08
- * @version 1.22.12.08
+ * @version 1.22.12.28
  */
 class AdulteActions extends LocalActions
 {
@@ -30,7 +30,7 @@ class AdulteActions extends LocalActions
     //////////////////////////////////////////////////
     /**
      * @since 1.22.12.08
-     * @version 1.22.12.08
+     * @version 1.22.12.28
      */
     public function getCsvExport()
     {
@@ -48,20 +48,10 @@ class AdulteActions extends LocalActions
                 $arrToExport[] = $objAdulte->toCsv();
             }
         } elseif ($ids=='filter') {
-            list(, $value) = explode('=', $filters);
-            if ($value=='oui') {
-                $adh = 1;
-            } elseif ($value=='non') {
-                $adh = 0;
-            } else {
-                $adh = '%';
-            }
-
-            $arrFilters = array(
-                    self::FIELD_ADHERENT => $adh,
-            );
+            $arrActiveFilters = $this->getActiveFilters($filters);
+            
             // On récupère toutes les données spécifiques au filtre
-            $objsAdulte = $this->objAdulteServices->getAdultesWithFilters($arrFilters);
+            $objsAdulte = $this->objAdulteServices->getAdultesWithFilters($arrActiveFilters);
             foreach ($objsAdulte as $objAdulte) {
                 $arrToExport[] = $objAdulte->toCsv();
             }
@@ -80,5 +70,4 @@ class AdulteActions extends LocalActions
         // On retourne le message de réussite.
         return $this->exportFile($arrToExport, ucfirst(self::ONGLET_PARENTS));
     }
-    
 }

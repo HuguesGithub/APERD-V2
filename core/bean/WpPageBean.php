@@ -15,14 +15,6 @@ class WpPageBean extends UtilitiesBean
     protected $objWpPage;
 
     /**
-     * @param string $post
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * @return mixed
      * @since 2.22.12.05
      * @version 2.22.12.05

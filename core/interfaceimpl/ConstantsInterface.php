@@ -54,13 +54,16 @@ interface ConstantsInterface
     const CST_CURPAGE            = 'curPage';
     const CST_DELETE             = 'delete';
     const CST_DISABLED           = 'disabled';
+    const CST_COMPOSITION_DIVISIONS  = 'compoDivision';
     const CST_EDIT               = 'edit';
+    const CST_ENSEIGNANTS_PRINCIPAUX = 'enseignantPrinc';
     const CST_EOL                = "\r\n";
     const CST_ERR_LOGIN          = 'err_login';
     const CST_EXPORT             = 'export';
     const CST_ICON               = 'icon';
     const CST_IDS                = 'ids';
     const CST_LABEL              = 'label';
+    const CST_MATIERES_ENSEIGNANTS   = 'matiereEnseignant';
     const CST_NBSP               = '&nbsp;';
     const CST_ONGLET             = 'onglet';
     const CST_PARENTS_DELEGUES   = 'parentDelegue';
@@ -77,8 +80,9 @@ interface ConstantsInterface
     const FIELD_ID               = 'id';
     const FIELD_DIVISIONID       = 'divisionId';
     const FIELD_DELEGUE          = 'delegue';
-    // Table Administration
+    const FIELD_ENSEIGNANTID     = 'enseignantId';
     const FIELD_GENRE            = 'genre';
+    // Table Administration
     const FIELD_NOMTITULAIRE     = 'nomTitulaire';
     const FIELD_LABELPOSTE       = 'labelPoste';
     // Table Adulte
@@ -90,13 +94,27 @@ interface ConstantsInterface
     const FIELD_ROLEADULTE       = 'roleAdulte';
     // Table AdulteDivision
     const FIELD_ADULTEID         = 'adulteId';
+    // Table Composition Division
+    // wp_14_aperd_compo_division
+    const FIELD_ENSEIGNANTMATIEREID = 'enseignantMatiereId';
+    // Table Division
+    const FIELD_LABELDIVISION    = 'labelDivision';
     // Table Eleve
     const FIELD_NOMELEVE         = 'nomEleve';
     const FIELD_PRENOMELEVE      = 'prenomEleve';
-    // Table Division
-    const FIELD_LABELDIVISION    = 'labelDivision';
+    // Table Enseignant
+    // wp_14_aperd_enseignant
+    const FIELD_NOMENSEIGNANT    = 'nomEnseignant';
+    const FIELD_PRENOMENSEIGNANT = 'prenomEnseignant';
+    const FIELD_MAILENSEIGNANT   = 'mailEnseignant';
+    // Table Enseignant Division
+    // wp_14_aperd_enseignant_division
+    // Pas de champ au nom unique.
     // Table Matière
     const FIELD_LABELMATIERE     = 'labelMatiere';
+    // Table Matiere Enseignant
+    // wp_14_aperd_enseignant_matiere
+    const FIELD_MATIEREID        = 'matiereId';
     
     /////////////////////////////////////////////////
     // Icons
@@ -130,10 +148,11 @@ interface ConstantsInterface
     const ONGLET_DESK             = 'desk';
     const ONGLET_DIVISIONS        = 'divisions';
     const ONGLET_ELEVES           = 'eleves';
+    const ONGLET_ENSEIGNANTS      = 'enseignants';
     const ONGLET_MATIERES         = 'matieres';
     const ONGLET_PARENTS          = 'parents';
     const SUBONGLET_PARENTS_DELEGUES          = 'parentDelegue';
-    
+        
     /////////////////////////////////////////////////
     // Pages
     const PAGE_ADMIN              = 'admin';
@@ -323,8 +342,6 @@ interface ConstantsInterface
     /////////////////////////////////////////////////
     // Onglets
     const ONGLET_CDC              = 'cdc';
-    const ONGLET_ELEVES           = 'eleves';
-    const ONGLET_ENSEIGNANTS      = 'enseignants';
     const ONGLET_INBOX            = 'inbox';
     const ONGLET_QUESTIONS        = 'questionnaire';
 
@@ -360,10 +377,6 @@ interface ConstantsInterface
     const TAG_IMG                = 'img';
     const TAG_SPAN               = 'span';
     const TAG_TEXTAREA           = 'textarea';
-
-    /////////////////////////////////////////////////
-    // Divers
-    const EOL          = "\r\n";
     */
     
     /////////////////////////////////////////////////

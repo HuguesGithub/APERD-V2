@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
  * LocalActions
  * @author Hugues
  * @since 1.22.12.07
- * @version 1.22.12.24
+ * @version 1.22.12.28
  */
 class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
 {
@@ -161,5 +161,54 @@ class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
             }
         }
         return $blnOk;
+    }
+    
+    /**
+     * @param string $filters
+     * @return string[]
+     * @since v2.22.12.28
+     * @version v2.22.12.28
+     */
+    public function getActiveFilters($filters)
+    {
+        // Si plusieurs filtres actifs, on doit les séparer.
+        $arrFilters = explode(',', $filters);
+        $arrActiveFilters = array();
+        
+        while (!empty($arrFilters)) {
+            $filter = array_shift($arrFilters);
+            // On récupère le type de filtre et sa valeur.
+            list($key, $value) = explode('=', $filter);
+            
+            if ($key=='filter-adherent') {
+                ///////////////////////////////////////////
+                // Filtre sur Adherent
+                if ($value=='oui') {
+                    $adh = 1;
+                } elseif ($value=='non') {
+                    $adh = 0;
+                } else {
+                    $adh = '%';
+                }
+                $arrActiveFilters[self::FIELD_ADHERENT] = $adh;
+            } elseif ($key=='filter-delegue') {
+                ///////////////////////////////////////////
+                // Filtre sur Délégué
+                if ($value=='oui') {
+                    $delegue = 1;
+                } elseif ($value=='non') {
+                    $delegue = 0;
+                } else {
+                    $delegue = '%';
+                }
+                $arrActiveFilters[self::FIELD_DELEGUE] = $delegue;
+            } elseif ($key=='filter-division') {
+                ///////////////////////////////////////////
+                // Filtre sur Division
+                $arrActiveFilters[self::FIELD_DIVISIONID] = $value;
+            }
+            ///////////////////////////////////////////
+        }
+        return $arrActiveFilters;
     }
 }

@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
  * AdulteDivisionActions
  * @author Hugues
  * @since 1.22.12.18
- * @version 1.22.12.18
+ * @version 1.22.12.28
  */
 class AdulteDivisionActions extends LocalActions
 {
@@ -30,7 +30,7 @@ class AdulteDivisionActions extends LocalActions
     //////////////////////////////////////////////////
     /**
      * @since 1.22.12.18
-     * @version 1.22.12.18
+     * @version 1.22.12.28
      */
     public function getCsvExport()
     {
@@ -48,33 +48,7 @@ class AdulteDivisionActions extends LocalActions
                 $arrToExport[] = $objAdulteDivision->toCsv();
             }
         } elseif ($ids=='filter') {
-            // Si plusieurs filtres actifs, on doit les séparer.
-            $arrFilters = explode(',', $filters);
-            $arrActiveFilters = array();
-            
-            while (!empty($arrFilters)) {
-                $filter = array_shift($arrFilters);
-                // On récupère le type de filtre et sa valeur.
-                list($key, $value) = explode('=', $filter);
-                
-                if ($key=='filter-adherent') {
-                    ///////////////////////////////////////////
-                    // Filtre sur Adhérent
-                    if ($value=='oui') {
-                        $adh = 1;
-                    } elseif ($value=='non') {
-                        $adh = 0;
-                    } else {
-                        $adh = '%';
-                    }
-                    $arrActiveFilters[self::FIELD_ADHERENT] = $adh;
-                } elseif ($key=='filter-division') {
-                    ///////////////////////////////////////////
-                    // Filtre sur Division
-                    $arrActiveFilters[self::FIELD_DIVISIONID] = $value;
-                }
-                ///////////////////////////////////////////
-            }
+            $arrActiveFilters = $this->getActiveFilters($filters);
             
             // On récupère toutes les données spécifiques au filtre
             $objsAdulteDivision = $this->objAdulteDivisionServices->getAdulteDivisionsWithFilters($arrActiveFilters);
