@@ -29,6 +29,7 @@ interface UrlsInterface
     const WEB_A_ROW_ADMINISTRATION  = self::WEB_PAF_TR.'admin-fragments-row-administration.tpl';
     const WEB_A_FORM_ADMINISTRATION = self::WEB_PAF_FORM.'admin-fragments-form-administration.tpl';
     const WEB_A_FORM_ADULTE         = self::WEB_PAF_FORM.'admin-fragments-form-adulte.tpl';
+    const WEB_A_FORM_ADULTE_DIVISION = self::WEB_PAF_FORM.'admin-fragments-form-adulte-division.tpl';
     const WEB_A_FORM_DIVISION       = self::WEB_PAF_FORM.'admin-fragments-form-division.tpl';
     const WEB_A_FORM_ELEVE          = self::WEB_PAF_FORM.'admin-fragments-form-eleve.tpl';
     const WEB_A_FORM_MATIERE        = self::WEB_PAF_FORM.'admin-fragments-form-matiere.tpl';
