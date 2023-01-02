@@ -24,6 +24,7 @@ interface LabelsInterface
     const LABEL_LABELDIVISION = 'Division';
     const LABEL_LABELMATIERE  = 'Matière';
     const LABEL_ELEVE         = 'Élève';
+    const LABEL_PRINCIPAL     = 'Principal';
     
     /////////////////////////////////////////////////
     // Libellés divers
@@ -67,6 +68,7 @@ interface LabelsInterface
     // Libellés longs
     const LABEL_INTERFACE_DIVISIONS_PRES = 'La liste des divisions du collège.';
     const LABEL_INTERFACE_ELEVES_PRES = 'La liste des élèves du collège.';
+    const LABEL_INTERFACE_ENSEIGNANTS_PRES = 'La liste des enseignants du collège.';
     const LABEL_INTERFACE_MATIERES_PRES = 'La liste des matières enseignées au collège.';
     const LABEL_INTERFACE_PARENTS_PRES = 'La liste des parents ayant simplement souhaité être en relation avec l\'association, ceux ayant adhéré, les parents délégués et ceux investis dans les instances du collège.';
     const LABEL_INTERFACE_ADMINISTRATIFS_PRES = 'Le personnel administratif présenté ici regroupe les personnes de l\'administration susceptibles d\'intervenir au sein notamment du conseil d\'administraion, mais aussi des conseils de classe.';

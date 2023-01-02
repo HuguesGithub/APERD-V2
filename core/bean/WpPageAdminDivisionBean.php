@@ -7,8 +7,8 @@ if (!defined('ABSPATH')) {
 /**
  * Classe WpPageAdminDivisionBean
  * @author Hugues
- * @since 1.22.12.11
- * @version 1.22.12.11
+ * @since v2.22.12.11
+ * @version v2.23.01.01
  */
 class WpPageAdminDivisionBean extends WpPageAdminBean
 {
@@ -44,7 +44,16 @@ class WpPageAdminDivisionBean extends WpPageAdminBean
         
         /////////////////////////////////////////
         // Construction du Breadcrumbs
-        $this->buildBreadCrumbs();
+        if ($this->slugSubOnglet=='') {
+            $href = $this->getUrl();
+            $buttonAttributes = array(self::ATTR_CLASS=>self::CSS_BTN_DARK.' '.self::CSS_DISABLED);
+        } else {
+            $urlElements = array(self::CST_ONGLET=>$this->slugOnglet, self::CST_SUBONGLET=>'');
+            $href = $this->getUrl($urlElements);
+            $buttonAttributes = array(self::ATTR_CLASS=>self::CSS_BTN_DARK);
+        }
+        $buttonContent = $this->getLink($this->titreOnglet, $href, self::CST_TEXT_WHITE);
+        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
     }
     
@@ -82,6 +91,20 @@ class WpPageAdminDivisionBean extends WpPageAdminBean
             $this->strNotifications = $this->getAlertContent($strNotification, $strMessage);
         }
         /////////////////////////////////////////
+    }
+    
+    /**
+     * @since v2.23.01.01
+     * @version v2.23.01.01
+     */
+    public static function getStaticWpPageBean($slugSubContent)
+    {
+        if ($slugSubContent == self::CST_COMPOSITION_DIVISIONS) {
+            $objBean = new WpPageAdminDivisionCompoBean();
+        } else {
+            $objBean = new WpPageAdminDivisionBean();
+        }
+        return $objBean;
     }
     
     /**

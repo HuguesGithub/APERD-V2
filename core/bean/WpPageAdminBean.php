@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
  * Classe WpPageAdminBean
  * @author Hugues
  * @since 2.22.12.05
- * @version 2.22.12.28
+ * @version v2.23.01.02
  */
 class WpPageAdminBean extends WpPageBean
 {
@@ -162,7 +162,7 @@ class WpPageAdminBean extends WpPageBean
     /**
      * @return string
      * @since 2.22.12.05
-     * @version 2.22.12.05
+     * @version v2.23.01.02
      */
     public function getContentPage()
     {
@@ -192,13 +192,16 @@ class WpPageAdminBean extends WpPageBean
                     $objBean = new WpPageAdminAdministratifBean();
                     break;
                 case self::ONGLET_DIVISIONS :
-                    $objBean = new WpPageAdminDivisionBean();
+                    $objBean = WpPageAdminDivisionBean::getStaticWpPageBean($this->slugSubOnglet);
                     break;
                 case self::ONGLET_ELEVES :
                     $objBean = new WpPageAdminEleveBean();
                     break;
+                case self::ONGLET_ENSEIGNANTS :
+                    $objBean = WpPageAdminEnseignantBean::getStaticWpPageBean($this->slugSubOnglet);
+                    break;
                 case self::ONGLET_MATIERES :
-                    $objBean = new WpPageAdminMatiereBean();
+                    $objBean = WpPageAdminMatiereBean::getStaticWpPageBean($this->slugSubOnglet);
                     break;
                 case self::ONGLET_PARENTS :
                     $objBean = WpPageAdminAdulteBean::getStaticWpPageBean($this->slugSubOnglet);
