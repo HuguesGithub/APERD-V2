@@ -22,12 +22,12 @@ class WpPageAdminEnseignantBean extends WpPageAdminBean
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
         $this->titreOnglet = self::LABEL_ENSEIGNANTS;
         // Initialisation des données du bloc de présentation
-        $this->blnBoutonCreation = true;
+        $this->blnBoutonCreation = false;// TODO true;
         $this->hasPresentation = true;
         $this->strPresentationTitle = self::LABEL_ENSEIGNANTS;
         $this->strPresentationContent = self::LABEL_INTERFACE_ENSEIGNANTS_PRES;
         // Initialisation de la présence d'un bloc import
-        $this->hasBlocImport = true;
+        $this->hasBlocImport = false;// TODO true;
         // Initialisation d'un éventuel objet dédié.
         $id = $this->initVar(self::ATTR_ID);
         $this->objEnseignant = $this->objEnseignantServices->getEnseignantById($id);
@@ -121,178 +121,73 @@ class WpPageAdminEnseignantBean extends WpPageAdminBean
      * @param int|string $ids
      * @param boolean $blnDelete
      * @return string
-     * @since v2.22.12.18
-     * @version v2.22.12.18
+     * @since v2.23.01.02
+     * @version v2.23.01.02
      */
     public function getListElements($ids, $blnDelete=false)
     {
-        /*
         $strElements = '';
         // On peut avoir une liste d'id en cas de suppression multiple.
         foreach (explode(',', $ids) as $id) {
-            $objAdulte = $this->objAdulteServices->getAdulteById($id);
-            $strElements .= $this->getBalise(self::TAG_LI, $objAdulte->getName());
+            $objEnseignant = $this->objEnseignantServices->getEnseignantById($id);
+            $strElements .= $this->getBalise(self::TAG_LI, $objEnseignant->getName());
             if ($blnDelete) {
-                $objAdulte->delete();
+                $objEnseignant->delete();
             }
         }
         return $strElements;
-        */
     }
     
     /**
      * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.18
+     * @since v2.23.01.02
+     * @version v2.23.01.02
      */
     public function getSpecificHeaderRow()
     {
-        /*
-        $cellCenter = array(self::ATTR_CLASS=>'text-center');
-        $trContent  = $this->getTh(self::LABEL_NOMPRENOM);
-        $trContent .= $this->getTh(self::LABEL_MAIL);
-        return $trContent.$this->getTh(self::LABEL_ADHERENT, $cellCenter);
-        */
+        $trContent  = $this->getTh(self::LABEL_GENRE);
+        return $trContent.$this->getTh(self::LABEL_NOMPRENOM);
     }
       
     /**
      * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.07
+     * @since v2.23.01.02
+     * @version v2.23.01.02
      */
     public function getListContent()
     {
-        /*
-        $this->attrDescribeList = self::LABEL_LIST_PARENTS;
+        $this->attrDescribeList = self::LABEL_LIST_ENSEIGNANTS;
         /////////////////////////////////////////
         // On va prendre en compte les éventuels filtres
         $attributes = array();
-          
-        if ($this->filtreAdherent=='oui') {
-            $attributes[self::FIELD_ADHERENT] = 1;
-        } elseif ($this->filtreAdherent=='non') {
-            $attributes[self::FIELD_ADHERENT] = 0;
-        }
         /////////////////////////////////////////
         // On va chercher les éléments à afficher
-        $objItems = $this->objAdulteServices->getAdultesWithFilters($attributes);
+        $objItems = $this->objEnseignantServices->getEnseignantsWithFilters($attributes);
         /////////////////////////////////////////
         return $this->getDefaultListContent($objItems);
-        */
     }
     
     /**
      * @return string
-     * @since 2.22.12.07
-     * @version 2.22.12.07
+     * @since v2.23.01.02
+     * @version v2.23.01.02
      */
     public function getEditContent()
     {
-        /*
         $baseUrl = $this->getUrl(array(self::CST_SUBONGLET=>''));
-        return $this->objAdulte->getBean()->getForm($baseUrl, $this->strNotifications);
-        */
+        return $this->objEnseignant->getBean()->getForm($baseUrl, $this->strNotifications);
     }
     
     /**
      * Retourne les éléments visibles dans la dropdown de Download
      * @return string
-     * @since v2.22.12.18
-     * @version v2.22.12.18
+     * @since v2.23.01.02
+     * @version v2.23.01.02
      */
     public function getDownloadUls()
     {
-        /*
         $ulContent  = $this->getLiDropdown('Sélection', 'dropdownDownload');
-        $ulContent .= $this->getLiDropdown('Filtre', 'dropdownDownload');
         return $ulContent.$this->getLiDropdown('Tous', 'dropdownDownload');
-        */
     }
     
-    /**
-     * Retourne le filtre spécifique à l'écran.
-     * @return string
-     * @param v2.22.12.18
-     * @since v2.22.12.19
-     */
-    public function getTrFiltres()
-    {
-        /*
-        /////////////////////////////////////////
-        // Filtre en place
-        $arrFilters = array(
-            'adherent' => $this->filtreAdherent,
-        );
-        
-        /////////////////////////////////////////
-        // On va mettre en place la ligne de Filtre
-        $trContent = '';
-        if ($this->curUser->hasEditorRights()) {
-            $trContent .= $this->getTh(self::CST_NBSP);
-        }
-        $trContent .= $this->getTh(self::CST_NBSP);
-        $trContent .= $this->getTh(self::CST_NBSP);
-        
-        // Filtre Adhérent
-        $trContent .= $this->getFiltreAdherent($arrFilters);
-        
-        if ($this->curUser->hasEditorRights()) {
-            $trContent .= $this->getButtonFiltre();
-        }
-        return $this->getBalise(self::TAG_TR, $trContent);
-        */
-    }
-    
-    /**
-     * Construction du Filtre Adherent
-     * @return string
-     * @since v2.22.12.18
-     * @version v2.22.12.18
-     */
-    public function getFiltreAdherent($arrFilters)
-    {
-        /*
-        /////////////////////////////////////////////
-        // Définition de quelques variables
-        $urlTemplate = self::WEB_PPF_FILTRE;
-        // Définition du label en fonction d'un éventuel filtre courant.
-        if ($this->filtreAdherent=='oui') {
-            $label = 'Oui';
-        } elseif ($this->filtreAdherent=='non') {
-            $label = 'Non';
-        } else {
-            $label = 'Tous';
-        }
-        $strOptions = '';
-        $strClass = 'dropdown-item text-white';
-        /////////////////////////////////////////////
-        
-        /////////////////////////////////////////////
-        // Définition de l'url de base pour la redirection
-        $baseUrl  = $this->getUrl();
-        foreach ($arrFilters as $key => $value) {
-            if ($key=='adherent') {
-                continue;
-            }
-            $baseUrl .= self::CST_AMP.'filter-'.$key.'='.$value;
-        }
-        $baseUrl .= self::CST_AMP.'filter-adherent=';
-        /////////////////////////////////////////////
-        
-        /////////////////////////////////////////////
-        // Construction des options
-        $strOptions .= $this->getBalise(self::TAG_LI, $this->getLink('Oui', $baseUrl.'oui', $strClass));
-        $strOptions .= $this->getBalise(self::TAG_LI, $this->getLink('Non', $baseUrl.'non', $strClass));
-        $strOptions .= $this->getBalise(self::TAG_LI, $this->getLink('Tous', $baseUrl.'all', $strClass));
-        /////////////////////////////////////////////
-        
-        // Définition des attributs pour le template
-        $attributes = array(
-            $label,
-            $strOptions,
-        );
-        
-        return $this->getRender($urlTemplate, $attributes);
-        */
-    }
 }

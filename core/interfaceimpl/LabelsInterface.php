@@ -47,11 +47,13 @@ interface LabelsInterface
     const LABEL_LIST_PARENTS_DELEGUES = 'Liste des Parents d\'élèves délégués';
     const LABEL_LIST_DIVISIONS        = 'Liste des Divisions';
     const LABEL_LIST_ELEVES           = 'Liste des Élèves';
+    const LABEL_LIST_ENSEIGNANTS      = 'Liste des Enseignants';
     const LABEL_LIST_MATIERES         = 'Liste des Matières';
     const LABEL_MATIERES              = 'Matières';
     const LABEL_MATIERES_ENSEIGNANTS  = 'Matière par enseignant';
     const LABEL_MODIFIER              = 'Modifier';
     const LABEL_CLEAR_FILTER          = 'Nettoyer le filtre';
+    const LABEL_PARAMETRES            = 'Paramètres';
     const LABEL_PARENTS               = 'Parents';
     const LABEL_PARENTS_ELEVES        = 'Parents d\'élèves';
     const LABEL_PARENTS_DELEGUES      = 'Parents délégués';
@@ -59,7 +61,7 @@ interface LabelsInterface
     const LABEL_ROLE                  = 'Rôle';
     const LABEL_ROLE_ADMIN            = 'Administrateur';
     const LABEL_ROLE_ADHERENT         = 'Adhérent';
-    const LABEL_ROLE_EDITEUR          = 'Éditeur';
+    const LABEL_ROLE_EDITEUR          = 'Délégué';
     const LABEL_ROLE_CONTACT          = 'Contact';
     const LABEL_SUPPRIMER             = 'Supprimer';
     const LABEL_PHONE                 = 'Téléphone';

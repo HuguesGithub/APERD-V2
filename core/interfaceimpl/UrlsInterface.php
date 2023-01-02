@@ -32,6 +32,7 @@ interface UrlsInterface
     const WEB_A_FORM_ADULTE_DIVISION = self::WEB_PAF_FORM.'admin-fragments-form-adulte-division.tpl';
     const WEB_A_FORM_DIVISION       = self::WEB_PAF_FORM.'admin-fragments-form-division.tpl';
     const WEB_A_FORM_ELEVE          = self::WEB_PAF_FORM.'admin-fragments-form-eleve.tpl';
+    const WEB_A_FORM_ENSEIGNANT     = self::WEB_PAF_FORM.'admin-fragments-form-enseignant.tpl';
     const WEB_A_FORM_MATIERE        = self::WEB_PAF_FORM.'admin-fragments-form-matiere.tpl';
     const WEB_P_ROW_ADMINISTRATION  = self::WEB_PPF_TR.'publique-fragments-row-administration.tpl';
     const WEB_PP_BOARD              = self::WEB_PAGES_PUBLIC.'publique-board.tpl';
@@ -51,6 +52,7 @@ interface UrlsInterface
     const WEB_PPFS_CONTENT_NAVBAR   = self::WEB_PPF_SECTION.'publique-fragments-section-content-navigation-bar.php';
     const WEB_PPFS_ONGLET           = self::WEB_PPF_SECTION.'publique-fragments-section-onglet.php';
     const WEB_PPFS_ONGLET_LIST      = self::WEB_PPF_SECTION.'publique-fragments-section-onglet-list.php';
+    const WEB_PPFS_CONTENT_CARD_GRID = self::WEB_PPF_SECTION.'section-onglet-content-card-grid.tpl';
     const WEB_PPFS_CONTENT_ONE_4TH  = self::WEB_PPF_SECTION.'section-onglet-content-one-fourth.tpl';
     const WEB_PPF_FILTRE            = self::WEB_PP_FRAGMENTS.'publique-fragments-filtre.tpl';
 }

@@ -46,6 +46,10 @@
                 </div>
               </div>
               <div class="col-md">
+                <div class="form-floating mb-3">
+                	<select class="form-select" id="roleAdulte" name="roleAdulte" aria-label="Liste des rôles" required>%10$s</select>
+               		<label for="roleAdulte">Rôle</label>
+                </div>
               </div>
             </div>
             

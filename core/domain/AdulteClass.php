@@ -73,6 +73,9 @@ class AdulteClass extends LocalDomainClass
     // METHODS
     //////////////////////////////////////////////////
     
+    public function hasAdminRights()
+    { return ($this->roleAdulte>=self::ROLE_ADMIN); }
+    
     public function hasEditorRights()
     { return ($this->roleAdulte>=self::ROLE_EDITEUR); }
     

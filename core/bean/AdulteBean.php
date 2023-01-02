@@ -87,6 +87,25 @@ class AdulteBean extends LocalBean
      */
     public function getForm($baseUrl, $strNotifications='')
     {
+        ///////////////////////////////////////////////
+        // Construction de la liste des rôles
+        $strRoleOptions = $this->getBalise(self::TAG_OPTION);
+        $arrRoles = array(
+            self::ROLE_CONTACT => self::LABEL_ROLE_CONTACT,
+            self::ROLE_ADHERENT => self::LABEL_ROLE_ADHERENT,
+            self::ROLE_EDITEUR => self::LABEL_ROLE_EDITEUR,
+            self::ROLE_ADMIN => self::LABEL_ROLE_ADMIN,
+        );
+        foreach ($arrRoles as $key => $value) {
+            // Construction de la liste des options.
+            $attributes = array(self::ATTR_VALUE=>$key);
+            if ($key==$this->obj->getField(self::FIELD_ROLEADULTE)) {
+                $attributes[self::ATTR_SELECTED] = ' '.self::ATTR_SELECTED;
+            }
+            $strRoleOptions .= $this->getBalise(self::TAG_OPTION, $value, $attributes);
+        }
+        ///////////////////////////////////////////////
+        
         $urlTemplate = self::WEB_A_FORM_ADULTE;
         $attributes = array(
             // Création - 1
@@ -107,6 +126,8 @@ class AdulteBean extends LocalBean
             ($this->obj->getField(self::FIELD_ADHERENT)==1 ? ' '.self::CST_CHECKED : ''),
             // Téléphone du Parent - 9
             $this->obj->getField(self::FIELD_PHONEADULTE),
+            // Rôles - 10
+            $strRoleOptions,
         );
         return $this->getRender($urlTemplate, $attributes);
     }

@@ -93,16 +93,16 @@ class WpPageAdminBean extends WpPageBean
                     self::CST_COMPOSITION_DIVISIONS => self::LABEL_COMPOSITION,
                 ),
             ),
-            self::ONGLET_MATIERES => array(
-                self::CST_ICON  => self::I_CHALKBOARD,
-                self::CST_LABEL => self::LABEL_MATIERES,
-                self::CST_CHILDREN => array(
-                    self::CST_MATIERES_ENSEIGNANTS => self::LABEL_MATIERES_ENSEIGNANTS,
-                ),
-            ),
             self::ONGLET_ELEVES => array(
                 self::CST_ICON  => self::I_USER_GRADUATE,
                 self::CST_LABEL => self::LABEL_ELEVES,
+            ),
+            self::ONGLET_ENSEIGNANTS => array(
+                self::CST_ICON  => self::I_USERS,
+                self::CST_LABEL => self::LABEL_ENSEIGNANTS,
+                self::CST_CHILDREN => array(
+                    self::CST_ENSEIGNANTS_PRINCIPAUX => self::LABEL_ENSEIGNANTS_PRINCIPAUX,
+                ),
             ),
             self::ONGLET_PARENTS => array(
                 self::CST_ICON  => self::I_USERS,
@@ -111,12 +111,16 @@ class WpPageAdminBean extends WpPageBean
                     self::CST_PARENTS_DIVISIONS => self::LABEL_PARENTS_DELEGUES,
                 ),
             ),
-            self::ONGLET_ENSEIGNANTS => array(
-                self::CST_ICON  => self::I_USERS,
-                self::CST_LABEL => self::LABEL_ENSEIGNANTS,
+            self::ONGLET_MATIERES => array(
+                self::CST_ICON  => self::I_CHALKBOARD,
+                self::CST_LABEL => self::LABEL_MATIERES,
                 self::CST_CHILDREN => array(
-                    self::CST_ENSEIGNANTS_PRINCIPAUX => self::LABEL_ENSEIGNANTS_PRINCIPAUX,
+                    self::CST_MATIERES_ENSEIGNANTS => self::LABEL_MATIERES_ENSEIGNANTS,
                 ),
+            ),
+            self::ONGLET_PARAMETRES => array(
+                self::CST_ICON  => self::I_GEAR,
+                self::CST_LABEL => self::LABEL_PARAMETRES,
             ),
         );
         ////////////////////////////////////////////////////////
@@ -202,6 +206,9 @@ class WpPageAdminBean extends WpPageBean
                     break;
                 case self::ONGLET_MATIERES :
                     $objBean = WpPageAdminMatiereBean::getStaticWpPageBean($this->slugSubOnglet);
+                    break;
+                case self::ONGLET_PARAMETRES :
+                    $objBean = new WpPageAdminParametreBean();
                     break;
                 case self::ONGLET_PARENTS :
                     $objBean = WpPageAdminAdulteBean::getStaticWpPageBean($this->slugSubOnglet);
@@ -410,7 +417,7 @@ class WpPageAdminBean extends WpPageBean
     public function getOngletContent()
     {
         // Définition des droits de l'utilisateur
-        $blnHasEditorRights = (self::isAdmin() || $this->curUser->getField(self::FIELD_ROLEADULTE)>=self::ROLE_EDITEUR);
+        $blnHasEditorRights = $this->curUser->hasEditorRights();
         $blnIsEditorPage    = ($this->slugAction==self::CST_WRITE);
         $blnIsDeletePage    = ($this->slugAction==self::CST_DELETE);
         $blnConfirm         = $this->initVar(self::CST_CONFIRM, false);

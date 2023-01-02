@@ -23,6 +23,8 @@ class EnseignantBean extends LocalBean
     public function __construct($objEnseignant='')
     {
         parent::__construct();
+        // TODO : A supprimer quand l'édition sera faite.
+        $this->hasEdit = false;
         $this->obj = ($objEnseignant=='' ? new EnseignantClass() : $objEnseignant);
     }
     
@@ -57,6 +59,9 @@ class EnseignantBean extends LocalBean
         
         ///////////////////////////////////////////////
         // La partie commune
+        // Genre
+        $trContent .= $this->getBalise(self::TAG_TD, $this->obj->getField(self::FIELD_GENRE), $attributes);
+        
         // Nom sans le lien d'édition
         $label = $this->getBalise(self::TAG_STRONG, $this->obj->getName());
         $trContent .= $this->getBalise(self::TAG_TD, $label, $attributes);

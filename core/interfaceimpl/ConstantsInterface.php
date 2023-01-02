@@ -129,6 +129,7 @@ interface ConstantsInterface
     const I_DOWNLOAD             = 'download';
     const I_EDIT                 = 'pen-to-square';
     const I_FILTER_CIRCLE_XMARK  = 'filter-circle-xmark';
+    const I_GEAR                 = 'gear';
     const I_REFRESH              = 'arrows-rotate';
     const I_SCHOOL               = 'school';
     const I_SQUARE_CHECK         = 'square-check';
@@ -151,6 +152,7 @@ interface ConstantsInterface
     const ONGLET_ENSEIGNANTS      = 'enseignants';
     const ONGLET_MATIERES         = 'matieres';
     const ONGLET_PARENTS          = 'parents';
+    const ONGLET_PARAMETRES       = 'parametres';
     const SUBONGLET_PARENTS_DELEGUES          = 'parentDelegue';
         
     /////////////////////////////////////////////////
