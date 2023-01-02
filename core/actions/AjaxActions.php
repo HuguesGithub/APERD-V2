@@ -30,6 +30,9 @@ class AjaxActions extends LocalActions
             case self::ONGLET_ELEVES :
                 $obj = new EleveActions();
                 break;
+            case self::ONGLET_ENSEIGNANTS :
+                $obj = new EnseignantActions();
+                break;
             case self::ONGLET_MATIERES :
                 $obj = new MatiereActions();
                 break;
@@ -47,29 +50,6 @@ class AjaxActions extends LocalActions
                 break;
         }
         return $obj->getDealWithAjax();
-    }
-
-    /**
-     * @return string
-     * @since v2.22.12.24
-     * @version v2.22.12.24
-     */
-    public function getDealWithAjax()
-    {
-        switch ($_POST[self::AJAX_ACTION]) {
-            case self::AJAX_CSV_EXPORT:
-                $returned = $this->dealWithCsvExport();
-                break;
-            case self::AJAX_IMPORT_FILE:
-                $returned = $this->dealWithImportFile();
-                break;
-            default :
-                $saisie = stripslashes($_POST[self::AJAX_ACTION]);
-                $msg = vsprintf(self::MSG_ERREUR_AJAX_DATA, array('getDealWithAjax()', $saisie, self::AJAX_ACTION));
-                $returned = $this->getToastContentJson(self::NOTIF_DANGER, 'Echec', $msg);
-                break;
-        }
-        return $returned;
     }
 
 }

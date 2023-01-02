@@ -52,8 +52,8 @@ class AdulteClass extends LocalDomainClass
         // Définition des champs de l'objet
         $this->arrFields = array(
             self::FIELD_ID => self::FIELD_ID,
-            self::FIELD_NOMADULTE => self::LABEL_NOMPRENOM,
-            self::FIELD_PRENOMADULTE => self::LABEL_NOMPRENOM,
+            self::FIELD_NOMADULTE => self::LABEL_NOM,
+            self::FIELD_PRENOMADULTE => self::LABEL_PRENOM,
             self::FIELD_MAILADULTE => self::LABEL_MAIL,
             self::FIELD_ADHERENT => self::LABEL_ADHERENT,
             self::FIELD_PHONEADULTE => self::LABEL_PHONE,

@@ -22,7 +22,7 @@
             <div class="row">
 	       		<div class="col-md">
             		<div class="form-floating mb-3">
-              			<input id="genre" type="text" class="form-control form-control-sm" placeholder="Genre" value="%4$s" name="genre">
+              			<input id="genre" type="text" class="form-control form-control-sm" placeholder="Genre" value="%5$s" name="genre">
               			<label for="genre">Genre</label>
             		</div>
           		</div>

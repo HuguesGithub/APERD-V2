@@ -22,12 +22,12 @@ class WpPageAdminEnseignantBean extends WpPageAdminBean
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
         $this->titreOnglet = self::LABEL_ENSEIGNANTS;
         // Initialisation des données du bloc de présentation
-        $this->blnBoutonCreation = false;// TODO true;
+        $this->blnBoutonCreation = true;
         $this->hasPresentation = true;
         $this->strPresentationTitle = self::LABEL_ENSEIGNANTS;
         $this->strPresentationContent = self::LABEL_INTERFACE_ENSEIGNANTS_PRES;
         // Initialisation de la présence d'un bloc import
-        $this->hasBlocImport = false;// TODO true;
+        $this->hasBlocImport = true;
         // Initialisation d'un éventuel objet dédié.
         $id = $this->initVar(self::ATTR_ID);
         $this->objEnseignant = $this->objEnseignantServices->getEnseignantById($id);
@@ -65,30 +65,26 @@ class WpPageAdminEnseignantBean extends WpPageAdminBean
      */
     public function dealWithForm()
     {
-        /*
         $strNotification = '';
         $strMessage = '';
         
         // Un formulaire est soumis.
         // On récupère les données qu'on affecte à l'objet
-        $this->objAdulte->setField(self::FIELD_NOMADULTE, $this->initVar(self::FIELD_NOMADULTE));
-        $this->objAdulte->setField(self::FIELD_PRENOMADULTE, $this->initVar(self::FIELD_PRENOMADULTE));
-        $this->objAdulte->setField(self::FIELD_MAILADULTE, $this->initVar(self::FIELD_MAILADULTE));
-        $this->objAdulte->setField(self::FIELD_ADHERENT, $this->initVar(self::FIELD_ADHERENT, 0));
-        $strPhoneAdulte = str_replace(' ', '', $this->initVar(self::FIELD_PHONEADULTE));
-        $this->objAdulte->setField(self::FIELD_PHONEADULTE, $strPhoneAdulte);
+        $this->objEnseignant->setField(self::FIELD_GENRE, $this->initVar(self::FIELD_GENRE));
+        $this->objEnseignant->setField(self::FIELD_NOMENSEIGNANT, $this->initVar(self::FIELD_NOMENSEIGNANT));
+        $this->objEnseignant->setField(self::FIELD_PRENOMENSEIGNANT, $this->initVar(self::FIELD_PRENOMENSEIGNANT));
         
         // Si le contrôle des données est ok
-        if ($this->objAdulte->controlerDonnees($strNotification, $strMessage)) {
+        if ($this->objEnseignant->controlerDonnees($strNotification, $strMessage)) {
             // Si l'id n'est pas défini
-            if ($this->objAdulte->getField(self::FIELD_ID)=='') {
+            if ($this->objEnseignant->getField(self::FIELD_ID)=='') {
                 // On insère l'objet
-                $this->objAdulte->insert();
+                $this->objEnseignant->insert();
                 // On renseigne le message d'information.
                 $this->strNotifications = $this->getAlertContent(self::NOTIF_SUCCESS, self::MSG_SUCCESS_CREATE);
             } else {
                 // On met à jour l'objet
-                $this->objAdulte->update();
+                $this->objEnseignant->update();
                 // On renseigne le message d'information.
                 $this->strNotifications = $this->getAlertContent(self::NOTIF_SUCCESS, self::MSG_SUCCESS_EDIT);
             }
@@ -97,8 +93,6 @@ class WpPageAdminEnseignantBean extends WpPageAdminBean
             $this->strNotifications = $this->getAlertContent($strNotification, $strMessage);
         }
         /////////////////////////////////////////
-         * 
-         */
     }
     
     /**

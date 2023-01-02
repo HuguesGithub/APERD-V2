@@ -50,8 +50,8 @@ class EnseignantClass extends LocalDomainClass
         $this->arrFields = array(
             self::FIELD_ID => self::FIELD_ID,
             self::FIELD_GENRE => self::LABEL_GENRE,
-            self::FIELD_NOMENSEIGNANT => self::LABEL_NOMPRENOM,
-            self::FIELD_PRENOMENSEIGNANT => self::LABEL_NOMPRENOM,
+            self::FIELD_NOMENSEIGNANT => self::LABEL_NOM,
+            self::FIELD_PRENOMENSEIGNANT => self::LABEL_PRENOM,
         );
     }
 
@@ -76,15 +76,11 @@ class EnseignantClass extends LocalDomainClass
      */
     public function controlerDonnees(&$notif, &$msg)
     {
-        $blnOk = true;
-        
         /////////////////////////////////////////////
         // Le nom doit être renseigné
-        $blnOk = $this->controlerSaisie(self::FIELD_NOMENSEIGNANT, $notif, $msg);
-        
+        return $this->controlerSaisie(self::FIELD_NOMENSEIGNANT, $notif, $msg);
         /////////////////////////////////////////////
         // Fin des contrôles
-        return $blnOk;
     }
     
     /**

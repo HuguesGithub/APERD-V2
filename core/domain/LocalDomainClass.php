@@ -6,6 +6,7 @@ use core\services\AdulteServices;
 use core\services\AdulteDivisionServices;
 use core\services\DivisionServices;
 use core\services\EleveServices;
+use core\services\EnseignantServices;
 use core\services\MatiereServices;
 use core\interfaceimpl\ConstantsInterface;
 use core\interfaceimpl\UrlsInterface;
@@ -48,6 +49,7 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
         $this->objAdulteDivisionServices = new AdulteDivisionServices();
         $this->objDivisionServices       = new DivisionServices();
         $this->objEleveServices          = new EleveServices();
+        $this->objEnseignantServices     = new EnseignantServices();
         $this->objMatiereServices        = new MatiereServices();
     }
     

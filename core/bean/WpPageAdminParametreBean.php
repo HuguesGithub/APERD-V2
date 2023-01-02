@@ -113,49 +113,11 @@ class WpPageAdminParametreBean extends WpPageAdminBean
     {
         $cardTitle = 'Arborescence du site';
         
-        $cardContent  = '<div class="input-group flex-nowrap mb-1"><span class="input-group-text col-2" id="addon-wrapping"><i class="nav-icon fa-solid fa-desktop"></i></span>';
-        $cardContent .= '<input type="text" class="form-control" placeholder="Bureau" aria-label="Bureau" value="Bureau"/></div>';
-
-        $cardContent .= '<div class="input-group flex-nowrap mb-1"><span class="input-group-text col-2" id="addon-wrapping"><i class="nav-icon fa-solid fa-users"></i></span>';
-        $cardContent .= '<input type="text" class="form-control" placeholder="Administratifs" aria-label="Administratifs" value="Administratifs"/></div>';
-        
-        $cardContent .= '<div class="input-group flex-nowrap"><span class="input-group-text col-2" id="addon-wrapping"><i class="nav-icon fa-solid fa-school"></i></span>';
-        $cardContent .= '<input type="text" class="form-control" placeholder="Divisions" aria-label="Divisions" value="Divisions"/></div>';
-        $cardContent .= '<div class="input-group flex-nowrap mb-1"><span class="col-2" id="addon-wrapping">&nbsp;</span>';
-        $cardContent .= '<input type="text" class="form-control" placeholder="Composition" aria-label="Composition" value="Composition"/></div>';
-        
-        $cardContent .= '<div class="input-group flex-nowrap mb-1"><span class="input-group-text col-2" id="addon-wrapping"><i class="nav-icon fa-solid fa-user-graduate"></i></span>';
-        $cardContent .= '<input type="text" class="form-control" placeholder="Élèves" aria-label="Élèves" value="Élèves"/></div>';
-        
-        $cardContent .= '<div class="input-group flex-nowrap mb-1"><span class="input-group-text col-2" id="addon-wrapping"><i class="nav-icon fa-solid fa-users"></i></span>';
-        $cardContent .= '<input type="text" class="form-control" placeholder="Enseignants" aria-label="Enseignants" value="Enseignants"/></div>';
-        
-        $cardContent .= '<div class="input-group flex-nowrap mb-1"><span class="input-group-text col-2" id="addon-wrapping"><i class="nav-icon fa-solid fa-users"></i></span>';
-        $cardContent .= '<input type="text" class="form-control" placeholder="Parents" aria-label="Parents" value="Parents"/></div>';
-        
-        $cardContent .= '<div class="input-group flex-nowrap mb-1"><span class="input-group-text col-2" id="addon-wrapping"><i class="nav-icon fa-solid fa-chalkboard"></i></span>';
-        $cardContent .= '<input type="text" class="form-control" placeholder="Matières" aria-label="Matières" value="Matières"/></div>';
-        
-        $cardContent .= '<div class="input-group flex-nowrap mb-1"><span class="input-group-text col-2" id="addon-wrapping"><i class="nav-icon fa-solid fa-gear"></i></span>';
-        $cardContent .= '<input type="text" class="form-control" placeholder="Paramètres" aria-label="Paramètres" value="Paramètres"/></div>';
-        
-        /*
-        $cardContent  = '<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">';
-        $cardContent .= '<li class="nav-item"> <input type=text" class="form-control" value=""/></li>';
-        $cardContent .= '<li class="nav-item"> <i class="nav-icon fa-solid fa-"></i><p></p></a></li>
-        <li class="nav-item"><a href="/admin?onglet=divisions" class="nav-link"><i class="nav-icon fa-solid fa-"></i><p><i class="right fa-solid fa-angle-left"></i></p></a><ul class="nav nav-treeview"><li class="nav-item"><a href="/admin?onglet=divisions&amp;subOnglet=compoDivision" class="nav-link"><i class="nav-icon fa-solid fa-circle"></i><p>Composition</p></a></li></ul></li>
-        <li class="nav-item"><a href="/admin?onglet=eleves" class="nav-link"><i class="nav-icon fa-solid fa-"></i><p></p></a></li>
-        <li class="nav-item"><a href="/admin?onglet=enseignants" class="nav-link"><i class="nav-icon fa-solid fa-"></i><p><i class="right fa-solid fa-angle-left"></i></p></a><ul class="nav nav-treeview"><li class="nav-item"><a href="/admin?onglet=enseignants&amp;subOnglet=enseignantPrinc" class="nav-link"><i class="nav-icon fa-solid fa-circle"></i><p>Enseignants principaux</p></a></li></ul></li>
-        <li class="nav-item"><a href="/admin?onglet=parents" class="nav-link"><i class="nav-icon fa-solid fa-"></i><p><i class="right fa-solid fa-angle-left"></i></p></a><ul class="nav nav-treeview"><li class="nav-item"><a href="/admin?onglet=parents&amp;subOnglet=parentDelegue" class="nav-link"><i class="nav-icon fa-solid fa-circle"></i><p>Parents délégués</p></a></li></ul></li>
-        <li class="nav-item"><a href="/admin?onglet=matieres" class="nav-link"><i class="nav-icon fa-solid fa-"></i><p><i class="right fa-solid fa-angle-left"></i></p></a><ul class="nav nav-treeview"><li class="nav-item"><a href="/admin?onglet=matieres&amp;subOnglet=matiereEnseignant" class="nav-link"><i class="nav-icon fa-solid fa-circle"></i><p>Matière par enseignant</p></a></li></ul></li>
-        <li class="nav-item"><a href="/admin?onglet=parametres" class="nav-link active"><i class="nav-icon fa-solid fa-"></i><p></p></a></li>';
-        $cardContent .= '</ul>';
-        */
-        
+       
         $urlTemplate = self::WEB_PPFC_CARD;
         $attributes = array(
             $cardTitle,
-            $cardContent,
+            '',
         );
         return $this->getRender($urlTemplate, $attributes);
     }

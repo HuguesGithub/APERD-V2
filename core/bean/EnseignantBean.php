@@ -23,8 +23,6 @@ class EnseignantBean extends LocalBean
     public function __construct($objEnseignant='')
     {
         parent::__construct();
-        // TODO : A supprimer quand l'édition sera faite.
-        $this->hasEdit = false;
         $this->obj = ($objEnseignant=='' ? new EnseignantClass() : $objEnseignant);
     }
     

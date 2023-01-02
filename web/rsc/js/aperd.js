@@ -145,7 +145,7 @@ function addDragAndDropHandler(obj) {
 		let fd = new FormData();
         fd.append('action', 'dealWithAjax');
         fd.append('ajaxAction', 'importFile');
-        fd.append('importType', $('#post-import-drag-drop input[name="importType"]').val());
+        fd.append('type', $('#post-import-drag-drop input[name="importType"]').val());
         fd.append('fileToImport', file);
         let status = new createStatusbar(obj);
         status.setFileNameSize(file.name, file.size);

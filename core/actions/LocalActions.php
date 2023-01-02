@@ -9,6 +9,7 @@ use core\services\AdulteServices;
 use core\services\AdulteDivisionServices;
 use core\services\DivisionServices;
 use core\services\EleveServices;
+use core\services\EnseignantServices;
 use core\services\MatiereServices;
 
 if (!defined('ABSPATH')) {
@@ -18,7 +19,7 @@ if (!defined('ABSPATH')) {
  * LocalActions
  * @author Hugues
  * @since 1.22.12.07
- * @version 1.22.12.28
+ * @version v2.23.01.02
  */
 class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
 {
@@ -32,6 +33,7 @@ class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
         $this->objAdulteDivisionServices = new AdulteDivisionServices();
         $this->objDivisionServices       = new DivisionServices();
         $this->objEleveServices          = new EleveServices();
+        $this->objEnseignantServices     = new EnseignantServices();
         $this->objMatiereServices        = new MatiereServices();
     }
     
@@ -66,7 +68,7 @@ class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
      */
     public function importFile()
     {
-        $importType = $_POST['importType'];
+        $importType = $_POST['type'];
         $dirName    = dirname(__FILE__).'/../../web/rsc/csv-files/';
         $fileName   = $dirName.'import_'.$this->importType.'.csv';
         if ($importType==$this->importType &&
@@ -210,5 +212,28 @@ class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
             ///////////////////////////////////////////
         }
         return $arrActiveFilters;
+    }
+    
+    /**
+     * @return string
+     * @since v2.22.12.24
+     * @version v2.22.12.24
+     */
+    public function getDealWithAjax()
+    {
+        switch ($_POST[self::AJAX_ACTION]) {
+            case self::AJAX_CSV_EXPORT:
+                $returned = $this->getCsvExport();
+                break;
+            case self::AJAX_IMPORT_FILE:
+                $returned = $this->importFile();
+                break;
+            default :
+                $saisie = stripslashes($_POST[self::AJAX_ACTION]);
+                $msg = vsprintf(self::MSG_ERREUR_AJAX_DATA, array('getDealWithAjax()', $saisie, self::AJAX_ACTION));
+                $returned = $this->getToastContentJson(self::NOTIF_DANGER, 'Echec', $msg);
+                break;
+        }
+        return $returned;
     }
 }
