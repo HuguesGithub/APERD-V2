@@ -8,6 +8,7 @@ use core\services\DivisionServices;
 use core\services\EleveServices;
 use core\services\EnseignantServices;
 use core\services\MatiereServices;
+use core\services\MatiereEnseignantServices;
 use core\interfaceimpl\ConstantsInterface;
 use core\interfaceimpl\UrlsInterface;
 use core\interfaceimpl\LabelsInterface;
@@ -19,19 +20,20 @@ if (!defined('ABSPATH')) {
  * Classe UtilitiesBean
  * @author Hugues
  * @since 2.22.12.05
- * @version 2.22.12.08
+ * @version v2.23.01.02
  */
 class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterface
 {
     public function __construct()
     {
-        $this->objAdministrationServices = new AdministrationServices();
-        $this->objAdulteServices         = new AdulteServices();
-        $this->objAdulteDivisionServices = new AdulteDivisionServices();
-        $this->objDivisionServices       = new DivisionServices();
-        $this->objEleveServices          = new EleveServices();
-        $this->objEnseignantServices     = new EnseignantServices();
-        $this->objMatiereServices        = new MatiereServices();
+        $this->objAdministrationServices    = new AdministrationServices();
+        $this->objAdulteServices            = new AdulteServices();
+        $this->objAdulteDivisionServices    = new AdulteDivisionServices();
+        $this->objDivisionServices          = new DivisionServices();
+        $this->objEleveServices             = new EleveServices();
+        $this->objEnseignantServices        = new EnseignantServices();
+        $this->objMatiereServices           = new MatiereServices();
+        $this->objMatiereEnseignantServices = new MatiereEnseignantServices();
     }
     
     /**

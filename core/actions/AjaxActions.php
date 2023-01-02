@@ -39,6 +39,9 @@ class AjaxActions extends LocalActions
             case self::ONGLET_PARENTS :
                 $obj = new AdulteActions();
                 break;
+            case self::CST_MATIERES_ENSEIGNANTS :
+                $obj = new MatiereEnseignantActions();
+                break;
             case self::SUBONGLET_PARENTS_DELEGUES :
                 $obj = new AdulteDivisionActions();
                 break;

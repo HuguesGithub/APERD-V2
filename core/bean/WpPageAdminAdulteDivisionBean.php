@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * Classe WpPageAdminAdulteDivisionBean
  * @author Hugues
  * @since 1.22.12.12
- * @version 1.22.12.12
+ * @version v2.23.01.02
  */
 class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
 {
@@ -35,6 +35,13 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
         /////////////////////////////////////////
         
         /////////////////////////////////////////
+        // Vérification de la soumission d'un formulaire
+        if ($this->curUser->hasEditorRights() && $this->postAction!='') {
+            $this->dealWithForm();
+        }
+        /////////////////////////////////////////
+        
+        /////////////////////////////////////////
         // Construction du Breadcrumbs
         $this->buildBreadCrumbs();
         /////////////////////////////////////////
@@ -43,10 +50,14 @@ class WpPageAdminAdulteDivisionBean extends WpPageAdminAdulteBean
     /**
      * En cas de formulaire, on le traite. A priori, Création ou édition pour l'heure
      * @since v2.22.12.28
-     * @version v2.22.12.28
+     * @version v2.23.01.02
      */
     public function dealWithForm()
     {
+        if (!isset($this->objAdulteDivision)) {
+            return;
+        }
+
         $strNotification = '';
         $strMessage = '';
         

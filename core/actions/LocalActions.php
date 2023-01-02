@@ -11,6 +11,7 @@ use core\services\DivisionServices;
 use core\services\EleveServices;
 use core\services\EnseignantServices;
 use core\services\MatiereServices;
+use core\services\MatiereEnseignantServices;
 
 if (!defined('ABSPATH')) {
     die('Forbidden');
@@ -35,6 +36,7 @@ class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
         $this->objEleveServices          = new EleveServices();
         $this->objEnseignantServices     = new EnseignantServices();
         $this->objMatiereServices        = new MatiereServices();
+        $this->objMatiereEnseignantServices = new MatiereEnseignantServices();
     }
     
     /**

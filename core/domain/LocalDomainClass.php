@@ -8,6 +8,7 @@ use core\services\DivisionServices;
 use core\services\EleveServices;
 use core\services\EnseignantServices;
 use core\services\MatiereServices;
+use core\services\MatiereEnseignantServices;
 use core\interfaceimpl\ConstantsInterface;
 use core\interfaceimpl\UrlsInterface;
 use core\interfaceimpl\LabelsInterface;
@@ -51,6 +52,7 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
         $this->objEleveServices          = new EleveServices();
         $this->objEnseignantServices     = new EnseignantServices();
         $this->objMatiereServices        = new MatiereServices();
+        $this->objMatiereEnseignantServices = new MatiereEnseignantServices();
     }
     
     /**
