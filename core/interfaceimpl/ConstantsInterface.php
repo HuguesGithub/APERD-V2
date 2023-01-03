@@ -95,25 +95,20 @@ interface ConstantsInterface
     // Table AdulteDivision
     const FIELD_ADULTEID         = 'adulteId';
     // Table Composition Division
-    // wp_14_aperd_compo_division
-    const FIELD_ENSEIGNANTMATIEREID = 'enseignantMatiereId';
+    const FIELD_MATIEREENSEIGNANTID = 'matiereEnseignantId';
     // Table Division
     const FIELD_LABELDIVISION    = 'labelDivision';
     // Table Eleve
     const FIELD_NOMELEVE         = 'nomEleve';
     const FIELD_PRENOMELEVE      = 'prenomEleve';
     // Table Enseignant
-    // wp_14_aperd_enseignant
     const FIELD_NOMENSEIGNANT    = 'nomEnseignant';
     const FIELD_PRENOMENSEIGNANT = 'prenomEnseignant';
     const FIELD_MAILENSEIGNANT   = 'mailEnseignant';
     // Table Enseignant Division
-    // wp_14_aperd_enseignant_division
-    // Pas de champ au nom unique.
     // Table Matière
     const FIELD_LABELMATIERE     = 'labelMatiere';
     // Table Matiere Enseignant
-    // wp_14_aperd_enseignant_matiere
     const FIELD_MATIEREID        = 'matiereId';
     
     /////////////////////////////////////////////////

@@ -12,6 +12,7 @@ use core\services\MatiereEnseignantServices;
 use core\interfaceimpl\ConstantsInterface;
 use core\interfaceimpl\UrlsInterface;
 use core\interfaceimpl\LabelsInterface;
+use core\services\DivisionCompositionServices;
 
 if (!defined('ABSPATH')) {
     die('Forbidden');
@@ -26,14 +27,15 @@ class UtilitiesBean implements ConstantsInterface, UrlsInterface, LabelsInterfac
 {
     public function __construct()
     {
-        $this->objAdministrationServices    = new AdministrationServices();
-        $this->objAdulteServices            = new AdulteServices();
-        $this->objAdulteDivisionServices    = new AdulteDivisionServices();
-        $this->objDivisionServices          = new DivisionServices();
-        $this->objEleveServices             = new EleveServices();
-        $this->objEnseignantServices        = new EnseignantServices();
-        $this->objMatiereServices           = new MatiereServices();
-        $this->objMatiereEnseignantServices = new MatiereEnseignantServices();
+        $this->objAdministrationServices      = new AdministrationServices();
+        $this->objAdulteServices              = new AdulteServices();
+        $this->objAdulteDivisionServices      = new AdulteDivisionServices();
+        $this->objDivisionServices            = new DivisionServices();
+        $this->objDivisionCompositionServices = new DivisionCompositionServices();
+        $this->objEleveServices               = new EleveServices();
+        $this->objEnseignantServices          = new EnseignantServices();
+        $this->objMatiereServices             = new MatiereServices();
+        $this->objMatiereEnseignantServices   = new MatiereEnseignantServices();
     }
     
     /**

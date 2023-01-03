@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * Classe WpPageAdminDivisionCompoBean
  * @author Hugues
  * @since v2.23.01.01
- * @version v2.23.01.01
+ * @version v2.23.01.03
  */
 class WpPageAdminDivisionCompoBean extends WpPageAdminDivisionBean
 {
@@ -22,8 +22,9 @@ class WpPageAdminDivisionCompoBean extends WpPageAdminDivisionBean
         $this->slugSubOnglet = self::CST_COMPOSITION_DIVISIONS;
         $this->titreOnglet = self::LABEL_COMPOSITION;
         // Initialisation des données du bloc de présentation
+        $this->blnBoutonCreation = false;
         // Initialisation de la présence d'un bloc import
-        $this->hasBlocImport = true;
+        $this->hasBlocImport = false;//true
         // Initialisation d'un éventuel objet dédié.
         // TODO : Impleménter la classe objet correspondant.
         //$id = $this->initVar(self::ATTR_ID);
@@ -32,6 +33,13 @@ class WpPageAdminDivisionCompoBean extends WpPageAdminDivisionBean
         $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
         // Initialisation des filtres
         $this->filtreDivision = $this->initVar('filter-division', 'all');
+        /////////////////////////////////////////
+        
+        /////////////////////////////////////////
+        // Vérification de la soumission d'un formulaire
+        if ($this->curUser->hasEditorRights() && $this->postAction!='') {
+            $this->dealWithForm();
+        }
         /////////////////////////////////////////
         
         /////////////////////////////////////////
@@ -120,36 +128,21 @@ class WpPageAdminDivisionCompoBean extends WpPageAdminDivisionBean
     
     /**
      * @return string
-     * @since 2.22.12.12
-     * @version 2.22.12.12
+     * @since v2.23.01.03
+     * @version v2.23.01.03
      */
     public function getListContent()
     {
-        /*
-        $this->attrDescribeList = self::LABEL_LIST_PARENTS_DELEGUES;
+        $this->attrDescribeList = self::LABEL_LIST_DIVISIONS_COMPOSITIONS;
         /////////////////////////////////////////
         // On va prendre en compte les éventuels filtres
-        $attributes = array(
-            self::FIELD_DELEGUE => 1,
-        );
-        // Filtre sur Division
-        if ($this->filtreDivision!='' && $this->filtreDivision!='all') {
-            $attributes[self::FIELD_DIVISIONID] = $this->filtreDivision;
-        }
-        // Filtre sur Adherent
-        if ($this->filtreAdherent=='oui') {
-            $attributes[self::FIELD_ADHERENT] = 1;
-        } elseif ($this->filtreAdherent=='non') {
-            $attributes[self::FIELD_ADHERENT] = 0;
-        }
-        // Sens d'affichage
-        $sensTri = self::FIELD_LABELDIVISION;
+        $attributes = array();
+        
         /////////////////////////////////////////
         // On va chercher les éléments à afficher
-        $objItems = $this->objAdulteDivisionServices->getAdulteDivisionsWithFilters($attributes, $sensTri);
+        $objItems = $this->objDivisionCompositionServices->getDivisionCompositionsWithFilters($attributes);
         /////////////////////////////////////////
         return $this->getDefaultListContent($objItems);
-        */
     }
     
     /**

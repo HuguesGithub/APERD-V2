@@ -1,46 +1,50 @@
 <?php
 namespace core\domain;
 
-use core\bean\AdulteDivisionBean;
+use core\bean\DivisionCompositionBean;
 
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
 /**
- * Classe AdulteDivisionClass
+ * Classe DivisionCompositionClass
  * @author Hugues
- * @since 2.22.12.12
- * @version 2.22.12.12
+ * @since v2.23.01.03
+ * @version v2.23.01.03
  */
-class AdulteDivisionClass extends LocalDomainClass
+class DivisionCompositionClass extends LocalDomainClass
 {
     //////////////////////////////////////////////////
     // ATTRIBUTES
     //////////////////////////////////////////////////
     protected $id;
-    protected $adulteId;
     protected $divisionId;
-    protected $delegue;
+    protected $matiereEnseignantId;
+    
     //////////////////////////////////////////////////
     // GETTERS & SETTERS
     //////////////////////////////////////////////////
     
-    public function getAdulte()
-    { return $this->objAdulteServices->getAdulteById($this->adulteId); }
-    
     public function getDivision()
     { return $this->objDivisionServices->getDivisionById($this->divisionId); }
     
+    public function getMatiereEnseignant()
+    { return $this->objMatiereEnseignantServices->getMatiereEnseignantById($this->enseignantId); }
+    
     public function getLibelle()
-    { return $this->getAdulte()->getName().', '.$this->getDivision()->getField(self::FIELD_LABELDIVISION); }
+    {
+        $strLibelle = $this->getMatiereEnseignant()->getLibelle().', ';
+        return $strLibelle.$this->getDivision()->getField(self::FIELD_LABELDIVISION);
+    }
+    
     //////////////////////////////////////////////////
     // CONSTRUCT - CLASSVARS - CONVERT - BEAN
     //////////////////////////////////////////////////
     
     /**
      * @param array $attributes
-     * @since 2.22.12.12
-     * @version 2.22.12.12
+     * @since v2.23.01.03
+     * @version v2.23.01.03
      */
     public function __construct($attributes=array())
     {
@@ -48,46 +52,49 @@ class AdulteDivisionClass extends LocalDomainClass
         // Définition des champs de l'objet
         $this->arrFields = array(
             self::FIELD_ID => self::FIELD_ID,
-            self::FIELD_ADULTEID => self::LABEL_NOMPRENOM,
             self::FIELD_DIVISIONID => self::LABEL_LABELDIVISION,
-            self::FIELD_DELEGUE => self::LABEL_DELEGUE,
+            // TODO.. Comment gérer le champ FIELD_MATIEREENSEIGNANTID qui devrait être scindé
+            // en deux colonnes, LABEL_NOMMATIERE et LABEL_NOMPRENOM ?
         );
     }
     /**
-     * @return AdulteDivisionBean
-     * @since 2.22.12.12
-     * @version 2.22.12.12
+     * @return DivisionCompositionBean
+     * @since v2.23.01.03
+     * @version v2.23.01.03
      */
     public function getBean()
-    { return new AdulteDivisionBean($this); }
+    { return new DivisionCompositionBean($this); }
     //////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////
     
     /**
      * @return string
-     * @since 2.22.12.18
-     * @version 2.22.12.18
+     * @since v2.23.01.03
+     * @version v2.23.01.03
      */
     public function toCsv()
     {
+        /*
         $arrValues = array();
         array_push($arrValues, $this->getField(self::FIELD_ID));
         array_push($arrValues, $this->getAdulte()->getName());
         array_push($arrValues, $this->getDivision()->getField(self::FIELD_LABELDIVISION));
         array_push($arrValues, $this->getField(self::FIELD_DELEGUE));
         return implode(self::CSV_SEP, $arrValues);
+        */
     }
     
     /**
      * @param string &$notif
      * @param string &$msg
      * @return boolean
-     * @since 2.22.12.08
-     * @version 2.22.12.08
+     * @since v2.23.01.03
+     * @version v2.23.01.03
      */
     public function controlerDonnees(&$notif, &$msg)
     {
+        /*
         $blnOk = true;
         /////////////////////////////////////////////
         // On doit contrôler adulteId qui doit exister
@@ -103,6 +110,7 @@ class AdulteDivisionClass extends LocalDomainClass
         /////////////////////////////////////////////
         // Fin des contrôles
         return $blnOk;
+        */
     }
     
     /**
@@ -110,11 +118,12 @@ class AdulteDivisionClass extends LocalDomainClass
      * @param string &$notif
      * @param string &$msg
      * @return boolean
-     * @since 2.22.12.12
-     * @version 2.22.12.12
+     * @since v2.23.01.03
+     * @version v2.23.01.03
      */
     public function controlerImportRow($rowContent, &$notif, &$msg)
     {
+        /*
         list($id, $nomAdulte, $labelDivision, $delegue) = explode(self::CSV_SEP, $rowContent);
         
         //////////////////////////////////////////////////////////////////////////////////
@@ -144,17 +153,19 @@ class AdulteDivisionClass extends LocalDomainClass
         $this->setField(self::FIELD_DELEGUE, $delegue);
         
         return $this->controlerDonneesAndAct($notif, $msg);
+        */
     }
     
     /**
      * @param string &$notif
      * @param string &$msg
      * @return boolean
-     * @since 2.22.12.12
-     * @version 2.22.12.12
+     * @since v2.23.01.03
+     * @version v2.23.01.03
      */
     public function controlerDonneesAndAct(&$notif, &$msg)
     {
+        /*
         if (!$this->controlerDonnees($notif, $msg)) {
             return false;
         }
@@ -172,26 +183,27 @@ class AdulteDivisionClass extends LocalDomainClass
             }
         }
         return true;
+        */
     }
     
     /**
-     * @since 2.22.12.12
-     * @version 2.22.12.12
+     * @since v2.23.01.03
+     * @version v2.23.01.03
      */
     public function insert()
-    { $this->objAdulteDivisionServices->insert($this); }
+    { $this->objDivisionCompositionServices->insert($this); }
     
     /**
-     * @since 2.22.12.12
-     * @version 2.22.12.12
+     * @since v2.23.01.03
+     * @version v2.23.01.03
      */
     public function update()
-    { $this->objAdulteDivisionServices->update($this); }
+    { $this->objDivisionCompositionServices->update($this); }
     
     /**
-     * @since 2.22.12.12
-     * @version 2.22.12.12
+     * @since v2.23.01.03
+     * @version v2.23.01.03
      */
     public function delete()
-    { $this->objAdulteDivisionServices->delete($this); }
+    { $this->objDivisionCompositionServices->delete($this); }
 }

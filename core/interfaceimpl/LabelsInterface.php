@@ -46,6 +46,7 @@ interface LabelsInterface
     const LABEL_LIST_PARENTS          = 'Liste des Parents d\'élèves';
     const LABEL_LIST_PARENTS_DELEGUES = 'Liste des Parents d\'élèves délégués';
     const LABEL_LIST_DIVISIONS        = 'Liste des Divisions';
+    const LABEL_LIST_DIVISIONS_COMPOSITIONS = 'Composition des Divisions';
     const LABEL_LIST_ELEVES           = 'Liste des Élèves';
     const LABEL_LIST_ENSEIGNANTS      = 'Liste des Enseignants';
     const LABEL_LIST_MATIERES         = 'Liste des Matières';
