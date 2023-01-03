@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
  * Classe EleveClass
  * @author Hugues
  * @since 2.22.12.22
- * @version 2.22.12.22
+ * @version v2.23.01.03
  */
 class EleveClass extends LocalDomainClass
 {
@@ -67,6 +67,22 @@ class EleveClass extends LocalDomainClass
      */
     public function getBean()
     { return new EleveBean($this); }
+    
+    /**
+     * @return string
+     * @since v2.23.01.03
+     * @version v2.23.01.03
+     */
+    public function toCsv()
+    {
+        $arrValues = array();
+        array_push($arrValues, $this->getField(self::FIELD_ID));
+        array_push($arrValues, $this->getField(self::FIELD_NOMELEVE));
+        array_push($arrValues, $this->getField(self::FIELD_PRENOMELEVE));
+        array_push($arrValues, $this->getDivision()->getField(self::FIELD_LABELDIVISION));
+        array_push($arrValues, $this->getField(self::FIELD_DELEGUE));
+        return implode(self::CSV_SEP, $arrValues);
+    }
 
     //////////////////////////////////////////////////
     // METHODS
@@ -112,11 +128,26 @@ class EleveClass extends LocalDomainClass
      * @param string &$msg
      * @return boolean
      * @since 2.22.12.22
-     * @version 2.22.12.22
+     * @version v2.23.01.03
      */
     public function controlerImportRow($rowContent, &$notif, &$msg)
     {
-        list($id, $nomEleve, $prenomEleve, $divisionId, $delegue) = explode(self::CSV_SEP, $rowContent);
+        list($id, $nomEleve, $prenomEleve, $labelDivision, $delegue) = explode(self::CSV_SEP, $rowContent);
+		
+        //////////////////////////////////////////////////////////////////////////////////
+        // rowContent ne contient pas l'id, mais label de la Division. Il faut donc 
+		// le rechercher pour définir l'id qui correspond.
+
+        // Recherche de la Division
+        $attributes = array(self::FIELD_LABELDIVISION=>$labelDivision);
+        $objsDivision = $this->objDivisionServices->getDivisionsWithFilters($attributes);
+        if (count($objsDivision)==1) {
+            $objDivision = array_shift($objsDivision);
+            $divisionId = $objDivision->getField(self::FIELD_ID);
+        } else {
+            $divisionId = '';
+        }
+		
         $this->setField(self::FIELD_ID, $id);
         $this->setField(self::FIELD_NOMELEVE, ucfirst(strtolower(trim($nomEleve))));
         $this->setField(self::FIELD_PRENOMELEVE, ucfirst(strtolower(trim($prenomEleve))));
@@ -125,6 +156,7 @@ class EleveClass extends LocalDomainClass
         
         return $this->controlerDonneesAndAct($notif, $msg);
     }
+
     
     /**
      * @param string &$notif

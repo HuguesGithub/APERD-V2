@@ -106,7 +106,7 @@ class MatiereDaoImpl extends LocalDaoImpl
         //////////////////////////////
         // Construction de la requête
         $request  = "UPDATE ".$this->dbTable." SET ";
-        $request .= "libelleMatiere = '%s' ";
+        $request .= "labelMatiere = '%s' ";
         $request .= "WHERE id = '%s';";
         parent::update($request, $attributes);
     }

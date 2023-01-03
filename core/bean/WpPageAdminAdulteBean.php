@@ -77,6 +77,7 @@ class WpPageAdminAdulteBean extends WpPageAdminBean
         $this->objAdulte->setField(self::FIELD_ADHERENT, $this->initVar(self::FIELD_ADHERENT, 0));
         $strPhoneAdulte = str_replace(' ', '', $this->initVar(self::FIELD_PHONEADULTE));
         $this->objAdulte->setField(self::FIELD_PHONEADULTE, $strPhoneAdulte);
+        $this->objAdulte->setField(self::FIELD_ROLEADULTE, $this->initVar(self::FIELD_ROLEADULTE, 1));
         
         // Si le contrôle des données est ok
         if ($this->objAdulte->controlerDonnees($strNotification, $strMessage)) {

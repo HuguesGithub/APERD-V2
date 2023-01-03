@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
  * Classe AdministrationBean
  * @author Hugues
  * @since 2.22.12.05
- * @version 2.22.12.08
+ * @version v2.23.01.03
  */
 class AdministrationBean extends LocalBean
 {
@@ -79,9 +79,9 @@ class AdministrationBean extends LocalBean
      * @param string $baseUrl
      * @return string
      * @since 2.22.12.05
-     * @version 2.22.12.05
+     * @version v2.23.01.03
      */
-    public function getForm($baseUrl)
+    public function getForm($baseUrl, $strNotifications='')
     {
         $urlTemplate = self::WEB_A_FORM_ADMINISTRATION;
         $attributes = array(
@@ -91,11 +91,13 @@ class AdministrationBean extends LocalBean
             $this->obj->getField(self::FIELD_ID),
             // Annuler - 3
             $baseUrl,
-            // Genre de l'Administration - 4
+			// Notifications - 4
+			$strNotifications,
+            // Genre de l'Administration - 5
             $this->obj->getField(self::FIELD_GENRE),
-            // Nom de l'Administration - 5
+            // Nom de l'Administration - 6
             $this->obj->getField(self::FIELD_NOMTITULAIRE),
-            // Poste de l'Administration - 6
+            // Poste de l'Administration - 7
             $this->obj->getField(self::FIELD_LABELPOSTE),
         );
         return $this->getRender($urlTemplate, $attributes);

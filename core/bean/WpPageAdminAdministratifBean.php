@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * Classe WpPageAdminAdministratifBean
  * @author Hugues
  * @since 1.22.12.01
- * @version 1.22.12.08
+ * @version v2.23.01.03
  */
 class WpPageAdminAdministratifBean extends WpPageAdminBean
 {
@@ -138,11 +138,11 @@ class WpPageAdminAdministratifBean extends WpPageAdminBean
     /**
      * @return string
      * @since 2.22.12.07
-     * @version 2.22.12.07
+     * @version v2.23.01.03
      */
     public function getEditContent()
     {
         $baseUrl = $this->getUrl(array(self::CST_SUBONGLET=>''));
-        return $this->objAdministratif->getBean()->getForm($baseUrl);
+        return $this->objAdministratif->getBean()->getForm($baseUrl, $this->strNotifications);
     }
 }

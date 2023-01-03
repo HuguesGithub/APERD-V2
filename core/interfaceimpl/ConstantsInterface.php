@@ -188,6 +188,7 @@ interface ConstantsInterface
     const TAG_DIV                 = 'div';
     const TAG_I                   = 'i';
     const TAG_INPUT               = 'input';
+    const TAG_LABEL              = 'label';
     const TAG_LI                  = 'li';
     const TAG_OPTION             = 'option';
     const TAG_P                   = 'p';

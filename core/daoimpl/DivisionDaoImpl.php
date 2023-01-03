@@ -106,7 +106,7 @@ class DivisionDaoImpl extends LocalDaoImpl
         //////////////////////////////
         // Construction de la requête
         $request  = "UPDATE ".$this->dbTable." SET ";
-        $request .= "libelleDivision = '%s' ";
+        $request .= "labelDivision = '%s' ";
         $request .= "WHERE id = '%s';";
         parent::update($request, $attributes);
     }
