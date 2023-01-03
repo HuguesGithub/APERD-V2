@@ -133,10 +133,10 @@ class EleveClass extends LocalDomainClass
     public function controlerImportRow($rowContent, &$notif, &$msg)
     {
         list($id, $nomEleve, $prenomEleve, $labelDivision, $delegue) = explode(self::CSV_SEP, $rowContent);
-		
+        
         //////////////////////////////////////////////////////////////////////////////////
-        // rowContent ne contient pas l'id, mais label de la Division. Il faut donc 
-		// le rechercher pour définir l'id qui correspond.
+        // rowContent ne contient pas l'id, mais label de la Division. Il faut donc
+        // le rechercher pour définir l'id qui correspond.
 
         // Recherche de la Division
         $attributes = array(self::FIELD_LABELDIVISION=>$labelDivision);
@@ -147,7 +147,7 @@ class EleveClass extends LocalDomainClass
         } else {
             $divisionId = '';
         }
-		
+        
         $this->setField(self::FIELD_ID, $id);
         $this->setField(self::FIELD_NOMELEVE, ucfirst(strtolower(trim($nomEleve))));
         $this->setField(self::FIELD_PRENOMELEVE, ucfirst(strtolower(trim($prenomEleve))));

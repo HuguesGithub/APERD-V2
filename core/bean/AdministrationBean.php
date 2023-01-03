@@ -91,8 +91,8 @@ class AdministrationBean extends LocalBean
             $this->obj->getField(self::FIELD_ID),
             // Annuler - 3
             $baseUrl,
-			// Notifications - 4
-			$strNotifications,
+            // Notifications - 4
+            $strNotifications,
             // Genre de l'Administration - 5
             $this->obj->getField(self::FIELD_GENRE),
             // Nom de l'Administration - 6
