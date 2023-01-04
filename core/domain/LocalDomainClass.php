@@ -7,6 +7,7 @@ use core\services\AdulteDivisionServices;
 use core\services\DivisionServices;
 use core\services\EleveServices;
 use core\services\EnseignantServices;
+use core\services\EnseignantPrincipalServices;
 use core\services\MatiereServices;
 use core\services\MatiereEnseignantServices;
 use core\interfaceimpl\ConstantsInterface;
@@ -45,14 +46,15 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
         }
         
         // Initialisation des Services
-        $this->objAdministrationServices = new AdministrationServices();
-        $this->objAdulteServices         = new AdulteServices();
-        $this->objAdulteDivisionServices = new AdulteDivisionServices();
-        $this->objDivisionServices       = new DivisionServices();
-        $this->objEleveServices          = new EleveServices();
-        $this->objEnseignantServices     = new EnseignantServices();
-        $this->objMatiereServices        = new MatiereServices();
-        $this->objMatiereEnseignantServices = new MatiereEnseignantServices();
+        $this->objAdministrationServices      = new AdministrationServices();
+        $this->objAdulteServices              = new AdulteServices();
+        $this->objAdulteDivisionServices      = new AdulteDivisionServices();
+        $this->objDivisionServices            = new DivisionServices();
+        $this->objEleveServices               = new EleveServices();
+        $this->objEnseignantServices          = new EnseignantServices();
+        $this->objEnseignantPrincipalServices = new EnseignantPrincipalServices();
+        $this->objMatiereServices             = new MatiereServices();
+        $this->objMatiereEnseignantServices   = new MatiereEnseignantServices();
     }
     
     /**

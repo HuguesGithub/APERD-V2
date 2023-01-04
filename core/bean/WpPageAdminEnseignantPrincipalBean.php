@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * Classe WpPageAdminEnseignantPrincipalBean
  * @author Hugues
  * @since v2.23.01.02
- * @version v2.23.01.02
+ * @version v2.23.01.04
  */
 class WpPageAdminEnseignantPrincipalBean extends WpPageAdminEnseignantBean
 {
@@ -25,12 +25,18 @@ class WpPageAdminEnseignantPrincipalBean extends WpPageAdminEnseignantBean
         // Initialisation de la présence d'un bloc import
         $this->hasBlocImport = true;
         // Initialisation d'un éventuel objet dédié.
-        // TODO : Impleménter la classe objet correspondant.
-        //$id = $this->initVar(self::ATTR_ID);
-        //$this->objAdulteDivision = $this->objAdulteDivisionServices->getAdulteDivisionById($id);
+        $id = $this->initVar(self::ATTR_ID);
+        $this->objEnseignantPrincipal = $this->objEnseignantPrincipalServices->getEnseignantPrincipalById($id);
         // Initialisation de la pagination
         $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
         // Initialisation des filtres
+        /////////////////////////////////////////
+        
+        /////////////////////////////////////////
+        // Vérification de la soumission d'un formulaire
+        if ($this->curUser->hasEditorRights() && $this->postAction!='') {
+            $this->dealWithForm();
+        }
         /////////////////////////////////////////
         
         /////////////////////////////////////////
@@ -41,32 +47,35 @@ class WpPageAdminEnseignantPrincipalBean extends WpPageAdminEnseignantBean
     
     /**
      * En cas de formulaire, on le traite. A priori, Création ou édition pour l'heure
-     * @since v2.22.12.28
-     * @version v2.22.12.28
+     * @since v2.23.01.04
+     * @version v2.23.01.04
      */
     public function dealWithForm()
     {
-        /*
+        if (!isset($this->objEnseignantPrincipal)) {
+            return;
+        }
+
         $strNotification = '';
         $strMessage = '';
         
         /////////////////////////////////////////
         // Un formulaire est soumis.
         // On récupère les données qu'on affecte à l'objet
-        $this->objAdulteDivision->setField(self::FIELD_ADULTEID, $this->initVar(self::FIELD_ADULTEID));
-        $this->objAdulteDivision->setField(self::FIELD_DIVISIONID, $this->initVar(self::FIELD_DIVISIONID));
+        $this->objEnseignantPrincipal->setField(self::FIELD_ENSEIGNANTID, $this->initVar(self::FIELD_ENSEIGNANTID));
+        $this->objEnseignantPrincipal->setField(self::FIELD_DIVISIONID, $this->initVar(self::FIELD_DIVISIONID));
         
         // Si le contrôle des données est ok
-        if ($this->objAdulteDivision->controlerDonnees($strNotification, $strMessage)) {
+        if ($this->objEnseignantPrincipal->controlerDonnees($strNotification, $strMessage)) {
             // Si l'id n'est pas défini
-            if ($this->objAdulteDivision->getField(self::FIELD_ID)=='') {
+            if ($this->objEnseignantPrincipal->getField(self::FIELD_ID)=='') {
                 // On insère l'objet
-                $this->objAdulteDivision->insert();
+                $this->objEnseignantPrincipal->insert();
                 // On renseigne le message d'information.
                 $this->strNotifications = $this->getAlertContent(self::NOTIF_SUCCESS, self::MSG_SUCCESS_CREATE);
             } else {
                 // On met à jour l'objet
-                $this->objAdulteDivision->update();
+                $this->objEnseignantPrincipal->update();
                 // On renseigne le message d'information.
                 $this->strNotifications = $this->getAlertContent(self::NOTIF_SUCCESS, self::MSG_SUCCESS_EDIT);
             }
@@ -75,7 +84,6 @@ class WpPageAdminEnseignantPrincipalBean extends WpPageAdminEnseignantBean
             $this->strNotifications = $this->getAlertContent($strNotification, $strMessage);
         }
         /////////////////////////////////////////
-         */
     }
     
     /**
@@ -84,23 +92,21 @@ class WpPageAdminEnseignantPrincipalBean extends WpPageAdminEnseignantBean
      * @param int|string $ids
      * @param boolean $blnDelete
      * @return string
-     * @since v2.22.12.18
-     * @version v2.22.12.18
+     * @since v2.23.01.04
+     * @version v2.23.01.04
      */
     public function getListElements($ids, $blnDelete=false)
     {
-        /*
         $strElements = '';
         // On peut avoir une liste d'id en cas de suppression multiple.
         foreach (explode(',', $ids) as $id) {
-            $objAdulteDivision = $this->objAdulteDivisionServices->getAdulteDivisionById($id);
-            $strElements .= $this->getBalise(self::TAG_LI, $objAdulteDivision->getLibelle());
+            $objEnseignantPrincipal = $this->objEnseignantPrincipalServices->getEnseignantPrincipalById($id);
+            $strElements .= $this->getBalise(self::TAG_LI, $objEnseignantPrincipal->getLibelle());
             if ($blnDelete) {
-                $objAdulteDivision->delete();
+                $objEnseignantPrincipal->delete();
             }
         }
         return $strElements;
-        */
     }
     
     /**
@@ -116,79 +122,33 @@ class WpPageAdminEnseignantPrincipalBean extends WpPageAdminEnseignantBean
     
     /**
      * @return string
-     * @since 2.22.12.12
-     * @version 2.22.12.12
+     * @since v2.23.01.04
+     * @version v2.23.01.04
      */
     public function getListContent()
     {
-        /*
-        $this->attrDescribeList = self::LABEL_LIST_PARENTS_DELEGUES;
+        $this->attrDescribeList = self::LABEL_LIST_ENSEIGNANTS_PRINCIPAUX;
         /////////////////////////////////////////
         // On va prendre en compte les éventuels filtres
-        $attributes = array(
-            self::FIELD_DELEGUE => 1,
-        );
-        // Filtre sur Division
-        if ($this->filtreDivision!='' && $this->filtreDivision!='all') {
-            $attributes[self::FIELD_DIVISIONID] = $this->filtreDivision;
-        }
-        // Filtre sur Adherent
-        if ($this->filtreAdherent=='oui') {
-            $attributes[self::FIELD_ADHERENT] = 1;
-        } elseif ($this->filtreAdherent=='non') {
-            $attributes[self::FIELD_ADHERENT] = 0;
-        }
+        $attributes = array();
         // Sens d'affichage
         $sensTri = self::FIELD_LABELDIVISION;
+
         /////////////////////////////////////////
         // On va chercher les éléments à afficher
-        $objItems = $this->objAdulteDivisionServices->getAdulteDivisionsWithFilters($attributes, $sensTri);
+        $objItems = $this->objEnseignantPrincipalServices->getEnseignantPrincipalsWithFilters($attributes, $sensTri);
         /////////////////////////////////////////
         return $this->getDefaultListContent($objItems);
-        */
     }
     
     /**
-     * Retourne le filtre spécifique à l'écran.
      * @return string
-     * @since v2.22.12.18
-     * @param v2.22.12.18
+     * @since v2.23.01.04
+     * @version v2.23.01.04
      */
-    public function getTrFiltres()
-    {
-        /*
-        /////////////////////////////////////////
-        // Filtre en place
-        $arrFilters = array(
-            'division' => $this->filtreDivision,
-            'adherent' => $this->filtreAdherent,
-        );
-        
-        /////////////////////////////////////////
-        // On va mettre en place la ligne de Filtre
-        $trContent = '';
-        if ($this->curUser->hasEditorRights()) {
-            $trContent .= $this->getTh(self::CST_NBSP);
-        }
-        $trContent .= $this->getTh(self::CST_NBSP);
-        $trContent .= $this->getFiltreDivision($arrFilters);
-        $trContent .= $this->getTh(self::CST_NBSP);
-        
-        // Filtre Adhérent
-        $trContent .= $this->getFiltreAdherent($arrFilters);
-        
-        if ($this->curUser->hasEditorRights()) {
-            $trContent .= $this->getButtonFiltre();
-        }
-        return $this->getBalise(self::TAG_TR, $trContent);
-        */
-    }
-    
     public function getEditContent()
     {
-        /*
         $baseUrl = $this->getUrl(array(self::CST_SUBONGLET=>''));
-        return $this->objAdulteDivision->getBean()->getForm($baseUrl, $this->strNotifications);
-        */
+        return $this->objEnseignantPrincipal->getBean()->getForm($baseUrl, $this->strNotifications);
     }
 }

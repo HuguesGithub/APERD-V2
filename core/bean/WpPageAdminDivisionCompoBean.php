@@ -56,6 +56,10 @@ class WpPageAdminDivisionCompoBean extends WpPageAdminDivisionBean
     public function dealWithForm()
     {
         /*
+        if (!isset($this->objMatiereEnseignant)) {
+            return;
+        }
+ 
         $strNotification = '';
         $strMessage = '';
         

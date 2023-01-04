@@ -49,6 +49,7 @@ interface LabelsInterface
     const LABEL_LIST_DIVISIONS_COMPOSITIONS = 'Composition des Divisions';
     const LABEL_LIST_ELEVES           = 'Liste des Élèves';
     const LABEL_LIST_ENSEIGNANTS      = 'Liste des Enseignants';
+    const LABEL_LIST_ENSEIGNANTS_PRINCIPAUX = 'Liste des Enseignants Principaux';
     const LABEL_LIST_MATIERES         = 'Liste des Matières';
     const LABEL_LIST_MATIERES_ENSEIGNANT = 'Liste des Enseignants par Matière';
     const LABEL_MATIERES              = 'Matières';

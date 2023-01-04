@@ -33,6 +33,7 @@ interface UrlsInterface
     const WEB_A_FORM_DIVISION       = self::WEB_PAF_FORM.'admin-fragments-form-division.tpl';
     const WEB_A_FORM_ELEVE          = self::WEB_PAF_FORM.'admin-fragments-form-eleve.tpl';
     const WEB_A_FORM_ENSEIGNANT     = self::WEB_PAF_FORM.'admin-fragments-form-enseignant.tpl';
+    const WEB_A_FORM_ENSEIGNANT_PRINCIPAL = self::WEB_PAF_FORM.'admin-fragments-form-enseignant-principal.tpl';
     const WEB_A_FORM_MATIERE        = self::WEB_PAF_FORM.'admin-fragments-form-matiere.tpl';
     const WEB_A_FORM_MATIERE_ENSEIGNANT = self::WEB_PAF_FORM.'admin-fragments-form-matiere-enseignant.tpl';
     const WEB_P_ROW_ADMINISTRATION  = self::WEB_PPF_TR.'publique-fragments-row-administration.tpl';
