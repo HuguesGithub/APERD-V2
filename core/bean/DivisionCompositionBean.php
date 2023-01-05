@@ -99,23 +99,23 @@ class DivisionCompositionBean extends LocalBean
         ///////////////////////////////////////////////
         // Construction de la liste des matières / enseignants
         $strMatEnseOptions = $this->getBalise(self::TAG_OPTION);
-		$arrOrderBy = array(self::FIELD_LABELMATIERE, self::FIELD_NOMENSEIGNANT);
-		$arrOrder = array(self::SQL_ORDER_ASC, self::SQL_ORDER_ASC);
-		$matiereId = '';
+        $arrOrderBy = array(self::FIELD_LABELMATIERE, self::FIELD_NOMENSEIGNANT);
+        $arrOrder = array(self::SQL_ORDER_ASC, self::SQL_ORDER_ASC);
+        $matiereId = '';
         $objsMatEns = $this->objMatiereEnseignantServices->getMatiereEnseignantsWithFilters(array(), $arrOrderBy, $arrOrder);
         while (!empty($objsMatEns)) {
             $objMatEns = array_shift($objsMatEns);
 
-			if ($matiereId!=$objMatEns->getField(self::FIELD_MATIEREID)) {
-				if ($matiereId!='') {
-					$strMatEnseOptions .= '</div>';
-				}
-				$strMatEnseOptions .= '<optgroup label="'.$objMatEns->getMatiere()->getField(self::FIELD_LABELMATIERE).'">';
-				$matiereId = $objMatEns->getField(self::FIELD_MATIEREID);
-			}
-			$strMatEnseOptions .= '<option value="'.$objMatEns->getField(self::FIELD_ID).'">'.$objMatEns->getEnseignant()->getFullName().'</option>';
-			
-		/*
+            if ($matiereId!=$objMatEns->getField(self::FIELD_MATIEREID)) {
+                if ($matiereId!='') {
+                    $strMatEnseOptions .= '</div>';
+                }
+                $strMatEnseOptions .= '<optgroup label="'.$objMatEns->getMatiere()->getField(self::FIELD_LABELMATIERE).'">';
+                $matiereId = $objMatEns->getField(self::FIELD_MATIEREID);
+            }
+            $strMatEnseOptions .= '<option value="'.$objMatEns->getField(self::FIELD_ID).'">'.$objMatEns->getEnseignant()->getFullName().'</option>';
+            
+        /*
             $adulteId = $objAdulte->getField(self::FIELD_ID);
             $adulteLabel = $objAdulte->getName();
             // Construction de la liste des options.
@@ -123,7 +123,7 @@ class DivisionCompositionBean extends LocalBean
             if ($adulteId==$this->obj->getField(self::FIELD_ADULTEID)) {
                 $attributes[self::ATTR_SELECTED] = ' '.self::ATTR_SELECTED;
             }
-		*/
+        */
             //$strMatEnseOptions .= $this->getBalise(self::TAG_OPTION, $adulteLabel, $attributes);
         }
         ///////////////////////////////////////////////

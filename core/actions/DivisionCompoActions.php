@@ -1,7 +1,7 @@
 <?php
 namespace core\actions;
 
-use core\domain\DivisionCompoClass;
+use core\domain\DivisionCompositionClass;
 
 if (!defined('ABSPATH')) {
     die('Forbidden');
@@ -21,7 +21,7 @@ class DivisionCompoActions extends LocalActions
     public function __construct()
     {
         parent::__construct();
-        $this->obj = new DivisionCompoClass();
+        $this->obj = new DivisionCompositionClass();
         $this->importType = self::CST_COMPOSITION_DIVISIONS;
     }
     

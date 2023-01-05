@@ -63,7 +63,7 @@ class DivisionCompositionClass extends LocalDomainClass
      */
     public function getBean()
     { return new DivisionCompositionBean($this); }
-	
+    
     //////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////
@@ -75,14 +75,14 @@ class DivisionCompositionClass extends LocalDomainClass
      */
     public function getCsvEntete()
     {
-		$arrFields = array(
-			self::FIELD_ID,
-			self::FIELD_LABELDIVISION,
-			self::FIELD_LABELMATIERE,
-			self::FIELD_NOMENSEIGNANT,
-		);
-		return implode(self::CSV_SEP, $arrFields);
-	}
+        $arrFields = array(
+            self::FIELD_ID,
+            self::FIELD_LABELDIVISION,
+            self::FIELD_LABELMATIERE,
+            self::FIELD_NOMENSEIGNANT,
+        );
+        return implode(self::CSV_SEP, $arrFields);
+    }
 
     /**
      * @return string
@@ -95,7 +95,7 @@ class DivisionCompositionClass extends LocalDomainClass
         array_push($arrValues, $this->getField(self::FIELD_ID));
         array_push($arrValues, $this->getDivision()->getField(self::FIELD_LABELDIVISION));
         array_push($arrValues, $this->getMatiereEnseignant()->getMatiere()->getField(self::FIELD_LABELMATIERE));
-		array_push($arrValues, $this->getMatiereEnseignant()->getEnseignant()->getName());
+        array_push($arrValues, $this->getMatiereEnseignant()->getEnseignant()->getName());
         return implode(self::CSV_SEP, $arrValues);
     }
     
@@ -108,8 +108,8 @@ class DivisionCompositionClass extends LocalDomainClass
      */
     public function controlerDonnees(&$notif, &$msg)
     {
-        /*
         $blnOk = true;
+        /*
         /////////////////////////////////////////////
         // On doit contrôler adulteId qui doit exister
         // Vu qu'il est renseigné à partir des données importées, soit il est correct, soit il est nul.
@@ -121,10 +121,10 @@ class DivisionCompositionClass extends LocalDomainClass
             $blnOk = $this->controlerSaisie(self::FIELD_DIVISIONID, $notif, $msg);
         }
         
+        */
         /////////////////////////////////////////////
         // Fin des contrôles
         return $blnOk;
-        */
     }
     
     /**
