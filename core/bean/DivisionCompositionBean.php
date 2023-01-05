@@ -96,13 +96,26 @@ class DivisionCompositionBean extends LocalBean
      */
     public function getForm($baseUrl, $strNotifications='')
     {
-        /*
         ///////////////////////////////////////////////
-        // Construction de la liste des adultes
-        $strAdulteOptions = $this->getBalise(self::TAG_OPTION);
-        $objsAdulte = $this->objAdulteServices->getAdultesWithFilters();
-        while (!empty($objsAdulte)) {
-            $objAdulte = array_shift($objsAdulte);
+        // Construction de la liste des matières / enseignants
+        $strMatEnseOptions = $this->getBalise(self::TAG_OPTION);
+		$arrOrderBy = array(self::FIELD_LABELMATIERE, self::FIELD_NOMENSEIGNANT);
+		$arrOrder = array(self::SQL_ORDER_ASC, self::SQL_ORDER_ASC);
+		$matiereId = '';
+        $objsMatEns = $this->objMatiereEnseignantServices->getMatiereEnseignantsWithFilters(array(), $arrOrderBy, $arrOrder);
+        while (!empty($objsMatEns)) {
+            $objMatEns = array_shift($objsMatEns);
+
+			if ($matiereId!=$objMatEns->getField(self::FIELD_MATIEREID)) {
+				if ($matiereId!='') {
+					$strMatEnseOptions .= '</div>';
+				}
+				$strMatEnseOptions .= '<optgroup label="'.$objMatEns->getMatiere()->getField(self::FIELD_LABELMATIERE).'">';
+				$matiereId = $objMatEns->getField(self::FIELD_MATIEREID);
+			}
+			$strMatEnseOptions .= '<option value="'.$objMatEns->getField(self::FIELD_ID).'">'.$objMatEns->getEnseignant()->getFullName().'</option>';
+			
+		/*
             $adulteId = $objAdulte->getField(self::FIELD_ID);
             $adulteLabel = $objAdulte->getName();
             // Construction de la liste des options.
@@ -110,7 +123,8 @@ class DivisionCompositionBean extends LocalBean
             if ($adulteId==$this->obj->getField(self::FIELD_ADULTEID)) {
                 $attributes[self::ATTR_SELECTED] = ' '.self::ATTR_SELECTED;
             }
-            $strAdulteOptions .= $this->getBalise(self::TAG_OPTION, $adulteLabel, $attributes);
+		*/
+            //$strMatEnseOptions .= $this->getBalise(self::TAG_OPTION, $adulteLabel, $attributes);
         }
         ///////////////////////////////////////////////
         
@@ -131,7 +145,7 @@ class DivisionCompositionBean extends LocalBean
         }
         ///////////////////////////////////////////////
         
-        $urlTemplate = self::WEB_A_FORM_ADULTE_DIVISION;
+        $urlTemplate = self::WEB_A_FORM_DIVISION_COMPOSITION;
         $attributes = array(
             // Création - 1
             ($this->obj->getField(self::FIELD_ID)=='' ? self::LABEL_CREER : self::LABEL_MODIFIER),
@@ -141,12 +155,11 @@ class DivisionCompositionBean extends LocalBean
             $baseUrl,
             // Message de confirmation ou d'erreur - 4
             $strNotifications,
-            // Adulte - 5
-            $strAdulteOptions,
-            // Division - 6
+            // Division - 5
             $strDivOptions,
+            // Matière / Enseignant - 6
+            $strMatEnseOptions,
         );
         return $this->getRender($urlTemplate, $attributes);
-        */
     }
 }

@@ -53,8 +53,7 @@ class DivisionCompositionClass extends LocalDomainClass
         $this->arrFields = array(
             self::FIELD_ID => self::FIELD_ID,
             self::FIELD_DIVISIONID => self::LABEL_LABELDIVISION,
-            // TODO.. Comment gérer le champ FIELD_MATIEREENSEIGNANTID qui devrait être scindé
-            // en deux colonnes, LABEL_NOMMATIERE et LABEL_NOMPRENOM ?
+            self::FIELD_MATIEREENSEIGNANTID => self::LABEL_LABELMATIERE.' / Nom Enseignant',
         );
     }
     /**
@@ -64,25 +63,40 @@ class DivisionCompositionClass extends LocalDomainClass
      */
     public function getBean()
     { return new DivisionCompositionBean($this); }
+	
     //////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////
     
     /**
      * @return string
-     * @since v2.23.01.03
-     * @version v2.23.01.03
+     * @since v2.23.01.05
+     * @version v2.23.01.05
+     */
+    public function getCsvEntete()
+    {
+		$arrFields = array(
+			self::FIELD_ID,
+			self::FIELD_LABELDIVISION,
+			self::FIELD_LABELMATIERE,
+			self::FIELD_NOMENSEIGNANT,
+		);
+		return implode(self::CSV_SEP, $arrFields);
+	}
+
+    /**
+     * @return string
+     * @since v2.23.01.05
+     * @version v2.23.01.05
      */
     public function toCsv()
     {
-        /*
         $arrValues = array();
         array_push($arrValues, $this->getField(self::FIELD_ID));
-        array_push($arrValues, $this->getAdulte()->getName());
         array_push($arrValues, $this->getDivision()->getField(self::FIELD_LABELDIVISION));
-        array_push($arrValues, $this->getField(self::FIELD_DELEGUE));
+        array_push($arrValues, $this->getMatiereEnseignant()->getMatiere()->getField(self::FIELD_LABELMATIERE));
+		array_push($arrValues, $this->getMatiereEnseignant()->getEnseignant()->getName());
         return implode(self::CSV_SEP, $arrValues);
-        */
     }
     
     /**
@@ -160,12 +174,11 @@ class DivisionCompositionClass extends LocalDomainClass
      * @param string &$notif
      * @param string &$msg
      * @return boolean
-     * @since v2.23.01.03
-     * @version v2.23.01.03
+     * @since v2.23.01.05
+     * @version v2.23.01.05
      */
     public function controlerDonneesAndAct(&$notif, &$msg)
     {
-        /*
         if (!$this->controlerDonnees($notif, $msg)) {
             return false;
         }
@@ -175,7 +188,7 @@ class DivisionCompositionClass extends LocalDomainClass
         if ($id=='') {
             $this->insert();
         } else {
-            $objectInBase = $this->objAdulteDivisionServices->getAdulteDivisionById($id);
+            $objectInBase = $this->objDivisionCompoServices->getDivisionCompoById($id);
             if ($objectInBase->getField(self::FIELD_ID)=='') {
                 $this->insert();
             } else {
@@ -183,7 +196,6 @@ class DivisionCompositionClass extends LocalDomainClass
             }
         }
         return true;
-        */
     }
     
     /**

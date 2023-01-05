@@ -30,7 +30,6 @@ class WpPageAdminMatiereEnseignantBean extends WpPageAdminMatiereBean
         // Initialisation de la pagination
         $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
         // Initialisation des filtres
-        // TODO : Filtre par matière ?
         /////////////////////////////////////////
         
         /////////////////////////////////////////
@@ -139,42 +138,6 @@ class WpPageAdminMatiereEnseignantBean extends WpPageAdminMatiereBean
         $objItems = $this->objMatiereEnseignantServices->getMatiereEnseignantsWithFilters($attributes, $sensTri);
         /////////////////////////////////////////
         return $this->getDefaultListContent($objItems);
-    }
-    
-    /**
-     * Retourne le filtre spécifique à l'écran.
-     * @return string
-     * @since v2.22.12.18
-     * @param v2.22.12.18
-     */
-    public function getTrFiltres()
-    {
-        /*
-        /////////////////////////////////////////
-        // Filtre en place
-        $arrFilters = array(
-            'division' => $this->filtreDivision,
-            'adherent' => $this->filtreAdherent,
-        );
-        
-        /////////////////////////////////////////
-        // On va mettre en place la ligne de Filtre
-        $trContent = '';
-        if ($this->curUser->hasEditorRights()) {
-            $trContent .= $this->getTh(self::CST_NBSP);
-        }
-        $trContent .= $this->getTh(self::CST_NBSP);
-        $trContent .= $this->getFiltreDivision($arrFilters);
-        $trContent .= $this->getTh(self::CST_NBSP);
-        
-        // Filtre Adhérent
-        $trContent .= $this->getFiltreAdherent($arrFilters);
-        
-        if ($this->curUser->hasEditorRights()) {
-            $trContent .= $this->getButtonFiltre();
-        }
-        return $this->getBalise(self::TAG_TR, $trContent);
-        */
     }
     
     /**

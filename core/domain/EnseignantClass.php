@@ -34,6 +34,9 @@ class EnseignantClass extends LocalDomainClass
     public function getName()
     { return $this->nomEnseignant.' '.$this->prenomEnseignant; }
 
+    public function getFullName()
+    { return $this->genre.' '.$this->getName(); }
+
     //////////////////////////////////////////////////
     // CONSTRUCT - CLASSVARS - CONVERT - BEAN
     //////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-<?php
+    <?php
 namespace core\actions;
 
 if (!defined('ABSPATH')) {
@@ -27,11 +27,17 @@ class AjaxActions extends LocalActions
             case self::ONGLET_DIVISIONS :
                 $obj = new DivisionActions();
                 break;
+            case self::CST_COMPOSITION_DIVISIONS :
+                $obj = new DivisionCompoActions();
+                break;
             case self::ONGLET_ELEVES :
                 $obj = new EleveActions();
                 break;
             case self::ONGLET_ENSEIGNANTS :
                 $obj = new EnseignantActions();
+                break;
+            case self::CST_ENSEIGNANTS_PRINCIPAUX :
+                $obj = new EnseignantPrincipalActions();
                 break;
             case self::ONGLET_MATIERES :
                 $obj = new MatiereActions();

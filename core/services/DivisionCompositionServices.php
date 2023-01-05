@@ -40,8 +40,6 @@ class DivisionCompositionServices extends LocalServices
     {
         $arrParams = array();
         array_push($arrParams, $this->getValueToSearch($arrFilters, self::FIELD_DIVISIONID));
-        array_push($arrParams, $this->getValueToSearch($arrFilters, self::FIELD_MATIEREID));
-        array_push($arrParams, $this->getValueToSearch($arrFilters, self::FIELD_ENSEIGNANTID));
         return $arrParams;
     }
     

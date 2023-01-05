@@ -22,13 +22,12 @@ class WpPageAdminDivisionCompoBean extends WpPageAdminDivisionBean
         $this->slugSubOnglet = self::CST_COMPOSITION_DIVISIONS;
         $this->titreOnglet = self::LABEL_COMPOSITION;
         // Initialisation des données du bloc de présentation
-        $this->blnBoutonCreation = false;
+        $this->blnBoutonCreation = true;
         // Initialisation de la présence d'un bloc import
-        $this->hasBlocImport = false;//true
+        $this->hasBlocImport = true;
         // Initialisation d'un éventuel objet dédié.
-        // TODO : Impleménter la classe objet correspondant.
-        //$id = $this->initVar(self::ATTR_ID);
-        //$this->objAdulteDivision = $this->objAdulteDivisionServices->getAdulteDivisionById($id);
+        $id = $this->initVar(self::ATTR_ID);
+        $this->objDivisionComposition = $this->objDivisionCompositionServices->getDivisionCompositionById($id);
         // Initialisation de la pagination
         $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
         // Initialisation des filtres
@@ -56,10 +55,6 @@ class WpPageAdminDivisionCompoBean extends WpPageAdminDivisionBean
     public function dealWithForm()
     {
         /*
-        if (!isset($this->objMatiereEnseignant)) {
-            return;
-        }
- 
         $strNotification = '';
         $strMessage = '';
         
@@ -150,46 +145,13 @@ class WpPageAdminDivisionCompoBean extends WpPageAdminDivisionBean
     }
     
     /**
-     * Retourne le filtre spécifique à l'écran.
      * @return string
-     * @since v2.22.12.18
-     * @param v2.22.12.18
+     * @since v2.23.01.05
+     * @version v2.23.01.05
      */
-    public function getTrFiltres()
-    {
-        /*
-        /////////////////////////////////////////
-        // Filtre en place
-        $arrFilters = array(
-            'division' => $this->filtreDivision,
-            'adherent' => $this->filtreAdherent,
-        );
-        
-        /////////////////////////////////////////
-        // On va mettre en place la ligne de Filtre
-        $trContent = '';
-        if ($this->curUser->hasEditorRights()) {
-            $trContent .= $this->getTh(self::CST_NBSP);
-        }
-        $trContent .= $this->getTh(self::CST_NBSP);
-        $trContent .= $this->getFiltreDivision($arrFilters);
-        $trContent .= $this->getTh(self::CST_NBSP);
-        
-        // Filtre Adhérent
-        $trContent .= $this->getFiltreAdherent($arrFilters);
-        
-        if ($this->curUser->hasEditorRights()) {
-            $trContent .= $this->getButtonFiltre();
-        }
-        return $this->getBalise(self::TAG_TR, $trContent);
-        */
-    }
-    
     public function getEditContent()
     {
-        /*
         $baseUrl = $this->getUrl(array(self::CST_SUBONGLET=>''));
-        return $this->objAdulteDivision->getBean()->getForm($baseUrl, $this->strNotifications);
-        */
+        return $this->objDivisionComposition->getBean()->getForm($baseUrl, $this->strNotifications);
     }
 }

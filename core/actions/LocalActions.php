@@ -10,6 +10,7 @@ use core\services\AdulteDivisionServices;
 use core\services\DivisionServices;
 use core\services\EleveServices;
 use core\services\EnseignantServices;
+use core\services\EnseignantPrincipalServices;
 use core\services\MatiereServices;
 use core\services\MatiereEnseignantServices;
 
@@ -35,6 +36,7 @@ class LocalActions implements ConstantsInterface, LabelsInterface, UrlsInterface
         $this->objDivisionServices       = new DivisionServices();
         $this->objEleveServices          = new EleveServices();
         $this->objEnseignantServices     = new EnseignantServices();
+        $this->objEnseignantPrincipalServices = new EnseignantPrincipalServices();
         $this->objMatiereServices        = new MatiereServices();
         $this->objMatiereEnseignantServices = new MatiereEnseignantServices();
     }

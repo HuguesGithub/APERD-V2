@@ -47,8 +47,8 @@ class WpPageAdminEnseignantPrincipalBean extends WpPageAdminEnseignantBean
     
     /**
      * En cas de formulaire, on le traite. A priori, Création ou édition pour l'heure
-     * @since v2.23.01.04
-     * @version v2.23.01.04
+     * @since v2.22.12.28
+     * @version v2.22.12.28
      */
     public function dealWithForm()
     {
@@ -92,8 +92,8 @@ class WpPageAdminEnseignantPrincipalBean extends WpPageAdminEnseignantBean
      * @param int|string $ids
      * @param boolean $blnDelete
      * @return string
-     * @since v2.23.01.04
-     * @version v2.23.01.04
+     * @since v2.23.01.05
+     * @version v2.23.01.05
      */
     public function getListElements($ids, $blnDelete=false)
     {
@@ -122,8 +122,8 @@ class WpPageAdminEnseignantPrincipalBean extends WpPageAdminEnseignantBean
     
     /**
      * @return string
-     * @since v2.23.01.04
-     * @version v2.23.01.04
+     * @since 2.22.12.12
+     * @version 2.22.12.12
      */
     public function getListContent()
     {
@@ -141,11 +141,6 @@ class WpPageAdminEnseignantPrincipalBean extends WpPageAdminEnseignantBean
         return $this->getDefaultListContent($objItems);
     }
     
-    /**
-     * @return string
-     * @since v2.23.01.04
-     * @version v2.23.01.04
-     */
     public function getEditContent()
     {
         $baseUrl = $this->getUrl(array(self::CST_SUBONGLET=>''));

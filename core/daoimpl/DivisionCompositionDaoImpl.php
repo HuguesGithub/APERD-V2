@@ -27,9 +27,9 @@ class DivisionCompositionDaoImpl extends LocalDaoImpl
     {
         $this->dbTable = self::DB_PREFIX.'division_composition';
         $this->dbTable_mat_ens = self::DB_PREFIX.'matiere_enseignant';
+        $this->dbTable_division = self::DB_PREFIX.'division';
         $this->dbTable_matiere = self::DB_PREFIX.'matiere';
         $this->dbTable_enseignant = self::DB_PREFIX.'enseignant';
-        $this->dbTable_division = self::DB_PREFIX.'division';
         parent::__construct();
     }
     
@@ -62,9 +62,9 @@ class DivisionCompositionDaoImpl extends LocalDaoImpl
         $request  = "SELECT dc.id AS id, divisionId, matiereEnseignantId FROM ".$this->dbTable." AS dc ";
         $request .= "INNER JOIN ".$this->dbTable_division." AS d ON d.id=divisionId ";
         $request .= "INNER JOIN ".$this->dbTable_mat_ens." AS me ON me.id=matiereEnseignantId ";
-        $request .= "INNER JOIN ".$this->dbTable_matiere." AS m ON m.id=me.matiereId ";
+        $request .= "INNER JOIN ".$this->dbTable_matiere." AS m ON m.id=matiereId ";
         $request .= "INNER JOIN ".$this->dbTable_enseignant." AS e ON e.id=enseignantId ";
-        $request .= "WHERE 1=1 AND divisionId LIKE '%s' AND me.matiereId LIKE '%s' AND me.enseignantId LIKE '%s' ";
+        $request .= "WHERE 1=1 AND divisionId LIKE '%s' ";
         return $this->getRequestWithFilters($request, $attributes);
     }
     
