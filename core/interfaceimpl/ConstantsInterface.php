@@ -167,6 +167,7 @@ interface ConstantsInterface
     
     /////////////////////////////////////////////////
     // SQL
+    const SQL_INNER_JOIN          = 'INNER JOIN';
     const SQL_JOKER               = '%';
     const SQL_LIMIT               = '__limit__';
     const SQL_ORDER_ASC           = 'ASC';

@@ -73,12 +73,14 @@ class DivisionCompositionBean extends LocalBean
         $label = $this->obj->getMatiereEnseignant()->getEnseignant()->getFullName();
         $trContent .= $this->getBalise(self::TAG_TD, $label, $attributes);
 
-        // Principal // TODO
-        /*
-        $blnChecked = ($this->obj->getAdulte()->getField(self::FIELD_MAILADULTE)!='');
+        // Principal
+        $attributes = array(
+            self::FIELD_DIVISIONID => $this->obj->getField(self::FIELD_DIVISIONID),    
+            self::FIELD_ENSEIGNANTID => $this->obj->getMatiereEnseignant()->getField(self::FIELD_ENSEIGNANTID),
+        );
+        $objsEnsPrinc = $this->objEnseignantPrincipalServices->getEnseignantPrincipalsWithFilters($attributes);
+        $blnChecked = !empty($objsEnsPrinc);
         $trContent .= $this->getIconCheckbox($blnChecked);
-        */
-        $trContent .= $this->getBalise(self::TAG_TD, '&nbsp;', $attributes);
         ///////////////////////////////////////////////
         
         ///////////////////////////////////////////////

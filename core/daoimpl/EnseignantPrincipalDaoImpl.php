@@ -60,7 +60,7 @@ class EnseignantPrincipalDaoImpl extends LocalDaoImpl
         $request  = "SELECT ep.id AS id, divisionId, enseignantId FROM ".$this->dbTable." AS ep ";
         $request .= "INNER JOIN ".$this->dbTable_enseignant." AS e ON e.id=enseignantId ";
         $request .= "INNER JOIN ".$this->dbTable_division." AS d ON d.id=divisionId ";
-        $request .= "WHERE 1=1 AND enseignantId LIKE '%s' AND divisionId LIKE '%s' ";
+        $request .= "WHERE 1=1 AND divisionId LIKE '%s' AND enseignantId LIKE '%s' ";
         return $this->getRequestWithFilters($request, $attributes);
     }
     

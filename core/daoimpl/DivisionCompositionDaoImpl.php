@@ -60,10 +60,10 @@ class DivisionCompositionDaoImpl extends LocalDaoImpl
         //////////////////////////////
         // Construction de la requête
         $request  = "SELECT dc.id AS id, divisionId, matiereEnseignantId FROM ".$this->dbTable." AS dc ";
-        $request .= "INNER JOIN ".$this->dbTable_division." AS d ON d.id=divisionId ";
-        $request .= "INNER JOIN ".$this->dbTable_mat_ens." AS me ON me.id=matiereEnseignantId ";
-        $request .= "INNER JOIN ".$this->dbTable_matiere." AS m ON m.id=matiereId ";
-        $request .= "INNER JOIN ".$this->dbTable_enseignant." AS e ON e.id=enseignantId ";
+        $request .= self::SQL_INNER_JOIN." ".$this->dbTable_division." AS d ON d.id=divisionId ";
+        $request .= self::SQL_INNER_JOIN." ".$this->dbTable_mat_ens." AS me ON me.id=matiereEnseignantId ";
+        $request .= self::SQL_INNER_JOIN." ".$this->dbTable_matiere." AS m ON m.id=matiereId ";
+        $request .= self::SQL_INNER_JOIN." ".$this->dbTable_enseignant." AS e ON e.id=enseignantId ";
         $request .= "WHERE 1=1 AND divisionId LIKE '%s' ";
         return $this->getRequestWithFilters($request, $attributes);
     }

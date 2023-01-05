@@ -22,16 +22,12 @@ class WpPageAdminDivisionCompoBean extends WpPageAdminDivisionBean
         $this->slugSubOnglet = self::CST_COMPOSITION_DIVISIONS;
         $this->titreOnglet = self::LABEL_COMPOSITION;
         // Initialisation des données du bloc de présentation
-        $this->blnBoutonCreation = true;
         // Initialisation de la présence d'un bloc import
-        $this->hasBlocImport = true;
         // Initialisation d'un éventuel objet dédié.
         $id = $this->initVar(self::ATTR_ID);
         $this->objDivisionComposition = $this->objDivisionCompositionServices->getDivisionCompositionById($id);
         // Initialisation de la pagination
-        $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
         // Initialisation des filtres
-        $this->filtreDivision = $this->initVar('filter-division', 'all');
         /////////////////////////////////////////
         
         /////////////////////////////////////////

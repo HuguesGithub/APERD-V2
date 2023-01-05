@@ -135,6 +135,7 @@ class DivisionCompositionClass extends LocalDomainClass
      */
     public function controlerImportRow($rowContent, &$notif, &$msg)
     {
+        // TODO : Mettre en place
         /*
         list($id, $nomAdulte, $labelDivision, $delegue) = explode(self::CSV_SEP, $rowContent);
         
