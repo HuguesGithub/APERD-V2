@@ -2,6 +2,7 @@
 namespace core\bean;
 
 use core\domain\DivisionCompositionClass;
+use core\domain\MatiereClass;
 
 if (!defined('ABSPATH')) {
     die('Forbidden');
@@ -24,7 +25,7 @@ class DivisionCompositionBean extends LocalBean
     {
         parent::__construct();
         $this->obj = ($objDivisionComposition=='' ? new DivisionCompositionClass() : $objDivisionComposition);
-        $this->hasEdit = false;
+        $this->hasEdit = true;
     }
     
     //////////////////////////////////////////////////
@@ -42,15 +43,15 @@ class DivisionCompositionBean extends LocalBean
     {
         $attributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE);
         $trContent  = '';
-        /*
+
         ///////////////////////////////////////////////
         // Les cases à cocher
         if ($blnHasEditorRights) {
             $id = $this->obj->getField(self::FIELD_ID);
             
             $this->baseUrl  = '/'.self::PAGE_ADMIN;
-            $this->baseUrl .= '?'.self::CST_ONGLET.'='.self::ONGLET_PARENTS;
-            $this->baseUrl .= self::CST_AMP.self::CST_SUBONGLET.'='.self::SUBONGLET_PARENTS_DELEGUES;
+            $this->baseUrl .= '?'.self::CST_ONGLET.'='.self::ONGLET_DIVISIONS;
+            $this->baseUrl .= self::CST_AMP.self::CST_SUBONGLET.'='.self::CST_COMPOSITION_DIVISIONS;
             $this->baseUrl .= self::CST_AMP.self::FIELD_ID.'='.$id;
             
             // Case à cocher
@@ -60,21 +61,24 @@ class DivisionCompositionBean extends LocalBean
         
         ///////////////////////////////////////////////
         // La partie commune
-        // Nom sans le lien d'édition
-        $label = $this->getBalise(self::TAG_STRONG, $this->obj->getAdulte()->getName());
-        $trContent .= $this->getBalise(self::TAG_TD, $label, $attributes);
-        
         // Division
         $label = $this->getBalise(self::TAG_STRONG, $this->obj->getDivision()->getField(self::FIELD_LABELDIVISION));
         $trContent .= $this->getBalise(self::TAG_TD, $label, $attributes);
+        
+        // Matière
+        $label = $this->obj->getMatiereEnseignant()->getMatiere()->getField(self::FIELD_LABELMATIERE);
+        $trContent .= $this->getBalise(self::TAG_TD, $label, $attributes);
+        
+        // Enseignant
+        $label = $this->obj->getMatiereEnseignant()->getEnseignant()->getFullName();
+        $trContent .= $this->getBalise(self::TAG_TD, $label, $attributes);
 
-        // Mail
+        // Principal // TODO
+        /*
         $blnChecked = ($this->obj->getAdulte()->getField(self::FIELD_MAILADULTE)!='');
         $trContent .= $this->getIconCheckbox($blnChecked);
-        
-        // Adhérent
-        $blnChecked = ($this->obj->getAdulte()->getField(self::FIELD_ADHERENT)==1);
-        $trContent .= $this->getIconCheckbox($blnChecked);
+        */
+        $trContent .= $this->getBalise(self::TAG_TD, '&nbsp;', $attributes);
         ///////////////////////////////////////////////
         
         ///////////////////////////////////////////////
@@ -84,7 +88,7 @@ class DivisionCompositionBean extends LocalBean
             $trContent .= $this->getCellActions();
         }
         ///////////////////////////////////////////////
-         */
+
         return $this->getBalise(self::TAG_TR, $trContent, $attributes);
     }
     
@@ -99,33 +103,40 @@ class DivisionCompositionBean extends LocalBean
         ///////////////////////////////////////////////
         // Construction de la liste des matières / enseignants
         $strMatEnseOptions = $this->getBalise(self::TAG_OPTION);
-        $arrOrderBy = array(self::FIELD_LABELMATIERE, self::FIELD_NOMENSEIGNANT);
-        $arrOrder = array(self::SQL_ORDER_ASC, self::SQL_ORDER_ASC);
-        $matiereId = '';
-        $objsMatEns = $this->objMatiereEnseignantServices->getMatiereEnseignantsWithFilters(array(), $arrOrderBy, $arrOrder);
+        $orderBy = array(self::FIELD_LABELMATIERE, self::FIELD_NOMENSEIGNANT);
+        $order = array(self::SQL_ORDER_ASC, self::SQL_ORDER_ASC);
+        $objsMatEns = $this->objMatiereEnseignantServices->getMatiereEnseignantsWithFilters(array(), $orderBy, $order);
+        $objMatiere = new MatiereClass();
+        
+        $strOptGroupContent = '';
         while (!empty($objsMatEns)) {
             $objMatEns = array_shift($objsMatEns);
 
-            if ($matiereId!=$objMatEns->getField(self::FIELD_MATIEREID)) {
-                if ($matiereId!='') {
-                    $strMatEnseOptions .= '</div>';
+            if ($objMatiere->getField(self::FIELD_ID)!=$objMatEns->getField(self::FIELD_MATIEREID)) {
+                if ($objMatiere->getField(self::FIELD_ID)!='') {
+                    $labelMatiere = $objMatiere->getField(self::FIELD_LABELMATIERE);
+                    
+                    $optGrpAttributes = array('label'=>$labelMatiere);
+                    // On ajoute ici l'optgroup. avec l'optGroupContent qu'on a accumulé
+                    $strMatEnseOptions .= $this->getBalise('optgroup', $strOptGroupContent, $optGrpAttributes);
+                    // Puis on réinitialise l'optGroupContent et l'objMatiere
+                    $strOptGroupContent = '';
                 }
-                $strMatEnseOptions .= '<optgroup label="'.$objMatEns->getMatiere()->getField(self::FIELD_LABELMATIERE).'">';
-                $matiereId = $objMatEns->getField(self::FIELD_MATIEREID);
+                $objMatiere = $objMatEns->getMatiere();
             }
-            $strMatEnseOptions .= '<option value="'.$objMatEns->getField(self::FIELD_ID).'">'.$objMatEns->getEnseignant()->getFullName().'</option>';
             
-        /*
-            $adulteId = $objAdulte->getField(self::FIELD_ID);
-            $adulteLabel = $objAdulte->getName();
-            // Construction de la liste des options.
-            $attributes = array(self::ATTR_VALUE=>$adulteId);
-            if ($adulteId==$this->obj->getField(self::FIELD_ADULTEID)) {
-                $attributes[self::ATTR_SELECTED] = ' '.self::ATTR_SELECTED;
+            $matEnsId = $objMatEns->getField(self::FIELD_ID);
+            $labelOption = $objMatEns->getEnseignant()->getFullName();
+            $optAttributes = array(self::ATTR_VALUE=>$matEnsId);
+            if ($matEnsId==$this->obj->getField(self::FIELD_MATIEREENSEIGNANTID)) {
+                $optAttributes[self::ATTR_SELECTED] = '';
             }
-        */
-            //$strMatEnseOptions .= $this->getBalise(self::TAG_OPTION, $adulteLabel, $attributes);
+            $strOptGroupContent .= $this->getBalise(self::TAG_OPTION, $labelOption, $optAttributes);
         }
+        // On ajoute le dernier de la liste
+        $labelMatiere = $objMatiere->getField(self::FIELD_LABELMATIERE);
+        $optGrpAttributes = array('label'=>$labelMatiere);
+        $strMatEnseOptions .= $this->getBalise('optgroup', $strOptGroupContent, $optGrpAttributes);
         ///////////////////////////////////////////////
         
         ///////////////////////////////////////////////

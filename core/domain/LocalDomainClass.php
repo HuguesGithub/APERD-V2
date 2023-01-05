@@ -13,6 +13,7 @@ use core\services\MatiereEnseignantServices;
 use core\interfaceimpl\ConstantsInterface;
 use core\interfaceimpl\UrlsInterface;
 use core\interfaceimpl\LabelsInterface;
+use core\services\DivisionCompositionServices;
 
 if (!defined('ABSPATH')) {
     die('Forbidden');
@@ -50,6 +51,7 @@ class LocalDomainClass implements ConstantsInterface, UrlsInterface, LabelsInter
         $this->objAdulteServices              = new AdulteServices();
         $this->objAdulteDivisionServices      = new AdulteDivisionServices();
         $this->objDivisionServices            = new DivisionServices();
+        $this->objDivisionCompositionServices = new DivisionCompositionServices();
         $this->objEleveServices               = new EleveServices();
         $this->objEnseignantServices          = new EnseignantServices();
         $this->objEnseignantPrincipalServices = new EnseignantPrincipalServices();

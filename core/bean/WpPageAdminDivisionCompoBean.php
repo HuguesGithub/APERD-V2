@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * Classe WpPageAdminDivisionCompoBean
  * @author Hugues
  * @since v2.23.01.01
- * @version v2.23.01.03
+ * @version v2.23.01.05
  */
 class WpPageAdminDivisionCompoBean extends WpPageAdminDivisionBean
 {
@@ -49,32 +49,36 @@ class WpPageAdminDivisionCompoBean extends WpPageAdminDivisionBean
     
     /**
      * En cas de formulaire, on le traite. A priori, Création ou édition pour l'heure
-     * @since v2.22.12.28
-     * @version v2.22.12.28
+     * @since v2.23.01.05
+     * @version v2.23.01.05
      */
     public function dealWithForm()
     {
-        /*
+        if (!isset($this->objDivisionComposition)) {
+            return;
+        }
+        
         $strNotification = '';
         $strMessage = '';
         
         /////////////////////////////////////////
         // Un formulaire est soumis.
         // On récupère les données qu'on affecte à l'objet
-        $this->objAdulteDivision->setField(self::FIELD_ADULTEID, $this->initVar(self::FIELD_ADULTEID));
-        $this->objAdulteDivision->setField(self::FIELD_DIVISIONID, $this->initVar(self::FIELD_DIVISIONID));
+        $this->objDivisionComposition->setField(self::FIELD_DIVISIONID, $this->initVar(self::FIELD_DIVISIONID));
+        $matiereEnseignantId = $this->initVar(self::FIELD_MATIEREENSEIGNANTID);
+        $this->objDivisionComposition->setField(self::FIELD_MATIEREENSEIGNANTID, $matiereEnseignantId);
         
         // Si le contrôle des données est ok
-        if ($this->objAdulteDivision->controlerDonnees($strNotification, $strMessage)) {
+        if ($this->objDivisionComposition->controlerDonnees($strNotification, $strMessage)) {
             // Si l'id n'est pas défini
-            if ($this->objAdulteDivision->getField(self::FIELD_ID)=='') {
+            if ($this->objDivisionComposition->getField(self::FIELD_ID)=='') {
                 // On insère l'objet
-                $this->objAdulteDivision->insert();
+                $this->objDivisionComposition->insert();
                 // On renseigne le message d'information.
                 $this->strNotifications = $this->getAlertContent(self::NOTIF_SUCCESS, self::MSG_SUCCESS_CREATE);
             } else {
                 // On met à jour l'objet
-                $this->objAdulteDivision->update();
+                $this->objDivisionComposition->update();
                 // On renseigne le message d'information.
                 $this->strNotifications = $this->getAlertContent(self::NOTIF_SUCCESS, self::MSG_SUCCESS_EDIT);
             }
@@ -83,7 +87,6 @@ class WpPageAdminDivisionCompoBean extends WpPageAdminDivisionBean
             $this->strNotifications = $this->getAlertContent($strNotification, $strMessage);
         }
         /////////////////////////////////////////
-         */
     }
     
     /**
@@ -92,23 +95,21 @@ class WpPageAdminDivisionCompoBean extends WpPageAdminDivisionBean
      * @param int|string $ids
      * @param boolean $blnDelete
      * @return string
-     * @since v2.22.12.18
-     * @version v2.22.12.18
+     * @since v2.23.01.05
+     * @version v2.23.01.05
      */
     public function getListElements($ids, $blnDelete=false)
     {
-        /*
         $strElements = '';
         // On peut avoir une liste d'id en cas de suppression multiple.
         foreach (explode(',', $ids) as $id) {
-            $objAdulteDivision = $this->objAdulteDivisionServices->getAdulteDivisionById($id);
-            $strElements .= $this->getBalise(self::TAG_LI, $objAdulteDivision->getLibelle());
+            $objDivisionComposition = $this->objDivisionCompositionServices->getDivisionCompositionById($id);
+            $strElements .= $this->getBalise(self::TAG_LI, $objDivisionComposition->getLibelle());
             if ($blnDelete) {
-                $objAdulteDivision->delete();
+                $objDivisionComposition->delete();
             }
         }
         return $strElements;
-        */
     }
     
     /**

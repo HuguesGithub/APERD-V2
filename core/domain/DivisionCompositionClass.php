@@ -29,7 +29,7 @@ class DivisionCompositionClass extends LocalDomainClass
     { return $this->objDivisionServices->getDivisionById($this->divisionId); }
     
     public function getMatiereEnseignant()
-    { return $this->objMatiereEnseignantServices->getMatiereEnseignantById($this->enseignantId); }
+    { return $this->objMatiereEnseignantServices->getMatiereEnseignantById($this->matiereEnseignantId); }
     
     public function getLibelle()
     {
@@ -103,25 +103,23 @@ class DivisionCompositionClass extends LocalDomainClass
      * @param string &$notif
      * @param string &$msg
      * @return boolean
-     * @since v2.23.01.03
-     * @version v2.23.01.03
+     * @since v2.23.01.05
+     * @version v2.23.01.05
      */
     public function controlerDonnees(&$notif, &$msg)
     {
         $blnOk = true;
-        /*
-        /////////////////////////////////////////////
-        // On doit contrôler adulteId qui doit exister
-        // Vu qu'il est renseigné à partir des données importées, soit il est correct, soit il est nul.
-        $blnOk = $this->controlerSaisie(self::FIELD_ADULTEID, $notif, $msg);
         
+        /////////////////////////////////////////////
         // On doit contrôler divisionId qui doit exister
         // Vu qu'il est renseigné à partir des données importées, soit il est correct, soit il est nul.
-        if ($blnOk) {
-            $blnOk = $this->controlerSaisie(self::FIELD_DIVISIONID, $notif, $msg);
-        }
+        $blnOk = $this->controlerSaisie(self::FIELD_DIVISIONID, $notif, $msg);
         
-        */
+        // On doit contrôler matiereEnseignantId qui doit exister
+        // Vu qu'il est renseigné à partir des données importées, soit il est correct, soit il est nul.
+        if ($blnOk) {
+            $blnOk = $this->controlerSaisie(self::FIELD_MATIEREENSEIGNANTID, $notif, $msg);
+        }
         /////////////////////////////////////////////
         // Fin des contrôles
         return $blnOk;
