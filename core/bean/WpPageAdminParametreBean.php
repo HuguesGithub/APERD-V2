@@ -82,14 +82,15 @@ class WpPageAdminParametreBean extends WpPageAdminBean
             $this->strNotifications = $this->getAlertContent($strNotification, $strMessage);
         }
         /////////////////////////////////////////
-         * 
          */
     }
     
     public function getOngletContent()
     {
-        $firstCol  = '1';
-        $secondCol = '2';
+        $firstCol  = $this->getFirstCol();
+		
+        $secondCol = $this->getCardPdf();
+		
         $thirdCol  = '3';
         $fourthCol = $this->getCardNavigation();
         
@@ -108,7 +109,88 @@ class WpPageAdminParametreBean extends WpPageAdminBean
         );
         return $this->getRender($urlTemplate, $attributes);
     }
-    
+	
+	public function getMeta($metaKey)
+	{
+		return '';
+	}
+	
+	private function getCardPdf()
+	{
+        $cardTitle = 'Données PDF';
+		
+		$cardContent = '';
+		$inputAttributes = array(
+			self::ATTR_CLASS => 'form-control form-control-sm',
+			self::ATTR_TYPE => 'text',
+		);
+		
+		$pdfDatas = array(
+			'titrePdf' => 'Titre du Pdf',	// "Association de Parents d'Élèves du Collège Raoul Dufy"
+			'titreAnneeScolaire' => 'Année Scolaire',	// "ANNÉE SCOLAIRE %s"
+			'titreHeaderLine1' => 'Titre Header 1',	// "Compte-rendu du conseil de classe du %s trimestre"
+			'titreHeaderLine2' => 'Titre Header 2',	// "Classe de : %s. Effectif de la classe : %s élèves"
+			'titreHeaderLine3' => 'Titre Header 3',	// "Le conseil de classe s'est tenu le %s sous la présidence de %s, en présence de "%s, des autres professeurs de la classe, %s %s"
+			'conclusionLine1' => 'Conclusion Réunions',	// "Réunions mensuelles : L'association des Parents d'Élèves se réunit un mercredi par mois (hors vacances scolaires). Vous pouvez également découvrir la vie du collège et les actions de l'association sur son site internet."
+			'conclusionLine2' => 'Conclusion Rédaction',	// "Compte rendu fait le %s par %s, sous %s responsabilité."
+		);
+		
+		foreach ($pdfDatas as $key => $value) {
+			$dataAttributes = array_merge(
+				$inputAttributes,
+				array(
+					self::FIELD_ID => $key,
+					self::ATTR_NAME => $key,
+					self::ATTR_VALUE => $this->getMeta($key),
+				),
+			);
+			$cardInput = $this->getBalise(self::TAG_INPUT, '', $dataAttributes);
+			$cardLabel = $this->getBalise(self::TAG_LABEL, $value, array('for'=>$key));
+			$cardContent .= $this->getDiv($cardInput.$cardLabel, array(self::ATTR_CLASS=>'form-floating mb-3'));
+		}
+       
+        $urlTemplate = self::WEB_PPFC_CARD;
+        $attributes = array(
+            $cardTitle,
+            $cardContent,
+        );
+        return $this->getRender($urlTemplate, $attributes);
+	
+	}
+
+	private function getFirstCol()
+	{
+		$strFirstColContent = '';
+		
+		$arrFirstCol = array(
+			'anneeScolaire' => 'Année Scolaire',
+			'email' => 'Email',
+			'phone' => 'Téléphone',
+		);
+		
+		foreach ($arrFirstCol as $key => $value) {
+			$inputAttributes = array(
+				self::FIELD_ID => $key,
+				self::ATTR_NAME => $key,
+				self::ATTR_CLASS => 'form-control form-control-sm',
+				self::ATTR_VALUE => $this->getMeta($key),
+				self::ATTR_TYPE => 'text',
+			);
+			$cardInput = $this->getBalise(self::TAG_INPUT, '', $inputAttributes);
+			$cardLabel = $this->getBalise(self::TAG_LABEL, $value, array('for'=>$key));
+			$cardContent = $this->getDiv($cardInput.$cardLabel, array(self::ATTR_CLASS=>'form-floating mb-3'));
+		   
+			$urlTemplate = self::WEB_PPFC_CARD;
+			$attributes = array(
+				$value,
+				$cardContent,
+			);
+			$strFirstColContent .= $this->getRender($urlTemplate, $attributes);
+		}
+		
+		return $strFirstColContent;
+	}
+	    
     private function getCardNavigation()
     {
         $cardTitle = 'Arborescence du site';

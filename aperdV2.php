@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: HJ - APERD V2
  * Description: Plugin APERD V2. Gestion des compte-rendus
@@ -57,45 +58,6 @@ function aperd_v2_autoloader($classname)
 
 /**
 #######################################################################################
-###  Ajout d'une entrée dans le menu d'administration.
-#######################################################################################
-**/
-function aperd_v2_menu()
-{
-  $urlRoot = 'hj-v2-aperd/admin_manage.php';
-  if (function_exists('add_menu_page')) {
-    $uploadFiles = 'upload_files';
-    $pluginName = 'APERD v2';
-    $imgUrl = plugins_url('/hj-v2-aperd/web/rsc/img/icons/aperd.png');
-    add_menu_page($pluginName, $pluginName, $uploadFiles, $urlRoot, '', $imgUrl);
-    if (function_exists('add_submenu_page')) {
-      $arrUrlSubMenu = array(
-        'administration' => 'Administratifs',
-        'annee-scolaire' => 'Années Scolaires',
-        'compodivision'  => 'Composition Divisions',
-        'compte-rendu'   => 'Compte-Rendus',
-        'questionnaire'  => 'Config. Questionnaire',
-        'division'       => 'Divisions',
-        'eleve'          => 'Élèves',
-        'enseignant'     => 'Enseignants',
-        'matiere'        => 'Matières',
-        'parent'         => 'Parents',
-        'parent-delegue' => 'Parents Délégués',
-        '-'              => '-----------------',
-
-        'data-question'  => 'Questionnaires',
-        'schema-table'  => 'Adm : Schéma Base',
-      );
-      foreach ($arrUrlSubMenu as $key => $value) {
-        $urlSubMenu = $urlRoot.'&amp;onglet='.$key;
-        add_submenu_page($urlRoot, $value, $value, $uploadFiles, $urlSubMenu, $key);
-      }
-    }
-  }
-}
-add_action('admin_menu', 'aperd_v2_menu');
-/**
-#######################################################################################
 ### Ajout d'une action Ajax
 ### Description: Entrance point for Ajax Interaction.
 #######################################################################################
@@ -104,10 +66,9 @@ add_action('wp_ajax_dealWithAjax', 'dealWithAjax_callback');
 add_action('wp_ajax_nopriv_dealWithAjax', 'dealWithAjax_callback');
 function dealWithAjax_callback()
 {
-    echo core\actions\AjaxActions::dealWithAjax();
+    echo \core\actions\AjaxActions::dealWithAjax();
     die();
 }
-
 
 /**
 #######################################################################################
